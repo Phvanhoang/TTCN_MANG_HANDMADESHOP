@@ -30,7 +30,7 @@ public class MatHang {
 	@Column(name = "SoLuongDaBan", nullable = false)
 	private int soLuongDaBan;
 	
-	@Column(name = "MoTa", nullable = false)
+	@Column(name = "MoTa", nullable = false, columnDefinition = "TEXT")
 	private String moTa;
 	
 	@OneToMany(mappedBy = "matHang")

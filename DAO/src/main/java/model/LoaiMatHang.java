@@ -15,7 +15,7 @@ public class LoaiMatHang {
 	@GeneratedValue
 	private long maLoaiMatHang;
 	
-	@Column(name = "TenLoaiMtHang")
+	@Column(name = "TenLoaiMatHang")
 	private String tenLoaiMatHang;
 	
 	@OneToMany(mappedBy = "loaiMatHang")

@@ -20,4 +20,9 @@ public class Anh_MatHang {
 	@ManyToOne
 	@JoinColumn(name = "MaMatHang", nullable = false)
 	private MatHang matHang;
+	
+	public Anh_MatHang(byte[] anh, MatHang matHang) {
+		this.anh = anh;
+		this.matHang = matHang;
+	}
 }

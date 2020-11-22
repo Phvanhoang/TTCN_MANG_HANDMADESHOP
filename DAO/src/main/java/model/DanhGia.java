@@ -25,7 +25,7 @@ public class DanhGia {
 	@Column(name = "SoSao", nullable = false)
 	private int soSao;
 	
-	@Column(name = "NoiDung", nullable = false)
+	@Column(name = "NoiDung", nullable = false, columnDefinition = "TEXT")
 	private int noiDung;
 	
 	@Column(name = "ThoiGianDanhGia", nullable = false)
