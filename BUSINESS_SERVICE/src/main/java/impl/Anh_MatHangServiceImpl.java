@@ -2,9 +2,7 @@ package impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import model.Anh_MatHang;
-import model.MatHang;
 import repository.Anh_MatHangRepository;
 import service.Anh_MatHangService;
 

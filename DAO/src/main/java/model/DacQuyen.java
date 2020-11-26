@@ -1,30 +1,30 @@
 package model;
 import java.sql.Date;
 import java.util.Set;
-
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
-@Table(name = "LOAIMATHANG")
+@Table(name = "DACQUYEN")
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "maLoaiMatHang")
-public class LoaiMatHang {
+		  property = "maDacQuyen")
+public class DacQuyen {
 	@Id
-	@Column(name = "MaLoaiMatHang")
+	@Column(name = "MaDacQuyen")
 	@GeneratedValue
-	private long maLoaiMatHang;
+	private long maDacQuyen;
 	
-	@Column(name = "TenLoaiMatHang")
-	private String tenLoaiMatHang;
+	@Column(name = "TenDacQuyen", nullable = false)
+	private String tenDacQuyen;
 	
 	@JsonBackReference
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiMatHang")
-	private Set<MatHang> danhSachMatHang;
+	@OneToMany(mappedBy = "dacQuyen")
+	private Set<TaiKhoan> danhSachTaiKhoan;
 	
 	@JsonIgnore
 	@Column(name = "IsDeleted", nullable = false)
@@ -62,29 +62,27 @@ public class LoaiMatHang {
 	public void setUpdatedBy(TaiKhoan updatedBy) {
 		this.updatedBy = updatedBy;
 	}
-	
-	public Set<MatHang> getDanhSachMatHang() {
-		return danhSachMatHang;
+	public Set<TaiKhoan> getDanhSachTaiKhoan() {
+		return danhSachTaiKhoan;
 	}
 	
-	public long getMaLoaiMatHang() {
-		return maLoaiMatHang;
+	public void setDanhSachTaiKhoan(Set<TaiKhoan> danhSachTaiKhoan) {
+		this.danhSachTaiKhoan = danhSachTaiKhoan;
 	}
 	
-	public String getTenLoaiMatHang() {
-		return tenLoaiMatHang;
+	public long getMaDacQuyen() {
+		return maDacQuyen;
 	}
 	
-	public void setDanhSachMatHang(Set<MatHang> danhSachMatHang) {
-		this.danhSachMatHang = danhSachMatHang;
+	public String getTenDacQuyen() {
+		return tenDacQuyen;
 	}
 	
-	public void setMaLoaiMatHang(long maLoaiMatHang) {
-		this.maLoaiMatHang = maLoaiMatHang;
+	public void setMaDacQuyen(long maDacQuyen) {
+		this.maDacQuyen = maDacQuyen;
 	}
 	
-	public void setTenLoaiMatHang(String tenLoaiMatHang) {
-		this.tenLoaiMatHang = tenLoaiMatHang;
+	public void setTenDacQuyen(String tenDacQuyen) {
+		this.tenDacQuyen = tenDacQuyen;
 	}
-	
 }

@@ -11,4 +11,20 @@ public class DonHang_MatHang_Key implements Serializable{
  
     @Column(name = "MaDonHang")
     private long maDonHang;
+    
+    public long getMaDonHang() {
+		return maDonHang;
+	}
+    
+    public long getMaMatHang() {
+		return maMatHang;
+	}
+    
+    public void setMaDonHang(long maDonHang) {
+		this.maDonHang = maDonHang;
+	}
+    
+    public void setMaMatHang(long maMatHang) {
+		this.maMatHang = maMatHang;
+	}
 }

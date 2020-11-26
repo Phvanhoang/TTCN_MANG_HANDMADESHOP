@@ -17,6 +17,7 @@ public class MatHangServiceImpl implements MatHangService{
 	}
 	
 	public MatHang findOne(long maMatHang) {
+//		System.out.println(maMatHang);
 		return matHangRepository.findById(maMatHang).get();
 	}
 }

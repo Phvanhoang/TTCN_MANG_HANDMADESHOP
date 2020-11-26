@@ -7,5 +7,5 @@ import model.TaiKhoan;
 
 @Repository
 public interface TaiKhoanRepository extends CrudRepository<TaiKhoan, Long>{
-
+	TaiKhoan findByTenDangNhap(String tenDangNhap);
 }

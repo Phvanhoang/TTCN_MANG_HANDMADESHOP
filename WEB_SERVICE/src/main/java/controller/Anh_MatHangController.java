@@ -1,23 +1,27 @@
 package controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import model.Anh_MatHang;
+import model.LoaiMatHang;
 import model.MatHang;
 import service.Anh_MatHangService;
 import service.MatHangService;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
-@RequestMapping("/anh_mat_hang")
 public class Anh_MatHangController {
 	@Autowired
 	private Anh_MatHangService anh_MatHangService;
@@ -25,16 +29,17 @@ public class Anh_MatHangController {
 	@Autowired 
 	private MatHangService matHangService;
 	
-	@PostMapping("/upload")
-	private ResponseEntity<Void> themAnhMatHang(@RequestParam("image") MultipartFile multipartFile,
-												@RequestParam("maMatHang") long maMatHang) {
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PostMapping("/admin/anh_mat_hang/upload")
+	public ResponseEntity<Void> upload(@RequestParam("image") MultipartFile multipartFile,
+										@RequestParam("maMatHang") long maMatHang) {
+		MatHang matHang = matHangService.findOne(maMatHang);
 		try {
-			MatHang matHang = matHangService.findOne(maMatHang);
-			Anh_MatHang anh_MatHang = new Anh_MatHang(multipartFile.getBytes(), matHang);
-			anh_MatHangService.save(anh_MatHang);
+			anh_MatHangService.save(new Anh_MatHang(multipartFile.getBytes(), matHang));
 		} catch (Exception e) {
-			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Void>(HttpStatus.CREATED);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
 }
