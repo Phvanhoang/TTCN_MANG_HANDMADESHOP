@@ -32,7 +32,7 @@ public class GioiTinh {
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "UpdatedBy", nullable = false)
+	@JoinColumn(name = "UpdatedBy", nullable = true)
 	private TaiKhoan updatedBy;
 	
 	@JsonIgnore
