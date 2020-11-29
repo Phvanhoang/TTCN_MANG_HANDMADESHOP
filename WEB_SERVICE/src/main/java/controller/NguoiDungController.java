@@ -71,10 +71,4 @@ public class NguoiDungController {
 		nguoiDungService.save(nguoiDung);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-
-	@GetMapping("/nguoi_dung_test/{maNguoiDung}")
-	public ResponseEntity<NguoiDung> getNguoiDungTest(@PathVariable Long maNguoiDung) {
-		NguoiDung nguoiDung = nguoiDungService.findOne(maNguoiDung);
-		return new ResponseEntity<NguoiDung>(nguoiDung, HttpStatus.OK);
-	}
 }
