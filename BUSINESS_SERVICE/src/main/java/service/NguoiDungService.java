@@ -1,5 +1,8 @@
 package service;
 
-public interface NguoiDungService {
+import model.NguoiDung;
 
+public interface NguoiDungService {
+	void save(NguoiDung nguoiDung);
+	NguoiDung findOne(long maNguoiDung);
 }

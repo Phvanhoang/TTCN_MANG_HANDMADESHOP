@@ -1,10 +1,10 @@
 package impl;
 
+
 import org.springframework.stereotype.Service;
 
 import service.TaiKhoanService;
 
 @Service
-public class TaiKhoanServiceImpl implements TaiKhoanService{
-
+public class TaiKhoanServiceImpl implements TaiKhoanService {
 }
