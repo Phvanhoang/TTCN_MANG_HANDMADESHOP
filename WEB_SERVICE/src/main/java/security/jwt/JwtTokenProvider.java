@@ -10,11 +10,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
-import lombok.extern.slf4j.Slf4j;
 import security.user.CustomUserDetails;
 
 @Component
-//@Slf4j
 public class JwtTokenProvider {
     private final String JWT_SECRET = "WEB TTCN";
     private final long JWT_EXPIRATION = 604800000L;
@@ -44,13 +42,13 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
             return true;
         } catch (MalformedJwtException ex) {
-//            log.error("Invalid JWT token");
+        	ex.printStackTrace();
         } catch (ExpiredJwtException ex) {
-//            log.error("Expired JWT token");
+        	ex.printStackTrace();
         } catch (UnsupportedJwtException ex) {
-//            log.error("Unsupported JWT token");
+        	ex.printStackTrace();
         } catch (IllegalArgumentException ex) {
-//            log.error("JWT claims string is empty.");
+        	ex.printStackTrace();
         }
         return false;
     }
