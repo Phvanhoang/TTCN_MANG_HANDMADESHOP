@@ -15,11 +15,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import org.springframework.web.filter.OncePerRequestFilter;
-import lombok.extern.slf4j.Slf4j;
 import security.user.UserService;
 
 
-@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -44,8 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        } catch (Exception ex) { 
-            log.error("failed on set user authentication", ex);
+        } catch (Exception ex) {
+        	ex.printStackTrace();
         }
         filterChain.doFilter(request, response);
     }
