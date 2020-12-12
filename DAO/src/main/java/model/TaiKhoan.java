@@ -9,9 +9,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "TAIKHOAN")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "maTaiKhoan")
 public class TaiKhoan {
 	@Id
 	@Column(name = "MaTaiKhoan")
@@ -24,7 +21,6 @@ public class TaiKhoan {
 	@Column(name = "MatKhau", nullable = false)
 	private String matKhau;
 	
-	@JsonManagedReference
 	@OneToOne
 	@JoinColumn(name = "MaDacQuyen", nullable = false)
 	private DacQuyen dacQuyen;
@@ -35,21 +31,17 @@ public class TaiKhoan {
 	@Column(name = "TrangThai", nullable = false)
 	private boolean trangThai;
 	
-	@JsonManagedReference
 	@OneToOne
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
 	private NguoiDung nguoiDung;
 	
-	@JsonIgnore
 	@Column(name = "IsDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	private TaiKhoan updatedBy;
 	
-	@JsonIgnore
 	@Column(name = "UpdatedAt", nullable = true)
 	private Date updatedAt;
 	

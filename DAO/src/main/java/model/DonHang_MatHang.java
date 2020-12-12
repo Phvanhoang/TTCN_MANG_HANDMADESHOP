@@ -10,20 +10,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "DONHANG_MATHANG")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "id")
 public class DonHang_MatHang {
 	@EmbeddedId
 	private DonHang_MatHang_Key id;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("maDonHang")
 	@JoinColumn(name = "MaDonHang")
 	private DonHang donHang;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("maMatHang")
 	@JoinColumn(name = "MaMatHang")
@@ -32,16 +27,13 @@ public class DonHang_MatHang {
 	@Column(name = "SoLuong", nullable = true)
 	private int soLuong;
 	
-	@JsonIgnore
 	@Column(name = "IsDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	private TaiKhoan updatedBy;
 	
-	@JsonIgnore
 	@Column(name = "UpdatedAt", nullable = true)
 	private Date updatedAt;
 	

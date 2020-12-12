@@ -1,5 +1,6 @@
 package model;
 import java.sql.Date;
+import java.sql.Types;
 import java.util.List;
 
 import javax.persistence.*;
@@ -17,10 +18,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "MATHANG")
-@JsonIgnoreProperties(value = {"IsDeleted"}, allowSetters= true)
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "maMatHang")
 public class MatHang {
 	@Id
 	@Column(name = "MaMatHang")
@@ -30,7 +27,6 @@ public class MatHang {
 	@Column(name = "TenMatHang", nullable = false)
 	private String tenMatHang;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaLoaiMatHang", nullable = false)
 	private LoaiMatHang loaiMatHang;
@@ -44,31 +40,25 @@ public class MatHang {
 	@Column(name = "SoLuongDaBan", nullable = false)
 	private int soLuongDaBan;
 	
-	@Column(name = "MoTa", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "MoTa", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String moTa;
 	
-//	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "matHang")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DanhGia> danhSachDanhGia;
 	
-//	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany( mappedBy = "matHang")
 	private List<Anh_MatHang> danhSachHinhAnh;
 	
-	@JsonIgnore
-	@JsonIgnoreProperties("IsDeleted")
 	@Column(name = "IsDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	private TaiKhoan updatedBy;
 	
-	@JsonIgnore
 	@Column(name = "UpdatedAt", nullable = true)
 	private Date updatedAt;
 	

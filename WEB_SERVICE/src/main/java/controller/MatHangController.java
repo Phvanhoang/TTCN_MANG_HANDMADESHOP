@@ -22,11 +22,12 @@ public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
 
+
 	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
 	//@RequestMapping(value = "/admin/mat_hang/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value="/admin/mat_hang/create", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) {
-//		matHangService.save(matHang);
+  //		matHangService.save(matHang);
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	

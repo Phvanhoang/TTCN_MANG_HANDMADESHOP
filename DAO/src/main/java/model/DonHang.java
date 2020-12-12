@@ -10,21 +10,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
-@Table(name = "DONHANG")@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "maDonHang")
+@Table(name = "DONHANG")
 public class DonHang {
 	@Id
 	@Column(name = "MaDonHang")
 	@GeneratedValue
 	private long maDonHang;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
 	private NguoiDung nguoiDung;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaTrangThaiDonHang", nullable = false)
 	private TrangThaiDonHang trangThaiDonHang;
@@ -41,20 +37,17 @@ public class DonHang {
 	@Column(name = "SDTGiaoHang", nullable = false)
 	private String SDTGiaoHang;
 	
-	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "donHang")
 	private Set<DonHang_MatHang> danhSachMatHang;
 	
-	@JsonIgnore
 	@Column(name = "IsDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	private TaiKhoan updatedBy;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@Column(name = "UpdatedAt", nullable = true)
 	private Date updatedAt;
 	

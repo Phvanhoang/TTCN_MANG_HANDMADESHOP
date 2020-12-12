@@ -10,9 +10,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "DACQUYEN")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "maDacQuyen")
 public class DacQuyen {
 	@Id
 	@Column(name = "MaDacQuyen")
@@ -22,20 +19,16 @@ public class DacQuyen {
 	@Column(name = "TenDacQuyen", nullable = false)
 	private String tenDacQuyen;
 	
-	@JsonBackReference
 	@OneToMany(mappedBy = "dacQuyen")
 	private Set<TaiKhoan> danhSachTaiKhoan;
 	
-	@JsonIgnore
 	@Column(name = "IsDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	private TaiKhoan updatedBy;
 	
-	@JsonIgnore
 	@Column(name = "UpdatedAt", nullable = true)
 	private Date updatedAt;
 	

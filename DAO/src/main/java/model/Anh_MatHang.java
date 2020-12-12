@@ -10,9 +10,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "ANH_MATHANG")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "maAnhMatHang")
 public class Anh_MatHang {
 	@Id
 	@Column(name = "MaAnhMatHang")
@@ -23,21 +20,17 @@ public class Anh_MatHang {
 	@Column(name = "Anh")
 	private byte[] anh;
 	
-	@JsonManagedReference // Annotation de ko tra ve hoan toan doi tuong, chi tra ve ID
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaMatHang", nullable = false)
 	private MatHang matHang;
 	
-	@JsonIgnore // Annotion de bo qua truong ko them vao doi tuowng tra ve
 	@Column(name = "IsDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	private TaiKhoan updatedBy;
 	
-	@JsonIgnore
 	@Column(name = "UpdatedAt", nullable = true)
 	private Date updatedAt;
 	
