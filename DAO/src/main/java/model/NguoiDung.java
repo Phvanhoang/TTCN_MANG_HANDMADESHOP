@@ -21,6 +21,7 @@ public class NguoiDung {
 	@GeneratedValue
 	private long maNguoiDung;
 	
+	@JsonIgnore
 	@Lob
 	@Column(name = "AnhDaiDien", nullable = true)
 	private byte[] anhDaiDien;

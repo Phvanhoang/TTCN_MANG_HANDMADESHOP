@@ -1,6 +1,8 @@
 package impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import model.NguoiDung;
@@ -18,5 +20,9 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 
 	public NguoiDung findOne(long maNguoiDung) {
 		return nguoiDungRepository.findById(maNguoiDung).get();
+	}
+
+	public Page<NguoiDung> findAll(Pageable pageable) {
+		return nguoiDungRepository.findAll(pageable);
 	}
 }
