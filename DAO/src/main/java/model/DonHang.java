@@ -29,6 +29,9 @@ public class DonHang {
 	@JoinColumn(name = "MaTrangThaiDonHang", nullable = false)
 	private TrangThaiDonHang trangThaiDonHang;
 	
+	@Column(name="TenNguoiNhanHang", nullable = true)
+	private String tenNguoiNhanHang;
+	
 	@Column(name = "ThoiGian", nullable = false)
 	private Date thoiGian;
 	
@@ -145,5 +148,12 @@ public class DonHang {
 	public void setTrangThaiDonHang(TrangThaiDonHang trangThaiDonHang) {
 		this.trangThaiDonHang = trangThaiDonHang;
 	}
-	 
+	
+	public String getTenNguoiNhanHang() {
+		return this.tenNguoiNhanHang;
+	}
+	
+	public void setTenNguoiNhanHang(String tenNguoiNhanHang) {
+		this.tenNguoiNhanHang = tenNguoiNhanHang;
+	}
 }

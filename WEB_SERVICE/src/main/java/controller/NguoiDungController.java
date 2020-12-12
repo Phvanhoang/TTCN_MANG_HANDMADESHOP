@@ -100,7 +100,7 @@ public class NguoiDungController {
 	}
 	
 	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
-	@GetMapping("/authorized/nguoi_dung/getAll")
+	@GetMapping("/authorized/nguoi_dung")
 	public ResponseEntity<JSONObject> getAllNguoiDung(
 			@RequestParam(name="page", required=false, defaultValue="0") int page,
 			@RequestParam(name="size", required=false, defaultValue="15") int size,
