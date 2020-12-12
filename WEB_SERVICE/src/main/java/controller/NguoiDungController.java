@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import model.GioiTinh;
 import model.NguoiDung;
@@ -41,6 +45,20 @@ public class NguoiDungController {
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
 
+	@PostMapping("/nguoi_dung/create")
+	public ResponseEntity<Void> createND(@RequestParam String hoTen, @RequestParam("avatar") MultipartFile multipartFile) {
+		NguoiDung nguoiDung = new NguoiDung();
+		nguoiDung.setHoTen(hoTen);
+		try {
+			nguoiDung.setAnhDaiDien(multipartFile.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		nguoiDungService.save(nguoiDung);
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
+	}
+	
 	// @PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
 	@PostMapping("/nguoi_dung/{maNguoiDung}")
 	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maNguoiDung,
