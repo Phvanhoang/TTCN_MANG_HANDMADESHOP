@@ -22,7 +22,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 		return nguoiDungRepository.findById(maNguoiDung).get();
 	}
 
-	public Page<NguoiDung> findAll(Pageable pageable) {
-		return nguoiDungRepository.findAll(pageable);
+	public Page<NguoiDung> findByIsDeletedFalse(Pageable pageable) {
+		return nguoiDungRepository.findByIsDeletedFalse(pageable);
 	}
 }

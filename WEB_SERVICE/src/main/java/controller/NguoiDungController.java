@@ -48,8 +48,7 @@ public class NguoiDungController {
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
-	@PostMapping("/authorized/nguoi_dung/create")
+	@PostMapping("/nguoi_dung/create")
 	public ResponseEntity<Void> createND(@RequestParam String hoTen,
 			@RequestParam("avatar") MultipartFile multipartFile) {
 		NguoiDung nguoiDung = new NguoiDung();
@@ -100,13 +99,12 @@ public class NguoiDungController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN'})")
+	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
 	@GetMapping("/authorized/nguoi_dung/getAll")
 	public ResponseEntity<JSONObject> getAllNguoiDung(
 			@RequestParam(name="page", required=false, defaultValue="0") int page,
 			@RequestParam(name="size", required=false, defaultValue="15") int size,
-			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort,
-			@RequestParam(name="sortType", required=false, defaultValue="maNguoiDung") String sortType){
+			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort){
 		Sort sortable = null;
 		if(sort.equals("ASC")) {
 			sortable = Sort.by("maNguoiDung").ascending();
@@ -116,15 +114,13 @@ public class NguoiDungController {
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
 		
-		
-		Page<NguoiDung> returnedPage = nguoiDungService.findAll(pageable);
+		Page<NguoiDung> returnedPage = nguoiDungService.findByIsDeletedFalse(pageable);
 		List<NguoiDung> listNguoiDung = returnedPage.getContent();
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", listNguoiDung);
 		returnedObject.put("currentPage", returnedPage.getNumber());
 	    returnedObject.put("totalItems", returnedPage.getTotalElements());
 	    returnedObject.put("totalPages", returnedPage.getTotalPages());
-		
 		
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
 

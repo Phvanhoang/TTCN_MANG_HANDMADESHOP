@@ -33,7 +33,7 @@ public class Anh_MatHangController {
 	@PostMapping("/admin/anh_mat_hang/upload")
 	public ResponseEntity<Void> upload(@RequestParam("image") MultipartFile multipartFile,
 										@RequestParam("maMatHang") long maMatHang) {
-		MatHang matHang = matHangService.findOne(maMatHang);
+		MatHang matHang = matHangService.findByMaMatHangAndIsDeletedFalse(maMatHang);
 		try {
 			anh_MatHangService.save(new Anh_MatHang(multipartFile.getBytes(), matHang));
 		} catch (Exception e) {

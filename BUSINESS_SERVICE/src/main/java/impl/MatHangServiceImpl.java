@@ -1,6 +1,8 @@
 package impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import model.MatHang;
@@ -16,8 +18,11 @@ public class MatHangServiceImpl implements MatHangService{
 		matHangRepository.save(matHang);
 	}
 	
-	public MatHang findOne(long maMatHang) {
-//		System.out.println(maMatHang);
-		return matHangRepository.findById(maMatHang).get();
+	public MatHang findByMaMatHangAndIsDeletedFalse(long maMatHang) {
+		return matHangRepository.findByMaMatHangAndIsDeletedFalse(maMatHang);
+	}
+
+	public Page<MatHang> findByIsDeletedFalse(Pageable pageable) {
+		return matHangRepository.findByIsDeletedFalse(pageable);
 	}
 }

@@ -47,13 +47,13 @@ public class MatHang {
 	@Column(name = "MoTa", nullable = false, columnDefinition = "TEXT")
 	private String moTa;
 	
-//	@JsonBackReference
+	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "matHang")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DanhGia> danhSachDanhGia;
 	
-//	@JsonBackReference
+	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany( mappedBy = "matHang")
 	private List<Anh_MatHang> danhSachHinhAnh;
