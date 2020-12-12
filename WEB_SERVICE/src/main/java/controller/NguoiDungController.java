@@ -3,19 +3,23 @@ package controller;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,8 +34,8 @@ public class NguoiDungController {
 	@Autowired
 	private NguoiDungService nguoiDungService;
 
-	// @PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
-	@GetMapping("/nguoi_dung/{maNguoiDung}")
+	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
+	@GetMapping("/authorized/nguoi_dung/{maNguoiDung}")
 	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung) {
 		JSONObject returnedObject = new JSONObject();
 		NguoiDung nguoiDung = nguoiDungService.findOne(maNguoiDung);
@@ -44,9 +48,11 @@ public class NguoiDungController {
 
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
-
-	@PostMapping("/nguoi_dung/create")
-	public ResponseEntity<Void> createND(@RequestParam String hoTen, @RequestParam("avatar") MultipartFile multipartFile) {
+	
+	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
+	@PostMapping("/authorized/nguoi_dung/create")
+	public ResponseEntity<Void> createND(@RequestParam String hoTen,
+			@RequestParam("avatar") MultipartFile multipartFile) {
 		NguoiDung nguoiDung = new NguoiDung();
 		nguoiDung.setHoTen(hoTen);
 		try {
@@ -58,35 +64,70 @@ public class NguoiDungController {
 		nguoiDungService.save(nguoiDung);
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
-	
-	// @PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
-	@PostMapping("/nguoi_dung/{maNguoiDung}")
-	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maNguoiDung,
-			@RequestBody JSONObject nguoiDungUpdate) {
-		NguoiDung nguoiDung = nguoiDungService.findOne(maNguoiDung);
-		nguoiDung.setHoTen((String) nguoiDungUpdate.get("hoTen"));
 
-		String ngaySinh = (String) nguoiDungUpdate.get("ngaySinh");
+	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
+	@PostMapping("/authorized/nguoi_dung/{maNguoiDung}")
+	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maNguoiDung, @RequestParam("hoTen") String hoTen,
+			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
+			@RequestParam("thanhPho") String thanhPho, @RequestParam("sdt") String sdt,
+			@RequestParam("anhDaiDien") MultipartFile multipartFile) {
+
+		NguoiDung nguoiDung = nguoiDungService.findOne(maNguoiDung);
+		nguoiDung.setHoTen(hoTen);
+
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		java.sql.Date ngaySinh_convert = null;
 		try {
 			ngaySinh_convert = new Date(simpleDateFormat.parse(ngaySinh).getTime());
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		nguoiDung.setNgaySinh(ngaySinh_convert);
-		nguoiDung.setSDT((String) nguoiDungUpdate.get("sdt"));
-		nguoiDung.setThanhPho((String) nguoiDungUpdate.get("thanhPho"));
-
-		int maGioiTinh = (Integer) nguoiDungUpdate.get("maGioiTinh");
-		System.out.println("maGioiTinh: " + maGioiTinh);
+		nguoiDung.setSDT(sdt);
+		nguoiDung.setThanhPho(thanhPho);
 
 		GioiTinh gioiTinh = new GioiTinh();
 		System.out.println("gioiTinh :" + gioiTinh);
 		gioiTinh.setMaGioiTinh(maGioiTinh);
 		nguoiDung.setGioiTinh(gioiTinh);
 
+		try {
+			nguoiDung.setAnhDaiDien(multipartFile.getBytes());
+		} catch (IOException e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 		nguoiDungService.save(nguoiDung);
 		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN'})")
+	@GetMapping("/authorized/nguoi_dung/getAll")
+	public ResponseEntity<JSONObject> getAllNguoiDung(
+			@RequestParam(name="page", required=false, defaultValue="0") int page,
+			@RequestParam(name="size", required=false, defaultValue="15") int size,
+			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort,
+			@RequestParam(name="sortType", required=false, defaultValue="maNguoiDung") String sortType){
+		Sort sortable = null;
+		if(sort.equals("ASC")) {
+			sortable = Sort.by("maNguoiDung").ascending();
+		}
+		if(sort.equals("DESC")) {
+			sortable = Sort.by("maNguoiDung").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		
+		
+		Page<NguoiDung> returnedPage = nguoiDungService.findAll(pageable);
+		List<NguoiDung> listNguoiDung = returnedPage.getContent();
+		JSONObject returnedObject = new JSONObject();
+		returnedObject.put("data", listNguoiDung);
+		returnedObject.put("currentPage", returnedPage.getNumber());
+	    returnedObject.put("totalItems", returnedPage.getTotalElements());
+	    returnedObject.put("totalPages", returnedPage.getTotalPages());
+		
+		
+		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
+
 	}
 }

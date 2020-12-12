@@ -1,8 +1,9 @@
 package controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,10 +22,12 @@ public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@PostMapping("/admin/mat_hang/create")
-	public ResponseEntity<Void> taoMatHang(@RequestBody MatHang matHang) {
-		matHangService.save(matHang);
+
+	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
+	//@RequestMapping(value = "/admin/mat_hang/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="/admin/mat_hang/create", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) {
+  //		matHangService.save(matHang);
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
