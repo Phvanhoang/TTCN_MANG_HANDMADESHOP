@@ -10,9 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "LOAIMATHANG")
-@JsonIdentityInfo(
-		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-		  property = "maLoaiMatHang")
 public class LoaiMatHang {
 	@Id
 	@Column(name = "MaLoaiMatHang")
@@ -22,20 +19,16 @@ public class LoaiMatHang {
 	@Column(name = "TenLoaiMatHang")
 	private String tenLoaiMatHang;
 	
-	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiMatHang")
 	private Set<MatHang> danhSachMatHang;
 	
-	@JsonIgnore
 	@Column(name = "IsDeleted", nullable = false)
 	private boolean isDeleted;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	private TaiKhoan updatedBy;
 	
-	@JsonIgnore
 	@Column(name = "UpdatedAt", nullable = true)
 	private Date updatedAt;
 	
