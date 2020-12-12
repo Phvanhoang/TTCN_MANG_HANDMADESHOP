@@ -46,7 +46,7 @@ public class MatHangController {
 		return new ResponseEntity<MatHang>(matHang, HttpStatus.OK);
 	}
 	
-	@GetMapping("/mat_hang/getAll")
+	@GetMapping("/mat_hang")
 	public ResponseEntity<JSONObject> getAllMatHang(
 			@RequestParam(name="page", required=false, defaultValue="0") int page,
 			@RequestParam(name="size", required=false, defaultValue="15") int size,

@@ -33,10 +33,10 @@ public class AuthenticationController {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getTenDangNhap(), loginRequest.getMatKhau()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = null;
+		String jwt = "";
 		jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
 		
-		if(jwt==null) {
+		if(jwt.equals("")) {
 			return new ResponseEntity<LoginResponse>(new LoginResponse(jwt, loginRequest.getTenDangNhap()), HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<LoginResponse>(new LoginResponse(jwt, loginRequest.getTenDangNhap()), HttpStatus.OK);
