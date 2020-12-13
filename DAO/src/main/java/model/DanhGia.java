@@ -21,12 +21,12 @@ public class DanhGia {
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaMatHang", nullable = false)
-	private MatHang matHang;
+	private MatHang matHang_DanhGia;
 	
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
-	private NguoiDung nguoiDung;
+	private NguoiDung nguoiDung_DanhGia;
 	
 	@Column(name = "SoSao", nullable = false)
 	private int soSao;
@@ -79,11 +79,11 @@ public class DanhGia {
 	}
 	
 	public MatHang getMatHang() {
-		return matHang;
+		return matHang_DanhGia;
 	}
 	
 	public NguoiDung getNguoiDung() {
-		return nguoiDung;
+		return nguoiDung_DanhGia;
 	}
 	
 	public int getNoiDung() {
@@ -103,11 +103,11 @@ public class DanhGia {
 	}
 	
 	public void setMatHang(MatHang matHang) {
-		this.matHang = matHang;
+		this.matHang_DanhGia = matHang;
 	}
 	
 	public void setNguoiDung(NguoiDung nguoiDung) {
-		this.nguoiDung = nguoiDung;
+		this.nguoiDung_DanhGia = nguoiDung;
 	}
 	
 	public void setNoiDung(int noiDung) {

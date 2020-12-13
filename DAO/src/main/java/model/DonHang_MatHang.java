@@ -27,7 +27,7 @@ public class DonHang_MatHang {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("maMatHang")
 	@JoinColumn(name = "MaMatHang")
-	private MatHang matHang;
+	private MatHang matHang_DonHang;
 	
 	@Column(name = "SoLuong", nullable = true)
 	private int soLuong;
@@ -74,7 +74,7 @@ public class DonHang_MatHang {
 	}
 	
 	public MatHang getMatHang() {
-		return matHang;
+		return matHang_DonHang;
 	}
 	
 	public DonHang_MatHang_Key getId() {
@@ -94,7 +94,7 @@ public class DonHang_MatHang {
 	}
 	
 	public void setMatHang(MatHang matHang) {
-		this.matHang = matHang;
+		this.matHang_DonHang = matHang;
 	}
 	
 	public void setSoLuong(int soLuong) {

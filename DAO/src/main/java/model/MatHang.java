@@ -49,13 +49,13 @@ public class MatHang {
 	
 	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "matHang")
+	@OneToMany(mappedBy = "matHang_DanhGia")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DanhGia> danhSachDanhGia;
 	
 	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany( mappedBy = "matHang")
+	@OneToMany( mappedBy = "matHang_Anh")
 	private List<Anh_MatHang> danhSachHinhAnh;
 	
 	@JsonIgnore

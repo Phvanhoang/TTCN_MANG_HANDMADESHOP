@@ -38,7 +38,7 @@ public class TaiKhoan {
 	@JsonManagedReference
 	@OneToOne
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
-	private NguoiDung nguoiDung;
+	private NguoiDung nguoiDung_TaiKhoan;
 	
 	@JsonIgnore
 	@Column(name = "IsDeleted", nullable = false)
@@ -86,7 +86,7 @@ public class TaiKhoan {
 	}
 	
 	public NguoiDung getNguoiDung() {
-		return nguoiDung;
+		return nguoiDung_TaiKhoan;
 	}
 	
 	public DacQuyen getDacQuyen() {
@@ -114,7 +114,7 @@ public class TaiKhoan {
 	}
 	
 	public void setNguoiDung(NguoiDung nguoiDung) {
-		this.nguoiDung = nguoiDung;
+		this.nguoiDung_TaiKhoan = nguoiDung;
 	}
 	
 	public void setDacQuyen(DacQuyen dacQuyen) {

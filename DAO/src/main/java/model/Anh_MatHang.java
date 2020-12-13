@@ -26,7 +26,7 @@ public class Anh_MatHang {
 	@JsonManagedReference // Annotation de ko tra ve hoan toan doi tuong, chi tra ve ID
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaMatHang", nullable = false)
-	private MatHang matHang;
+	private MatHang matHang_Anh;
 	
 	@JsonIgnore // Annotion de bo qua truong ko them vao doi tuowng tra ve
 	@Column(name = "IsDeleted", nullable = false)
@@ -67,7 +67,7 @@ public class Anh_MatHang {
 	
 	public Anh_MatHang(byte[] anh, MatHang matHang) {
 		this.anh = anh;
-		this.matHang = matHang;
+		this.matHang_Anh = matHang;
 	}
 	
 	public Anh_MatHang() {}
@@ -81,7 +81,7 @@ public class Anh_MatHang {
 	}
 	
 	public MatHang getMatHang() {
-		return matHang;
+		return matHang_Anh;
 	}
 	
 	public void setAnh(byte[] anh) {
@@ -93,7 +93,7 @@ public class Anh_MatHang {
 	}
 	
 	public void setMatHang(MatHang matHang) {
-		this.matHang = matHang;
+		this.matHang_Anh = matHang;
 	}
 	
 }

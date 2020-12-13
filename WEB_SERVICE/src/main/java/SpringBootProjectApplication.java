@@ -14,7 +14,7 @@ import security.config.WebSecurityConfig;
 @SpringBootApplication
 @EntityScan(basePackages = "model")
 @EnableJpaRepositories(basePackages = "repository")
-@ComponentScan(basePackages = {"model", "controller", "impl", "service", "security.*"}, basePackageClasses = {WebSecurityConfig.class, MethodSecurityConfig.class})
+@ComponentScan(basePackages = {"model", "controller", "impl", "service", "security.*", "utils"}, basePackageClasses = {WebSecurityConfig.class, MethodSecurityConfig.class})
 public class SpringBootProjectApplication {
 
 	public static void main(String[] args) {

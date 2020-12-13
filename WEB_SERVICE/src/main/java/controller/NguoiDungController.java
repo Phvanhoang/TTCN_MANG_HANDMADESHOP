@@ -38,29 +38,14 @@ public class NguoiDungController {
 	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung) {
 		JSONObject returnedObject = new JSONObject();
 		NguoiDung nguoiDung = nguoiDungService.findOne(maNguoiDung);
+		if (nguoiDung == null) return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.NOT_FOUND);
 		returnedObject.put("hoTen", nguoiDung.getHoTen());
 		returnedObject.put("ngaySinh", nguoiDung.getNgaySinh());
 		returnedObject.put("sdt", nguoiDung.getSDT());
 		returnedObject.put("thanhPho", nguoiDung.getThanhPho());
 		returnedObject.put("anhDaiDien", nguoiDung.getAnhDaiDien());
 		returnedObject.put("gioiTinh", nguoiDung.getGioiTinh().getTenGioiTinh());
-
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
-	}
-	
-	@PostMapping("/nguoi_dung/create")
-	public ResponseEntity<Void> createND(@RequestParam String hoTen,
-			@RequestParam("avatar") MultipartFile multipartFile) {
-		NguoiDung nguoiDung = new NguoiDung();
-		nguoiDung.setHoTen(hoTen);
-		try {
-			nguoiDung.setAnhDaiDien(multipartFile.getBytes());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		nguoiDungService.save(nguoiDung);
-		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
 	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")

@@ -10,7 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
-@Table(name = "DONHANG")@JsonIdentityInfo(
+@Table(name = "DONHANG")
+@JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "maDonHang")
 public class DonHang {
@@ -22,7 +23,7 @@ public class DonHang {
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
-	private NguoiDung nguoiDung;
+	private NguoiDung nguoiDung_DonHang;
 	
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -36,13 +37,16 @@ public class DonHang {
 	private Date thoiGian;
 	
 	@Column(name = "GiaTongCong", nullable = false)
-	private Date giaTongCong;
+	private long giaTongCong;
 	
 	@Column(name = "DiaChiGiaoHang", nullable = false)
 	private String diaChiGiaoHang;
 	
 	@Column(name = "SDTGiaoHang", nullable = false)
 	private String SDTGiaoHang;
+	
+	@Column(name= "ChuThich", nullable = false, columnDefinition = "TEXT")
+	private String chuThich;
 	
 	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "donHang")
@@ -93,7 +97,7 @@ public class DonHang {
 		return diaChiGiaoHang;
 	}
 	
-	public Date getGiaTongCong() {
+	public long getGiaTongCong() {
 		return giaTongCong;
 	}
 	
@@ -102,7 +106,7 @@ public class DonHang {
 	}
 	
 	public NguoiDung getNguoiDung() {
-		return nguoiDung;
+		return nguoiDung_DonHang;
 	}
 	
 	public String getSDTGiaoHang() {
@@ -125,7 +129,7 @@ public class DonHang {
 		this.diaChiGiaoHang = diaChiGiaoHang;
 	}
 	
-	public void setGiaTongCong(Date giaTongCong) {
+	public void setGiaTongCong(long giaTongCong) {
 		this.giaTongCong = giaTongCong;
 	}
 	
@@ -134,7 +138,7 @@ public class DonHang {
 	}
 	
 	public void setNguoiDung(NguoiDung nguoiDung) {
-		this.nguoiDung = nguoiDung;
+		this.nguoiDung_DonHang = nguoiDung;
 	}
 	
 	public void setSDTGiaoHang(String sDTGiaoHang) {
@@ -155,5 +159,13 @@ public class DonHang {
 	
 	public void setTenNguoiNhanHang(String tenNguoiNhanHang) {
 		this.tenNguoiNhanHang = tenNguoiNhanHang;
+	}
+	
+	public String getChuThich() {
+		return chuThich;
+	}
+	
+	public void setChuThich(String chuThich) {
+		this.chuThich = chuThich;
 	}
 }

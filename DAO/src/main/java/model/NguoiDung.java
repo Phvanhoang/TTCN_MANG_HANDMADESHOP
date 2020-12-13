@@ -44,11 +44,11 @@ public class NguoiDung {
 	private Date NgaySinh;
 	
 	@JsonBackReference
-	@OneToOne(fetch = FetchType.LAZY, mappedBy="nguoiDung")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy="nguoiDung_TaiKhoan")
 	private TaiKhoan taiKhoan;
 	
 	@JsonBackReference
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nguoiDung")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nguoiDung_DonHang")
 	private Set<DonHang> sanhSachDonHang;
 	
 	@JsonIgnore
