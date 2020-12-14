@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import model.LoaiMatHang;
 import model.MatHang;
 import net.minidev.json.JSONObject;
+import service.LoaiMatHangService;
 import service.MatHangService;
 
 @CrossOrigin(origins = { "http://localhost:3000" })
@@ -32,6 +35,8 @@ import service.MatHangService;
 public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
+	
+	@Autowired LoaiMatHangService loaiMatHangService;
 
 	// tạo mặt hàng
 	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
@@ -119,12 +124,54 @@ public class MatHangController {
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
 	}
 
-//	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
-//	@PutMapping("/mat_hang/{maMatHang}")
-//	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody JSONObject mh){
-//		try {
-//			MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
-//			
-//		}
-//	}
+	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
+	@PutMapping("/authorized/mat_hang/{maMatHang}")
+	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody net.minidev.json.JSONObject mhInput){
+		org.springframework.boot.configurationprocessor.json.JSONObject mh = new org.springframework.boot.configurationprocessor.json.JSONObject(mhInput);
+		System.out.println(mh.toString());
+		try {
+			MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
+			try {
+				
+				String tenMatHang = mh.getString("tenMatHang");
+				System.out.println("tenMatHang: "+ tenMatHang );
+				Long maLoaiMatHang = mh.getLong("maLoaiMatHang");
+				Long gia = mh.getLong("gia");
+				int soLuong = mh.getInt("soLuong");
+				int soLuongDaBan = mh.getInt("soLuongDaBan");
+				String moTa = mh.getString("moTa");
+				
+				LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHangAndDeletedFalse(maLoaiMatHang);
+				
+				matHang.setTenMatHang(mh.getString("tenMatHang"));
+				matHang.setLoaiMatHang(loaiMatHang);
+				matHang.setGia(gia);
+				matHang.setSoLuong(soLuong);
+				matHang.setSoLuongDaBan(soLuongDaBan);
+				matHang.setMoTa(moTa);
+				
+				matHangService.save(matHang);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		} catch(Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Void>(HttpStatus.ACCEPTED);	
+	}
+	
+	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
+	@DeleteMapping("/authorized/mat_hang/{maMatHang}")
+	public ResponseEntity<Void> xoaMatHang(@PathVariable Long maMatHang){
+		try {
+			MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
+			matHang.setDeleted(true);
+			matHangService.save(matHang);
+		} catch(Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<Void>(HttpStatus.ACCEPTED);	
+	}
 }
