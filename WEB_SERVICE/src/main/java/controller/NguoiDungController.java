@@ -39,14 +39,14 @@ public class NguoiDungController {
 	@GetMapping("/authorized/nguoi_dung/{maNguoiDung}")
 	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung) {
 		JSONObject returnedObject = new JSONObject();
-		NguoiDung nguoiDung = nguoiDungService.findOne(maNguoiDung);
+		NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
+		if (nguoiDung == null) return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.NOT_FOUND);
 		returnedObject.put("hoTen", nguoiDung.getHoTen());
 		returnedObject.put("ngaySinh", nguoiDung.getNgaySinh());
 		returnedObject.put("sdt", nguoiDung.getSDT());
 		returnedObject.put("thanhPho", nguoiDung.getThanhPho());
 		returnedObject.put("anhDaiDien", nguoiDung.getAnhDaiDien());
 		returnedObject.put("gioiTinh", nguoiDung.getGioiTinh().getTenGioiTinh());
-
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
 
@@ -54,12 +54,12 @@ public class NguoiDungController {
 	@PostMapping("/nguoi_dung")
 	public ResponseEntity<Void> createND(@RequestParam String hoTen,
 			@RequestParam("avatar") MultipartFile multipartFile) {
+
 		NguoiDung nguoiDung = new NguoiDung();
 		nguoiDung.setHoTen(hoTen);
 		try {
 			nguoiDung.setAnhDaiDien(multipartFile.getBytes());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		nguoiDungService.save(nguoiDung);
@@ -73,8 +73,7 @@ public class NguoiDungController {
 			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
 			@RequestParam("thanhPho") String thanhPho, @RequestParam("sdt") String sdt,
 			@RequestParam("anhDaiDien") MultipartFile multipartFile) {
-
-		NguoiDung nguoiDung = nguoiDungService.findOne(maNguoiDung);
+		NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
 		nguoiDung.setHoTen(hoTen);
 
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -119,7 +118,7 @@ public class NguoiDungController {
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
 
-		Page<NguoiDung> returnedPage = nguoiDungService.findByIsDeletedFalse(pageable);
+		Page<NguoiDung> returnedPage = nguoiDungService.findByDeletedFalse(pageable);
 		List<NguoiDung> listNguoiDung = returnedPage.getContent();
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", listNguoiDung);

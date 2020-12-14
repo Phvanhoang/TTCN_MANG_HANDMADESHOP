@@ -10,6 +10,6 @@ import model.NguoiDung;
 @Repository
 public interface NguoiDungRepository extends PagingAndSortingRepository<NguoiDung, Long> {
 
-	Page<NguoiDung> findByIsDeletedFalse(Pageable pageable);
+	Page<NguoiDung> findAll(Pageable pageable);
 
 }

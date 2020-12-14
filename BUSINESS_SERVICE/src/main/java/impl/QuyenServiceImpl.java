@@ -15,7 +15,7 @@ public class QuyenServiceImpl implements QuyenService {
 	private QuyenRepository quyenRepository;
 
 	public ArrayList<DacQuyen> getDanhSachDacQuyen() {
-		return quyenRepository.findByIsDeletedFalse();
+		return quyenRepository.findAll();
 	}
 
 }

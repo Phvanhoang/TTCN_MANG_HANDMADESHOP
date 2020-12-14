@@ -7,6 +7,6 @@ import model.NguoiDung;
 
 public interface NguoiDungService {
 	void save(NguoiDung nguoiDung);
-	NguoiDung findOne(long maNguoiDung);
-	Page<NguoiDung> findByIsDeletedFalse(Pageable pageable);
+	NguoiDung findByDeletedFalse(long maNguoiDung);
+	Page<NguoiDung> findByDeletedFalse(Pageable pageable);
 }

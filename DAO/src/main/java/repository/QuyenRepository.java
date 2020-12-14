@@ -10,6 +10,6 @@ import model.DacQuyen;
 @Repository
 public interface QuyenRepository extends CrudRepository<DacQuyen, Long>{
 
-	ArrayList<DacQuyen> findByIsDeletedFalse();
+	ArrayList<DacQuyen> findAll();
 
 }

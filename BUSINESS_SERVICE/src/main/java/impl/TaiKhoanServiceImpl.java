@@ -12,11 +12,11 @@ import service.TaiKhoanService;
 public class TaiKhoanServiceImpl implements TaiKhoanService {
 	@Autowired
 	private TaiKhoanRepository taiKhoanRepository;
-	public TaiKhoan findByMaTaiKhoanAndIsDeletedFalse(Long maTaiKhoan) {
-		return taiKhoanRepository.findByMaTaiKhoanAndIsDeletedFalse(maTaiKhoan);
+	public TaiKhoan findByMaTaiKhoanAndDeletedFalse(Long maTaiKhoan) {
+		return taiKhoanRepository.findByMaTaiKhoan(maTaiKhoan);
 	}
-	public void save(TaiKhoan taiKhoan) {
-		taiKhoanRepository.save(taiKhoan);
+	public TaiKhoan save(TaiKhoan taiKhoan) {
+		return taiKhoanRepository.save(taiKhoan);
 		
 	}
 }

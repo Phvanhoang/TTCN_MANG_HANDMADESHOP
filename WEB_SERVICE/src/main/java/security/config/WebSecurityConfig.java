@@ -2,6 +2,8 @@ package security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -11,8 +13,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import model.TaiKhoan;
+
 import org.springframework.security.config.BeanIds;
 
+import security.auditor_aware.SpringSecurityAuditorAware;
 import security.jwt.JwtAuthenticationFilter;
 import security.user.UserService;
 
@@ -23,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        String encodedPassword = passwordEncoder.encode("Hoangpv6681");
 //        System.out.println(encodedPassword);
 //    }
-    
+//    
     @Autowired
     UserService userService;
 
@@ -42,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

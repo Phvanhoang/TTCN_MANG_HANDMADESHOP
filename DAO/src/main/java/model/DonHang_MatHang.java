@@ -3,6 +3,8 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -10,71 +12,34 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "DONHANG_MATHANG")
+@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "id")
-public class DonHang_MatHang {
+public class DonHang_MatHang extends AuditModel<TaiKhoan>{
+	private static final long serialVersionUID = 4241860765887281677L;
 	@EmbeddedId
 	private DonHang_MatHang_Key id;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("maDonHang")
 	@JoinColumn(name = "MaDonHang")
 	private DonHang donHang;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("maMatHang")
 	@JoinColumn(name = "MaMatHang")
-	private MatHang matHang;
+	private MatHang matHang_DonHang;
 	
 	@Column(name = "SoLuong", nullable = true)
 	private int soLuong;
-	
-	@JsonIgnore
-	@Column(name = "IsDeleted", nullable = false)
-	private boolean isDeleted;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "UpdatedBy", nullable = true)
-	private TaiKhoan updatedBy;
-	
-	@JsonIgnore
-	@Column(name = "UpdatedAt", nullable = true)
-	private Date updatedAt;
-	
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-	
-	public TaiKhoan getUpdatedBy() {
-		return updatedBy;
-	}
-	
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-	
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-	
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	public void setUpdatedBy(TaiKhoan updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-	
+
 	public DonHang getDonHang() {
 		return donHang;
 	}
 	
 	public MatHang getMatHang() {
-		return matHang;
+		return matHang_DonHang;
 	}
 	
 	public DonHang_MatHang_Key getId() {
@@ -94,7 +59,7 @@ public class DonHang_MatHang {
 	}
 	
 	public void setMatHang(MatHang matHang) {
-		this.matHang = matHang;
+		this.matHang_DonHang = matHang;
 	}
 	
 	public void setSoLuong(int soLuong) {

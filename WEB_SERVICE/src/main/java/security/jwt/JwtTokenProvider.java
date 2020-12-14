@@ -3,6 +3,7 @@ package security.jwt;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -13,6 +14,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import security.user.CustomUserDetails;
 
 @Component
+@Service
 public class JwtTokenProvider {
     private final String JWT_SECRET = "WEB TTCN";
     private final long JWT_EXPIRATION = 604800000L;

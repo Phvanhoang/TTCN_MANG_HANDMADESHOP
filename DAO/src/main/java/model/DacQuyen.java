@@ -3,6 +3,8 @@ import java.sql.Date;
 import java.util.Set;
 import javax.persistence.*;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,10 +12,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "DACQUYEN")
+//@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "maDacQuyen")
-public class DacQuyen {
+public class DacQuyen{
 	@Id
 	@Column(name = "MaDacQuyen")
 	@GeneratedValue
@@ -22,46 +25,9 @@ public class DacQuyen {
 	@Column(name = "TenDacQuyen", nullable = false)
 	private String tenDacQuyen;
 	
-	@JsonBackReference
 	@OneToMany(mappedBy = "dacQuyen")
 	private Set<TaiKhoan> danhSachTaiKhoan;
-	
-	@JsonIgnore
-	@Column(name = "IsDeleted", nullable = false)
-	private boolean isDeleted;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "UpdatedBy", nullable = true)
-	private TaiKhoan updatedBy;
-	
-	@JsonIgnore
-	@Column(name = "UpdatedAt", nullable = true)
-	private Date updatedAt;
-	
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-	
-	public TaiKhoan getUpdatedBy() {
-		return updatedBy;
-	}
-	
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-	
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-	
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	public void setUpdatedBy(TaiKhoan updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+
 	public Set<TaiKhoan> getDanhSachTaiKhoan() {
 		return danhSachTaiKhoan;
 	}

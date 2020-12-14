@@ -4,6 +4,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.Nationalized;
+import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,10 +15,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "NGUOIDUNG")
+@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "maNguoiDung")
-public class NguoiDung {
+public class NguoiDung extends AuditModel<TaiKhoan>{
+	private static final long serialVersionUID = 799225384863590495L;
+
 	@Id
 	@Column(name = "MaNguoiDung")
 	@GeneratedValue
@@ -26,7 +32,6 @@ public class NguoiDung {
 	@Column(name = "AnhDaiDien", nullable = true)
 	private byte[] anhDaiDien;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaGioiTinh", nullable = true)
 	private GioiTinh gioiTinh;
@@ -43,51 +48,15 @@ public class NguoiDung {
 	@Column(name = "NgaySinh", nullable = true)
 	private Date NgaySinh;
 	
-	@JsonBackReference
-	@OneToOne(fetch = FetchType.LAZY, mappedBy="nguoiDung")
+	@JsonManagedReference
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "MaTaiKhoan", nullable = false)
 	private TaiKhoan taiKhoan;
 	
 	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nguoiDung")
 	private Set<DonHang> sanhSachDonHang;
-	
-	@JsonIgnore
-	@Column(name = "IsDeleted", nullable = false)
-	private boolean isDeleted;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "UpdatedBy", nullable = true)
-	private TaiKhoan updatedBy;
-	
-	@JsonIgnore
-	@Column(name = "UpdatedAt", nullable = true)
-	private Date updatedAt;
-	
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-	
-	public TaiKhoan getUpdatedBy() {
-		return updatedBy;
-	}
-	
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-	
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-	
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	public void setUpdatedBy(TaiKhoan updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-	
+
 	public byte[] getAnhDaiDien() {
 		return anhDaiDien;
 	}

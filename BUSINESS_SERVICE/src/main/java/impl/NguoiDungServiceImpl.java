@@ -18,11 +18,11 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 		nguoiDungRepository.save(nguoiDung);
 	}
 
-	public NguoiDung findOne(long maNguoiDung) {
+	public NguoiDung findByDeletedFalse(long maNguoiDung) {
 		return nguoiDungRepository.findById(maNguoiDung).get();
 	}
 
-	public Page<NguoiDung> findByIsDeletedFalse(Pageable pageable) {
-		return nguoiDungRepository.findByIsDeletedFalse(pageable);
+	public Page<NguoiDung> findByDeletedFalse(Pageable pageable) {
+		return nguoiDungRepository.findAll(pageable);
 	}
 }

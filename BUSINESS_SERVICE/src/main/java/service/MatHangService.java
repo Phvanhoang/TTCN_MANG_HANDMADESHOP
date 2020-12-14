@@ -8,7 +8,7 @@ import model.NguoiDung;
 
 public interface MatHangService {
 	void save(MatHang matHang);
-	MatHang findByMaMatHangAndIsDeletedFalse(long maMatHang);
-	Page<MatHang> findByIsDeletedFalse(Pageable pageable);
+	MatHang findByMaMatHangAndDeletedFalse(long maMatHang);
+	Page<MatHang> findByDeletedFalse(Pageable pageable);
 
 }

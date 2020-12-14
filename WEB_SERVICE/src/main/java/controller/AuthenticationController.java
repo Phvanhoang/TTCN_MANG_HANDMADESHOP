@@ -44,7 +44,7 @@ public class AuthenticationController {
 		loginResponse.setAccessToken(jwt);
 		loginResponse.setId(tokenProvider.getUserIdFromJWT(jwt));
 		
-		TaiKhoan taikhoan = TaiKhoanService.findByMaTaiKhoanAndIsDeletedFalse(loginResponse.getId());
+		TaiKhoan taikhoan = TaiKhoanService.findByMaTaiKhoanAndDeletedFalse(loginResponse.getId());
 		loginResponse.setRole(taikhoan.getDacQuyen().getTenDacQuyen());
 		
 		if(jwt.equals("")) {

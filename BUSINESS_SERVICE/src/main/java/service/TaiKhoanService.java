@@ -3,6 +3,6 @@ package service;
 import model.TaiKhoan;
 
 public interface TaiKhoanService {
-	TaiKhoan findByMaTaiKhoanAndIsDeletedFalse(Long maTaiKhoan);
-	void save(TaiKhoan taiKhoan);
+	TaiKhoan findByMaTaiKhoanAndDeletedFalse(Long maTaiKhoan);
+	TaiKhoan save(TaiKhoan taiKhoan);
 }
