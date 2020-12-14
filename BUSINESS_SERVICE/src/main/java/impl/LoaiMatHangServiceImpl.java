@@ -26,4 +26,9 @@ public class LoaiMatHangServiceImpl implements LoaiMatHangService{
 		return loaiMatHangRepository.findByDeletedFalse(pageable);
 	}
 
+	public void delete(LoaiMatHang loaiMatHang) {
+		loaiMatHangRepository.delete(loaiMatHang);
+		
+	}
+
 }

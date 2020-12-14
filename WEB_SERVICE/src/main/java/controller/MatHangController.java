@@ -83,9 +83,9 @@ public class MatHangController {
 			matHang.put("soLuongDaBang", mh.getSoLuongDaBan());
 			matHang.put("moTa", mh.getMoTa());
 			matHang.put("createdAt", mh.getCreatedAt());
-			matHang.put("createdBy", mh.getCreatedBy());
+			matHang.put("createdBy", mh.getCreatedBy().getMaTaiKhoan());
 			matHang.put("updatedAt", mh.getUpdatedAt());
-			matHang.put("updatedBy", mh.getUpdatedBy());
+			matHang.put("updatedBy", mh.getUpdatedBy().getMaTaiKhoan());
 			matHang.put("deleted", mh.isDeleted());
 			
 			data.add(matHang);

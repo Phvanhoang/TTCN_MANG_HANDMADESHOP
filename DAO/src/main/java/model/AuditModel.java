@@ -1,6 +1,15 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,9 +17,9 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(
         value = {"createdAt", "updatedAt", "updatedBy", "createdBy", "deleted"},
@@ -34,11 +43,13 @@ public abstract class AuditModel<TaiKhoan> implements Serializable {
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	@LastModifiedBy
 	@ManyToOne
+	@JsonBackReference
 	private TaiKhoan updatedBy;
 
     @JoinColumn(name = "CreatedBy", nullable = true, updatable = false)
     @CreatedBy
     @ManyToOne
+    @JsonBackReference
     private TaiKhoan createdBy;
 
     @JoinColumn(name = "Deleted", nullable = false, columnDefinition = "boolean default false")

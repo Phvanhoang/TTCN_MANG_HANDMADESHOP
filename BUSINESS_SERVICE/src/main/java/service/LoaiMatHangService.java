@@ -7,6 +7,7 @@ import model.LoaiMatHang;
 
 public interface LoaiMatHangService {
 	void save(LoaiMatHang loaiMatHang);
+	void delete(LoaiMatHang loaiMatHang);
 	LoaiMatHang findByMaLoaiMatHangAndDeletedFalse(long maLoaiMatHang);
 	Page<LoaiMatHang> findByDeletedFalse(Pageable pageable);
 
