@@ -27,18 +27,16 @@ import model.MatHang;
 import net.minidev.json.JSONObject;
 import service.MatHangService;
 
-
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
 public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
 
-	
 	// tạo mặt hàng
 	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
-	@PostMapping(value="/authorized/mat_hang")
-	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) { 
+	@PostMapping(value = "/authorized/mat_hang")
+	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) {
 		try {
 			Gson gson = new Gson();
 			matHangService.save(gson.fromJson(matHang.toString(), MatHang.class));
@@ -47,37 +45,53 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
-	
+
 	// lấy thông tin mặt hàng theo mã mặt hàng
 	@GetMapping("/mat_hang/{maMatHang}")
-	public ResponseEntity<MatHang> timMatHang(@PathVariable Long maMatHang) {
-		MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
-		if(matHang==null) {
-			return new ResponseEntity<MatHang>(matHang, HttpStatus.NOT_FOUND);
+	public ResponseEntity<JSONObject> timMatHang(@PathVariable Long maMatHang) {
+		try {
+			MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
+
+			JSONObject returnedMatHang = new JSONObject();
+			returnedMatHang.put("maMatHang", matHang.getMaMatHang());
+			returnedMatHang.put("tenMatHang", matHang.getTenMatHang());
+			returnedMatHang.put("maLoaiMatHang", matHang.getLoaiMatHang().getMaLoaiMatHang());
+			returnedMatHang.put("gia", matHang.getGia());
+			returnedMatHang.put("soLuong", matHang.getSoLuong());
+			returnedMatHang.put("soLuongDaBan", matHang.getSoLuongDaBan());
+			returnedMatHang.put("moTa", matHang.getMoTa());
+			returnedMatHang.put("createdAt", matHang.getCreatedAt());
+			returnedMatHang.put("createdBy", matHang.getCreatedBy().getMaTaiKhoan());
+			returnedMatHang.put("updatedAt", matHang.getUpdatedAt());
+			returnedMatHang.put("updatedBy", matHang.getUpdatedBy().getMaTaiKhoan());
+
+			return new ResponseEntity<JSONObject>(returnedMatHang, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<JSONObject>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<MatHang>(matHang, HttpStatus.OK);
+
 	}
-	
-	// lấy thông tin tất cả mặt hàng 
+
+	// lấy thông tin tất cả mặt hàng
 	@GetMapping("/mat_hang")
 	public ResponseEntity<JSONObject> getAllMatHang(
-			@RequestParam(name="page", required=false, defaultValue="0") int page,
-			@RequestParam(name="size", required=false, defaultValue="15") int size,
-			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort) throws JSONException{
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) throws JSONException {
 		Sort sortable = null;
-		if(sort.equals("ASC")) {
+		if (sort.equals("ASC")) {
 			sortable = Sort.by("maMatHang").ascending();
 		}
-		if(sort.equals("DESC")) {
+		if (sort.equals("DESC")) {
 			sortable = Sort.by("maMatHang").descending();
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
-		
+
 		Page<MatHang> returnedPage = matHangService.findByDeletedFalse(pageable);
 		List<MatHang> listMatHang = returnedPage.getContent();
-		
+
 		List<JSONObject> data = new ArrayList<JSONObject>();
-		for(int i=0;i<listMatHang.size();i++) {
+		for (int i = 0; i < listMatHang.size(); i++) {
 			JSONObject matHang = new JSONObject();
 			MatHang mh = listMatHang.get(i);
 			matHang.put("maMatHang", mh.getMaMatHang());
@@ -92,19 +106,19 @@ public class MatHangController {
 			matHang.put("updatedAt", mh.getUpdatedAt());
 			matHang.put("updatedBy", mh.getUpdatedBy().getMaTaiKhoan());
 			matHang.put("deleted", mh.isDeleted());
-			
+
 			data.add(matHang);
 		}
-		
+
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", data);
 		returnedObject.put("currentPage", returnedPage.getNumber());
-	    returnedObject.put("totalItems", returnedPage.getTotalElements());
-	    returnedObject.put("totalPages", returnedPage.getTotalPages());
-	    
+		returnedObject.put("totalItems", returnedPage.getTotalElements());
+		returnedObject.put("totalPages", returnedPage.getTotalPages());
+
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
 	}
-	
+
 //	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
 //	@PutMapping("/mat_hang/{maMatHang}")
 //	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody JSONObject mh){

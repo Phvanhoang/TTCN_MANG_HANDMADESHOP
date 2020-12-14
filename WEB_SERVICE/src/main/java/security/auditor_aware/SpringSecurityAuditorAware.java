@@ -22,8 +22,9 @@ public class SpringSecurityAuditorAware implements AuditorAware<TaiKhoan> {
 
 	public SpringSecurityAuditorAware(TaiKhoanService taiKhoanService, QuyenService quyenService) {
 		if (taiKhoanService.existsById(maTaiKhoan)) {
-			taiKhoan = taiKhoanService.findByMaTaiKhoan(1L);
+			taiKhoan = taiKhoanService.findByMaTaiKhoan(maTaiKhoan);
 		} else {
+			taiKhoan = new TaiKhoan();
 			ArrayList<DacQuyen> danhSachDacQuyen = quyenService.getDanhSachDacQuyen();
 			for(int i=0;i<danhSachDacQuyen.size();i++) {
 				if(danhSachDacQuyen.get(i).getTenDacQuyen().equals("ROLE_USER")) {
@@ -31,7 +32,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<TaiKhoan> {
 					break;
 				}
 			}
-			taiKhoan = new TaiKhoan();
+			
 			taiKhoan.setMaTaiKhoan(maTaiKhoan);
 			taiKhoan.setTenDangNhap("username");
 			taiKhoan.setMatKhau("password");

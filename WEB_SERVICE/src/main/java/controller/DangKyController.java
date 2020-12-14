@@ -83,11 +83,9 @@ public class DangKyController {
 			System.out.println("loi tai cho nay!");
 		}
 		
-		taiKhoanService.save(taiKhoan);
-		
-//		nguoiDung.setCreatedBy(Long.toString(createdTaiKhoan.getMaTaiKhoan()));
-//		nguoiDung.setTaiKhoan(createdTaiKhoan);
-//		nguoiDungService.save(nguoiDung);
+		//nguoiDung.setCreatedBy(Long.toString(createdTaiKhoan.getMaTaiKhoan()));
+		//nguoiDung.setTaiKhoan(createdTaiKhoan);
+		//nguoiDungService.save(nguoiDung);
 		
 		if(nguoiDung == null || taiKhoan == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
