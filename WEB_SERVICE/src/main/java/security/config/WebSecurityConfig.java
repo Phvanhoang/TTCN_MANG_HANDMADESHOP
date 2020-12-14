@@ -26,10 +26,10 @@ import security.user.UserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    public static void main(String[] args) {
 //        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        String encodedPassword = passwordEncoder.encode("Hoangpv6681");
+//        String encodedPassword = passwordEncoder.encode("123");
 //        System.out.println(encodedPassword);
 //    }
-//    
+    
     @Autowired
     UserService userService;
 
