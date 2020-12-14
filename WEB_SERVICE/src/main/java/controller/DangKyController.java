@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import model.DacQuyen;
 import model.NguoiDung;
@@ -27,6 +28,7 @@ import service.QuyenService;
 import service.TaiKhoanService;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
+//@SessionAttributes("taiKhoan")
 @RestController
 public class DangKyController {
 	@Autowired
@@ -35,7 +37,6 @@ public class DangKyController {
 	private NguoiDungService nguoiDungService;
 	@Autowired 
 	private QuyenService quyenService;
-
 	
 	@PostMapping("/register")
 	public ResponseEntity<Void> dangKy(@RequestBody JSONObject taiKhoanDangKy) {
@@ -54,7 +55,7 @@ public class DangKyController {
 		TaiKhoan taiKhoan = new TaiKhoan();
 		taiKhoan.setTenDangNhap(tenDangKy);
 		taiKhoan.setMatKhau(matKhauMaHoa);
-		taiKhoan.setNguoiDung(nguoiDung);
+//		taiKhoan.setNguoiDung(nguoiDung);
 		
 		ArrayList<DacQuyen> danhSachDacQuyen = quyenService.getDanhSachDacQuyen();
 		for(int i=0;i<danhSachDacQuyen.size();i++) {
@@ -82,11 +83,11 @@ public class DangKyController {
 			System.out.println("loi tai cho nay!");
 		}
 		
-		TaiKhoan createdTaiKhoan = taiKhoanService.save(taiKhoan);
+		taiKhoanService.save(taiKhoan);
 		
-		nguoiDung.setCreatedBy(createdTaiKhoan);
-		nguoiDung.setTaiKhoan(createdTaiKhoan);
-		nguoiDungService.save(nguoiDung);
+//		nguoiDung.setCreatedBy(Long.toString(createdTaiKhoan.getMaTaiKhoan()));
+//		nguoiDung.setTaiKhoan(createdTaiKhoan);
+//		nguoiDungService.save(nguoiDung);
 		
 		if(nguoiDung == null || taiKhoan == null) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);

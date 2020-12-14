@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 )
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AuditModel<TaiKhoan> implements Serializable {
+public abstract class AuditModel<U> implements Serializable {
 	private static final long serialVersionUID = 4927595793802724713L;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -44,13 +44,13 @@ public abstract class AuditModel<TaiKhoan> implements Serializable {
 	@LastModifiedBy
 	@ManyToOne
 	@JsonBackReference
-	private TaiKhoan updatedBy;
+	private U updatedBy;
 
     @JoinColumn(name = "CreatedBy", nullable = true, updatable = false)
     @CreatedBy
-    @ManyToOne
+    @ManyToOne()
     @JsonBackReference
-    private TaiKhoan createdBy;
+    private U createdBy;
 
     @JoinColumn(name = "Deleted", nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
@@ -59,11 +59,11 @@ public abstract class AuditModel<TaiKhoan> implements Serializable {
         return createdAt;
     }
     
-    public TaiKhoan getCreatedBy() {
+    public U getCreatedBy() {
 		return createdBy;
 	}
     
-    public void setCreatedBy(TaiKhoan createdBy) {
+    public void setCreatedBy(U createdBy) {
 		this.createdBy = createdBy;
 	}
     
@@ -87,11 +87,11 @@ public abstract class AuditModel<TaiKhoan> implements Serializable {
         this.updatedAt = updatedAt;
     }
     
-    public TaiKhoan getUpdatedBy() {
+    public U getUpdatedBy() {
 		return updatedBy;
 	}
     
-    public void setUpdatedBy(TaiKhoan updatedBy) {
+    public void setUpdatedBy(U updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 }
