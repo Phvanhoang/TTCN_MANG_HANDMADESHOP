@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,8 @@ public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
 
+	
+	// tạo mặt hàng
 	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
 	@PostMapping(value="/authorized/mat_hang")
 	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) { 
@@ -45,6 +48,7 @@ public class MatHangController {
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
+	// lấy thông tin mặt hàng theo mã mặt hàng
 	@GetMapping("/mat_hang/{maMatHang}")
 	public ResponseEntity<MatHang> timMatHang(@PathVariable Long maMatHang) {
 		MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
@@ -54,6 +58,7 @@ public class MatHangController {
 		return new ResponseEntity<MatHang>(matHang, HttpStatus.OK);
 	}
 	
+	// lấy thông tin tất cả mặt hàng 
 	@GetMapping("/mat_hang")
 	public ResponseEntity<JSONObject> getAllMatHang(
 			@RequestParam(name="page", required=false, defaultValue="0") int page,
@@ -98,7 +103,14 @@ public class MatHangController {
 	    returnedObject.put("totalPages", returnedPage.getTotalPages());
 	    
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
-
 	}
 	
+//	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
+//	@PutMapping("/mat_hang/{maMatHang}")
+//	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody JSONObject mh){
+//		try {
+//			MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
+//			
+//		}
+//	}
 }

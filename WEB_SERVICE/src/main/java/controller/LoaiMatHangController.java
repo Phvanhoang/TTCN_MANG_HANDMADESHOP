@@ -31,7 +31,8 @@ import service.LoaiMatHangService;
 public class LoaiMatHangController {
 	@Autowired
 	private LoaiMatHangService loaiMatHangService;
-
+	
+	// lấy thông tin loại mặt hàng theo mã loại mặt hàng
 	@GetMapping("/loai_mat_hang/{maLoaiMatHang}")
 	public ResponseEntity<JSONObject> timLoaiMatHang(@PathVariable Long maLoaiMatHang) {
 		LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHangAndDeletedFalse(maLoaiMatHang);
@@ -50,7 +51,8 @@ public class LoaiMatHangController {
 
 		return new ResponseEntity<JSONObject>(returnedLMH, HttpStatus.OK);
 	}
-
+	
+	// lấy thông tin tất cả loại mặt hàng
 	@GetMapping("/loai_mat_hang")
 	public ResponseEntity<JSONObject> getAllLoaiMatHang(
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
@@ -90,6 +92,7 @@ public class LoaiMatHangController {
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
 
+	// thêm một loại mặt hàng vào CSDL
 	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
 	@PostMapping("/loai_mat_hang")
 	public ResponseEntity<Void> themLoaiMatHang(@RequestBody JSONObject lmh) {
@@ -103,6 +106,7 @@ public class LoaiMatHangController {
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
+	// chỉnh sửa thông tin loại mặt hàng
 	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
 	@PutMapping("/loai_mat_hang/{maLoaiMatHang}")
 	public ResponseEntity<Void> suaLoaiMatHang(@PathVariable Long maLoaiMatHang, @RequestBody JSONObject lmh) {
