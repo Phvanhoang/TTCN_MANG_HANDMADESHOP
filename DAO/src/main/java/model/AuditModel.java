@@ -43,17 +43,15 @@ public abstract class AuditModel<U> implements Serializable {
 	@JoinColumn(name = "UpdatedBy", nullable = true)
 	@LastModifiedBy
 	@ManyToOne
+	@JsonBackReference
 	private U updatedBy;
 
     @JoinColumn(name = "CreatedBy", nullable = true, updatable = false)
     @CreatedBy
     @ManyToOne()
+    @JsonBackReference
     private U createdBy;
 
-    @JoinColumn(name = "CreatedBy", nullable = true, updatable = false)
-    @CreatedBy
-    @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "Deleted", nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
     

@@ -30,7 +30,7 @@ import service.TaiKhoanService;
 //@EnableTransactionManagement
 @EntityScan(basePackages = "model")
 @EnableJpaRepositories(basePackages = "repository")
-@ComponentScan(basePackages = {"model", "impl", "controller","service", "security.*", "utils"}, 
+@ComponentScan(basePackages = {"model", "impl", "controller", "service", "security.*", "utils"}, 
 				basePackageClasses = {WebSecurityConfig.class, MethodSecurityConfig.class})
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class SpringBootProjectApplication {
