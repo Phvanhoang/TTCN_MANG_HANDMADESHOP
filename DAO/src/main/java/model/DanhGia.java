@@ -3,16 +3,20 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "DANHGIA")
+@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "maDanhGia")
-public class DanhGia {
+public class DanhGia extends AuditModel<TaiKhoan>{
+	private static final long serialVersionUID = 2025865206338089513L;
 	@Id
 	@Column(name = "MaDanhGia")
 	@GeneratedValue
@@ -21,12 +25,12 @@ public class DanhGia {
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaMatHang", nullable = false)
-	private MatHang matHang_DanhGia;
+	private MatHang matHang;
 	
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
-	private NguoiDung nguoiDung_DanhGia;
+	private NguoiDung nguoiDung;
 	
 	@Column(name = "SoSao", nullable = false)
 	private int soSao;
@@ -36,54 +40,17 @@ public class DanhGia {
 	
 	@Column(name = "ThoiGianDanhGia", nullable = false)
 	private Date thoiGianDanhGia;
-	
-	@JsonIgnore
-	@Column(name = "IsDeleted", nullable = false)
-	private boolean isDeleted;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "UpdatedBy", nullable = true)
-	private TaiKhoan updatedBy;
-	
-	@JsonIgnore
-	@Column(name = "UpdatedAt", nullable = true)
-	private Date updatedAt;
-	
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-	
-	public TaiKhoan getUpdatedBy() {
-		return updatedBy;
-	}
-	
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-	
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-	
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	public void setUpdatedBy(TaiKhoan updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-	
+
 	public long getMaDanhGia() {
 		return maDanhGia;
 	}
 	
 	public MatHang getMatHang() {
-		return matHang_DanhGia;
+		return matHang;
 	}
 	
 	public NguoiDung getNguoiDung() {
-		return nguoiDung_DanhGia;
+		return nguoiDung;
 	}
 	
 	public int getNoiDung() {
@@ -103,11 +70,11 @@ public class DanhGia {
 	}
 	
 	public void setMatHang(MatHang matHang) {
-		this.matHang_DanhGia = matHang;
+		this.matHang = matHang;
 	}
 	
 	public void setNguoiDung(NguoiDung nguoiDung) {
-		this.nguoiDung_DanhGia = nguoiDung;
+		this.nguoiDung = nguoiDung;
 	}
 	
 	public void setNoiDung(int noiDung) {

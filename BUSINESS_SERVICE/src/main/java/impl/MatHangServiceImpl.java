@@ -19,10 +19,10 @@ public class MatHangServiceImpl implements MatHangService{
 	}
 	
 	public MatHang findByMaMatHangAndIsDeletedFalse(long maMatHang) {
-		return matHangRepository.findByMaMatHangAndIsDeletedFalse(maMatHang);
+		return matHangRepository.findByMaMatHang(maMatHang);
 	}
 
 	public Page<MatHang> findByIsDeletedFalse(Pageable pageable) {
-		return matHangRepository.findByIsDeletedFalse(pageable);
+		return matHangRepository.findAll(pageable);
 	}
 }

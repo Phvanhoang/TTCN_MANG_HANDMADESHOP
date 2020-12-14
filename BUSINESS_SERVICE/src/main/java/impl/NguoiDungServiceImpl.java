@@ -23,6 +23,6 @@ public class NguoiDungServiceImpl implements NguoiDungService {
 	}
 
 	public Page<NguoiDung> findByIsDeletedFalse(Pageable pageable) {
-		return nguoiDungRepository.findByIsDeletedFalse(pageable);
+		return nguoiDungRepository.findAll(pageable);
 	}
 }

@@ -2,6 +2,9 @@ package model;
 import java.sql.Date;
 import javax.persistence.*;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -9,10 +12,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "TAIKHOAN")
+@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "maTaiKhoan")
-public class TaiKhoan {
+public class TaiKhoan extends AuditModel<TaiKhoan>{
+	private static final long serialVersionUID = 485219662594825884L;
+
 	@Id
 	@Column(name = "MaTaiKhoan")
 	@GeneratedValue
@@ -35,47 +41,9 @@ public class TaiKhoan {
 	@Column(name = "TrangThai", nullable = false)
 	private boolean trangThai;
 	
-	@JsonManagedReference
-	@OneToOne
-	@JoinColumn(name = "MaNguoiDung", nullable = false)
-	private NguoiDung nguoiDung_TaiKhoan;
-	
-	@JsonIgnore
-	@Column(name = "IsDeleted", nullable = false)
-	private boolean isDeleted;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "UpdatedBy", nullable = true)
-	private TaiKhoan updatedBy;
-	
-	@JsonIgnore
-	@Column(name = "UpdatedAt", nullable = true)
-	private Date updatedAt;
-	
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-	
-	public TaiKhoan getUpdatedBy() {
-		return updatedBy;
-	}
-	
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-	
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-	
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	public void setUpdatedBy(TaiKhoan updatedBy) {
-		this.updatedBy = updatedBy;
-	}
+	@JsonBackReference
+	@OneToOne(fetch = FetchType.LAZY, mappedBy="taiKhoan")
+	private NguoiDung nguoiDung;
 	
 	public long getMaTaiKhoan() {
 		return maTaiKhoan;
@@ -86,7 +54,7 @@ public class TaiKhoan {
 	}
 	
 	public NguoiDung getNguoiDung() {
-		return nguoiDung_TaiKhoan;
+		return nguoiDung;
 	}
 	
 	public DacQuyen getDacQuyen() {
@@ -114,7 +82,7 @@ public class TaiKhoan {
 	}
 	
 	public void setNguoiDung(NguoiDung nguoiDung) {
-		this.nguoiDung_TaiKhoan = nguoiDung;
+		this.nguoiDung = nguoiDung;
 	}
 	
 	public void setDacQuyen(DacQuyen dacQuyen) {

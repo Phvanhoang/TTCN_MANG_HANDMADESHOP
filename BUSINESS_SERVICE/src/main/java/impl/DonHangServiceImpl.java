@@ -5,7 +5,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -29,18 +28,19 @@ public class DonHangServiceImpl implements DonHangService{
 	private DonHangRepository donHangRepository;
 	
 	public Page<DonHang> findAllByNguoiDung(Pageable pageable, NguoiDung nguoiDung) {
-		return donHangRepository.findByNguoiDungAndIsDeletedFalse(pageable, nguoiDung);
+		return null;
+//		return donHangRepository.findByNguoiDungAndDeletedFalse(pageable, nguoiDung);
 	}
 
 	@Transactional
-	public void createDonHang(DonHang donHang) {
+	public void createDonHang(DonHang donHang) throws Exception {
 		int sum = 0;
 		Set<DonHang_MatHang> list = donHang.getDanhSachMatHang();
 		Iterator<DonHang_MatHang> itr = list.iterator();
 		while (itr.hasNext()) {
 			DonHang_MatHang donHang_MatHang = itr.next();
 			donHang_MatHang.setDonHang(donHang);
-			donHang_MatHang.setUpdatedBy(donHang.getNguoiDung().getTaiKhoan());
+//			donHang_MatHang.setUpdatedBy(donHang.getNguoiDung().getTaiKhoan());
 //			donHang.getDanhSachMatHang().add(list.get(i));
 //			sum += donHang_MatHang.getSoLuong() * donHang_MatHang.getMatHang().getGia();
 		}
@@ -58,6 +58,7 @@ public class DonHangServiceImpl implements DonHangService{
 		trangThaiDonHang.setMatrangThai(1);
 		donHang.setTrangThaiDonHang(trangThaiDonHang);
 		donHangRepository.save(donHang);
+//		throw new Exception();
 	}
 
 }

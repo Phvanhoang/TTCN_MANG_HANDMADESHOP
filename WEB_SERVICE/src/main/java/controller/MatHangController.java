@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import model.MatHang;
 import service.MatHangService;
 import net.minidev.json.JSONObject;
@@ -30,10 +32,15 @@ public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
 
-	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
-	@PostMapping(value="/authorizied/mat_hang/create")
-	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) {
-//		matHangService.save(matHang);
+	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
+	@PostMapping(value="/authorized/mat_hang")
+	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) { 
+		try {
+			Gson gson = new Gson();
+			matHangService.save(gson.fromJson(matHang.toString(), MatHang.class));
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	

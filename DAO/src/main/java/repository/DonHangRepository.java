@@ -10,5 +10,5 @@ import model.NguoiDung;
 
 @Repository
 public interface DonHangRepository extends PagingAndSortingRepository<DonHang, Long>{
-	Page<DonHang> findByNguoiDungAndIsDeletedFalse(Pageable pageable, NguoiDung nguoiDung);
+	Page<DonHang> findByNguoiDung(Pageable pageable, NguoiDung nguoiDung);
 }

@@ -11,5 +11,5 @@ import model.NguoiDung;
 
 public interface DonHangService {
 	Page<DonHang> findAllByNguoiDung(Pageable pageable, NguoiDung nguoiDung);
-	void createDonHang(DonHang donHang);
+	void createDonHang(DonHang donHang) throws Exception;
 }

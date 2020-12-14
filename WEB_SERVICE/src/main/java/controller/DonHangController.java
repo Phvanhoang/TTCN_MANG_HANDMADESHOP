@@ -41,24 +41,18 @@ public class DonHangController {
 		
 		JSONObject jsonObject = new JSONObject(jObject);
 		DonHang donHang = new DonHang();
-//		System.out.println(jObject);
 		try {
-//			donHang.setTenNguoiNhanHang(jsonObject.getString("tenNguoiNhanHang"));
-//			donHang.setSDTGiaoHang(jsonObject.getString("SDTGiaoHang"));
-//			donHang.setDiaChiGiaoHang(jsonObject.getString("diaChiGiaoHang"));
-//			donHang.setChuThich(jsonObject.getString("chuThich"));
-
-//			JSONArray jsonArray = jsonObject.getJSONArray("danhSachMatHang");
-//			JSONArray list = jsonObject.getJSONArray("danhSachMatHang");
 			Gson gson = new Gson();
 			donHang = gson.fromJson(jObject.toString(), DonHang.class);
 			TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(token);
 			donHang.setNguoiDung(taiKhoan.getNguoiDung());
-			donHang.setUpdatedBy(taiKhoan);
-			donHangService.createDonHang(donHang);
-			System.out.println(donHang.getDanhSachMatHang().size());
+//			donHang.setUpdatedBy(taiKhoan);
+			try {
+				donHangService.createDonHang(donHang);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

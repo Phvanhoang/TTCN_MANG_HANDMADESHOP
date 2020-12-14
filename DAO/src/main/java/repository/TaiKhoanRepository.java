@@ -8,5 +8,5 @@ import model.TaiKhoan;
 @Repository
 public interface TaiKhoanRepository extends CrudRepository<TaiKhoan, Long>{
 	TaiKhoan findByTenDangNhap(String tenDangNhap);
-	TaiKhoan findByMaTaiKhoanAndIsDeletedFalse(Long maTaiKhoan);
+	TaiKhoan findByMaTaiKhoan(Long maTaiKhoan);
 }

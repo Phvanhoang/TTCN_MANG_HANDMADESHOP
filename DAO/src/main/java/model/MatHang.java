@@ -8,6 +8,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -17,11 +18,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "MATHANG")
-@JsonIgnoreProperties(value = {"IsDeleted"}, allowSetters= true)
+@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "maMatHang")
-public class MatHang {
+public class MatHang extends AuditModel<TaiKhoan>{
+	private static final long serialVersionUID = 8320053786535532224L;
+
 	@Id
 	@Column(name = "MaMatHang")
 	@GeneratedValue
@@ -49,53 +52,15 @@ public class MatHang {
 	
 	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "matHang_DanhGia")
+	@OneToMany(mappedBy = "matHang")
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DanhGia> danhSachDanhGia;
 	
 	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany( mappedBy = "matHang_Anh")
+	@OneToMany( mappedBy = "matHang")
 	private List<Anh_MatHang> danhSachHinhAnh;
-	
-	@JsonIgnore
-	@JsonIgnoreProperties("IsDeleted")
-	@Column(name = "IsDeleted", nullable = false)
-	private boolean isDeleted;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "UpdatedBy", nullable = true)
-	private TaiKhoan updatedBy;
-	
-	@JsonIgnore
-	@Column(name = "UpdatedAt", nullable = true)
-	private Date updatedAt;
-	
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-	
-	public TaiKhoan getUpdatedBy() {
-		return updatedBy;
-	}
-	
-	public boolean isDeleted() {
-		return isDeleted;
-	}
-	
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-	
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	public void setUpdatedBy(TaiKhoan updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-	
+
 	public List<DanhGia> getDanhSachDanhGia() {
 		return danhSachDanhGia;
 	}

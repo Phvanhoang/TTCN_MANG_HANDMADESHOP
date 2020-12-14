@@ -13,7 +13,7 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
 	@Autowired
 	private TaiKhoanRepository taiKhoanRepository;
 	public TaiKhoan findByMaTaiKhoanAndIsDeletedFalse(Long maTaiKhoan) {
-		return taiKhoanRepository.findByMaTaiKhoanAndIsDeletedFalse(maTaiKhoan);
+		return taiKhoanRepository.findByMaTaiKhoan(maTaiKhoan);
 	}
 	public void save(TaiKhoan taiKhoan) {
 		taiKhoanRepository.save(taiKhoan);
