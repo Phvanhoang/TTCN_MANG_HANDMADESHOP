@@ -36,4 +36,7 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
 	public TaiKhoan findByTenDangNhapAndMatKhau(String tenDangNhap, String matKhau) {
 		return taiKhoanRepository.findByTenDangNhapAndMatKhauAndDeletedFalse(tenDangNhap, matKhau);
 	}
+	public boolean existsByTenDangNhap(String tenDangNhap) {
+		return taiKhoanRepository.existsByTenDangNhap(tenDangNhap);
+	}
 }

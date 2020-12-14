@@ -11,4 +11,5 @@ public interface TaiKhoanRepository extends CrudRepository<TaiKhoan, Long>{
 	TaiKhoan findByMaTaiKhoan(Long maTaiKhoan);
 	TaiKhoan findTopByOrderByMaTaiKhoanDesc();
 	TaiKhoan findByTenDangNhapAndMatKhauAndDeletedFalse(String tenDangNhap, String matKhau);
+	boolean existsByTenDangNhap(String tenDangNhap);
 }

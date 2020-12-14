@@ -71,6 +71,7 @@ public class SpringBootProjectApplication {
     
     public static void createAdminAccount(TaiKhoanService taiKhoanService, QuyenService quyenService ,
     							String tenDangNhap, String matKhau) {
+    	if (taiKhoanService.existsByTenDangNhap(tenDangNhap)) return;
     	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     	String encodedPassword = passwordEncoder.encode(matKhau);
 		TaiKhoan taiKhoan = new TaiKhoan();
