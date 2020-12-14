@@ -2,6 +2,7 @@ package model;
 import java.sql.Date;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -52,12 +53,6 @@ public class TaiKhoan extends AuditModel<TaiKhoan>{
 	@JsonBackReference
 	@OneToOne(fetch = FetchType.LAZY, mappedBy="taiKhoan")
 	private NguoiDung nguoiDung;
-	
-	@JoinColumn(name = "CreatedBy", nullable = true, updatable = false)
-    @CreatedBy
-    @ManyToOne
-    
-    private TaiKhoan createdBy;
 	
 	public long getMaTaiKhoan() {
 		return maTaiKhoan;

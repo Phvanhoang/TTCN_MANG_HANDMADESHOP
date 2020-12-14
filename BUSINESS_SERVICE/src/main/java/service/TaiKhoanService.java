@@ -4,5 +4,7 @@ import model.TaiKhoan;
 
 public interface TaiKhoanService {
 	TaiKhoan findByMaTaiKhoanAndDeletedFalse(Long maTaiKhoan);
-	TaiKhoan save(TaiKhoan taiKhoan);
+	void save(TaiKhoan taiKhoan);
+	boolean existsById(long id);
+	TaiKhoan findByMaTaiKhoan(long id);
 }

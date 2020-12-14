@@ -1,5 +1,5 @@
 package model;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -45,6 +45,7 @@ public class NguoiDung extends AuditModel<TaiKhoan>{
 	@Column(name = "SDT", nullable = true)
 	private String SDT;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "NgaySinh", nullable = true)
 	private Date NgaySinh;
 	

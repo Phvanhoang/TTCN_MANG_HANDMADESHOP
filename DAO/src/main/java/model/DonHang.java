@@ -20,7 +20,7 @@ public class DonHang extends AuditModel<TaiKhoan>{
 	@GeneratedValue
 	private long maDonHang;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
 	private NguoiDung nguoiDung;
 	
