@@ -27,6 +27,7 @@ public class LoaiMatHang extends AuditModel<TaiKhoan>{
 	@Column(name = "TenLoaiMatHang")
 	private String tenLoaiMatHang;
 	
+	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiMatHang")
 	private Set<MatHang> danhSachMatHang;
 	

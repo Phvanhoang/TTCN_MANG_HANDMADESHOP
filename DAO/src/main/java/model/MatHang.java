@@ -34,7 +34,7 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	@Column(name = "TenMatHang", nullable = false)
 	private String tenMatHang;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "MaLoaiMatHang", nullable = false)
 	private LoaiMatHang loaiMatHang;
 	
