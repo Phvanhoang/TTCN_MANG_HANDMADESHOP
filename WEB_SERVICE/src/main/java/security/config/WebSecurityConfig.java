@@ -24,12 +24,12 @@ import security.user.UserService;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    public static void main(String[] args) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode("Hoangpv6681");
-        System.out.println(encodedPassword);
-    }
-    
+//    public static void main(String[] args) {
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String encodedPassword = passwordEncoder.encode("Hoangpv6681");
+//        System.out.println(encodedPassword);
+//    }
+//    
     @Autowired
     UserService userService;
 
