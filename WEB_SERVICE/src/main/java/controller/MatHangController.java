@@ -77,7 +77,7 @@ public class MatHangController {
 			MatHang mh = listMatHang.get(i);
 			matHang.put("maMatHang", mh.getMaMatHang());
 			matHang.put("tenMatHang", mh.getTenMatHang());
-			matHang.put("loaiMatHang", mh.getLoaiMatHang().getMaLoaiMatHang());
+			matHang.put("maLoaiMatHang", mh.getLoaiMatHang().getMaLoaiMatHang());
 			matHang.put("gia", mh.getGia());
 			matHang.put("soLuong", mh.getSoLuong());
 			matHang.put("soLuongDaBang", mh.getSoLuongDaBan());
