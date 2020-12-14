@@ -15,18 +15,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 		  property = "maDonHang")
 public class DonHang extends AuditModel<TaiKhoan>{
 	private static final long serialVersionUID = 5346964494397761012L;
-
 	@Id
 	@Column(name = "MaDonHang")
 	@GeneratedValue
 	private long maDonHang;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
 	private NguoiDung nguoiDung;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaTrangThaiDonHang", nullable = false)
 	private TrangThaiDonHang trangThaiDonHang;

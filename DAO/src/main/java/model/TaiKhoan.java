@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 		  property = "maTaiKhoan")
 public class TaiKhoan extends AuditModel<TaiKhoan>{
 	private static final long serialVersionUID = 485219662594825884L;
-
 	@Id
 	@Column(name = "MaTaiKhoan")
 	@GeneratedValue
@@ -30,7 +29,6 @@ public class TaiKhoan extends AuditModel<TaiKhoan>{
 	@Column(name = "MatKhau", nullable = false)
 	private String matKhau;
 	
-	@JsonManagedReference
 	@OneToOne
 	@JoinColumn(name = "MaDacQuyen", nullable = false)
 	private DacQuyen dacQuyen;
@@ -40,7 +38,7 @@ public class TaiKhoan extends AuditModel<TaiKhoan>{
 	
 	@Column(name = "TrangThai", nullable = false)
 	private boolean trangThai;
-	
+
 	@JsonBackReference
 	@OneToOne(fetch = FetchType.LAZY, mappedBy="taiKhoan")
 	private NguoiDung nguoiDung;

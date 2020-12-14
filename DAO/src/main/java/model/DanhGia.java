@@ -22,12 +22,10 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 	@GeneratedValue
 	private long maDanhGia;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaMatHang", nullable = false)
 	private MatHang matHang;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
 	private NguoiDung nguoiDung;

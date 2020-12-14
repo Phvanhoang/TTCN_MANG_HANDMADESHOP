@@ -25,10 +25,9 @@ public class DacQuyen{
 	@Column(name = "TenDacQuyen", nullable = false)
 	private String tenDacQuyen;
 	
-	@JsonBackReference
 	@OneToMany(mappedBy = "dacQuyen")
 	private Set<TaiKhoan> danhSachTaiKhoan;
-	
+
 	public Set<TaiKhoan> getDanhSachTaiKhoan() {
 		return danhSachTaiKhoan;
 	}

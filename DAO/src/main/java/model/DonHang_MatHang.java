@@ -18,17 +18,14 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 		  property = "id")
 public class DonHang_MatHang extends AuditModel<TaiKhoan>{
 	private static final long serialVersionUID = 4241860765887281677L;
-
 	@EmbeddedId
 	private DonHang_MatHang_Key id;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("maDonHang")
 	@JoinColumn(name = "MaDonHang")
 	private DonHang donHang;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("maMatHang")
 	@JoinColumn(name = "MaMatHang")

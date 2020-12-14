@@ -20,7 +20,6 @@ public class TrangThaiDonHang extends AuditModel<TaiKhoan>{
 	@Column(name = "TenTrangThai")
 	private String tenTrangThai;
 	
-	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "trangThaiDonHang")
 	private Set<DonHang> danhSachDonHang;
 	

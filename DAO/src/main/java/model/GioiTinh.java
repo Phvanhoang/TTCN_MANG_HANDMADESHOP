@@ -2,6 +2,9 @@ package model;
 import java.util.Set;
 import javax.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import org.hibernate.annotations.Nationalized;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -21,16 +24,12 @@ public class GioiTinh extends AuditModel<TaiKhoan>{
 	private long maGioiTinh;
 	
 	@Column(name = "TenGioiTinh", nullable = false)
+	@Nationalized
 	private String tenGioiTinh;
 	
-	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "gioiTinh")
 	private Set<NguoiDung> danhSachNguoiDung;
 
-	public Set<NguoiDung> getDanhSachNguoiDung() {
-		return danhSachNguoiDung;
-	}
-	
 	public long getMaGioiTinh() {
 		return maGioiTinh;
 	}

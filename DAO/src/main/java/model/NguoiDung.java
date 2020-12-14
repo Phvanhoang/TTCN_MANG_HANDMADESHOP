@@ -5,7 +5,8 @@ import java.util.Set;
 import javax.persistence.*;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import org.hibernate.annotations.Nationalized;
+import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,7 +32,6 @@ public class NguoiDung extends AuditModel<TaiKhoan>{
 	@Column(name = "AnhDaiDien", nullable = true)
 	private byte[] anhDaiDien;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaGioiTinh", nullable = true)
 	private GioiTinh gioiTinh;

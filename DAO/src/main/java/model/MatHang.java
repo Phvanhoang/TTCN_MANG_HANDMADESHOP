@@ -1,5 +1,6 @@
 package model;
 import java.sql.Date;
+import java.sql.Types;
 import java.util.List;
 
 import javax.persistence.*;
@@ -33,7 +34,6 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	@Column(name = "TenMatHang", nullable = false)
 	private String tenMatHang;
 	
-	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaLoaiMatHang", nullable = false)
 	private LoaiMatHang loaiMatHang;
@@ -47,7 +47,7 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	@Column(name = "SoLuongDaBan", nullable = false)
 	private int soLuongDaBan;
 	
-	@Column(name = "MoTa", nullable = false, columnDefinition = "TEXT")
+	@Column(name = "MoTa", nullable = false, columnDefinition = "NVARCHAR(255)")
 	private String moTa;
 	
 	@JsonBackReference
@@ -60,7 +60,7 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany( mappedBy = "matHang")
 	private List<Anh_MatHang> danhSachHinhAnh;
-
+	
 	public List<DanhGia> getDanhSachDanhGia() {
 		return danhSachDanhGia;
 	}

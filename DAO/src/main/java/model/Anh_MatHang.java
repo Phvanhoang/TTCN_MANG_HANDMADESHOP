@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 		  property = "maAnhMatHang")
 public class Anh_MatHang extends AuditModel<TaiKhoan>{
 	private static final long serialVersionUID = 1597388159413762079L;
-
 	@Id
 	@Column(name = "MaAnhMatHang")
 	@GeneratedValue
