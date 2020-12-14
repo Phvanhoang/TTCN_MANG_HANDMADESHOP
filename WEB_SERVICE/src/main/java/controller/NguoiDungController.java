@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,7 @@ public class NguoiDungController {
 	@Autowired
 	private NguoiDungService nguoiDungService;
 
+	// lay thong tin nguoi dung
 	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
 	@GetMapping("/authorized/nguoi_dung/{maNguoiDung}")
 	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung) {
@@ -47,8 +49,9 @@ public class NguoiDungController {
 
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
-	
-	@PostMapping("/nguoi_dung/create")
+
+	// tao nguoi dung
+	@PostMapping("/nguoi_dung")
 	public ResponseEntity<Void> createND(@RequestParam String hoTen,
 			@RequestParam("avatar") MultipartFile multipartFile) {
 		NguoiDung nguoiDung = new NguoiDung();
@@ -63,8 +66,9 @@ public class NguoiDungController {
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
+	// chinh sua thong tin nguoi dung
 	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
-	@PostMapping("/authorized/nguoi_dung/{maNguoiDung}")
+	@PutMapping("/authorized/nguoi_dung/{maNguoiDung}")
 	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maNguoiDung, @RequestParam("hoTen") String hoTen,
 			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
 			@RequestParam("thanhPho") String thanhPho, @RequestParam("sdt") String sdt,
@@ -98,31 +102,31 @@ public class NguoiDungController {
 		nguoiDungService.save(nguoiDung);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+
+	// lay thong tin TAT CA nguoi dung
 	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
 	@GetMapping("/authorized/nguoi_dung")
 	public ResponseEntity<JSONObject> getAllNguoiDung(
-			@RequestParam(name="page", required=false, defaultValue="0") int page,
-			@RequestParam(name="size", required=false, defaultValue="15") int size,
-			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort){
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
 		Sort sortable = null;
-		if(sort.equals("ASC")) {
+		if (sort.equals("ASC")) {
 			sortable = Sort.by("maNguoiDung").ascending();
 		}
-		if(sort.equals("DESC")) {
+		if (sort.equals("DESC")) {
 			sortable = Sort.by("maNguoiDung").descending();
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
-		
+
 		Page<NguoiDung> returnedPage = nguoiDungService.findByIsDeletedFalse(pageable);
 		List<NguoiDung> listNguoiDung = returnedPage.getContent();
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", listNguoiDung);
 		returnedObject.put("currentPage", returnedPage.getNumber());
-	    returnedObject.put("totalItems", returnedPage.getTotalElements());
-	    returnedObject.put("totalPages", returnedPage.getTotalPages());
-		
-		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
+		returnedObject.put("totalItems", returnedPage.getTotalElements());
+		returnedObject.put("totalPages", returnedPage.getTotalPages());
 
+		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
 	}
 }
