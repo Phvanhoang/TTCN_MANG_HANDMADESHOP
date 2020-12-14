@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+=======
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+>>>>>>> fc41112ee369d9868d967a52010b0be2d0a11c2d
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +38,7 @@ public class MatHangController {
 	@Autowired
 	private MatHangService matHangService;
 
+<<<<<<< HEAD
 	
 	// tạo mặt hàng
 	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
@@ -45,6 +50,14 @@ public class MatHangController {
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+=======
+
+	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
+	//@RequestMapping(value = "/admin/mat_hang/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value="/admin/mat_hang/create", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) {
+  //		matHangService.save(matHang);
+>>>>>>> fc41112ee369d9868d967a52010b0be2d0a11c2d
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	

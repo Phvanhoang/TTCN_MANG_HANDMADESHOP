@@ -18,7 +18,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.PutMapping;
+=======
+
+>>>>>>> fc41112ee369d9868d967a52010b0be2d0a11c2d
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,7 +77,12 @@ public class NguoiDungController {
 			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
 			@RequestParam("thanhPho") String thanhPho, @RequestParam("sdt") String sdt,
 			@RequestParam("anhDaiDien") MultipartFile multipartFile) {
+<<<<<<< HEAD
 		NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
+=======
+
+		NguoiDung nguoiDung = nguoiDungService.findOne(maNguoiDung);
+>>>>>>> fc41112ee369d9868d967a52010b0be2d0a11c2d
 		nguoiDung.setHoTen(hoTen);
 
 		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
