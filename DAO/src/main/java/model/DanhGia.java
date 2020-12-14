@@ -34,7 +34,7 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 	private int soSao;
 	
 	@Column(name = "NoiDung", nullable = false, columnDefinition = "TEXT")
-	private int noiDung;
+	private String noiDung;
 	
 	@Column(name = "ThoiGianDanhGia", nullable = false)
 	private Date thoiGianDanhGia;
@@ -51,7 +51,7 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 		return nguoiDung;
 	}
 	
-	public int getNoiDung() {
+	public String getNoiDung() {
 		return noiDung;
 	}
 	
@@ -75,7 +75,7 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 		this.nguoiDung = nguoiDung;
 	}
 	
-	public void setNoiDung(int noiDung) {
+	public void setNoiDung(String noiDung) {
 		this.noiDung = noiDung;
 	}
 	

@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import model.MatHang;
-import service.MatHangService;
 import net.minidev.json.JSONObject;
+import service.MatHangService;
 
 
 @CrossOrigin(origins = {"http://localhost:3000"})
@@ -68,15 +68,35 @@ public class MatHangController {
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
 		
-		
 		Page<MatHang> returnedPage = matHangService.findByDeletedFalse(pageable);
 		List<MatHang> listMatHang = returnedPage.getContent();
+		
+		List<JSONObject> data = new ArrayList<JSONObject>();
+		for(int i=0;i<listMatHang.size();i++) {
+			JSONObject matHang = new JSONObject();
+			MatHang mh = listMatHang.get(i);
+			matHang.put("maMatHang", mh.getMaMatHang());
+			matHang.put("tenMatHang", mh.getTenMatHang());
+			matHang.put("loaiMatHang", mh.getLoaiMatHang().getMaLoaiMatHang());
+			matHang.put("gia", mh.getGia());
+			matHang.put("soLuong", mh.getSoLuong());
+			matHang.put("soLuongDaBang", mh.getSoLuongDaBan());
+			matHang.put("moTa", mh.getMoTa());
+			matHang.put("createdAt", mh.getCreatedAt());
+			matHang.put("createdBy", mh.getCreatedBy());
+			matHang.put("updatedAt", mh.getUpdatedAt());
+			matHang.put("updatedBy", mh.getUpdatedBy());
+			matHang.put("deleted", mh.isDeleted());
+			
+			data.add(matHang);
+		}
+		
 		JSONObject returnedObject = new JSONObject();
-		returnedObject.put("data", listMatHang);
+		returnedObject.put("data", data);
 		returnedObject.put("currentPage", returnedPage.getNumber());
 	    returnedObject.put("totalItems", returnedPage.getTotalElements());
 	    returnedObject.put("totalPages", returnedPage.getTotalPages());
-		
+	    
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
 
 	}
