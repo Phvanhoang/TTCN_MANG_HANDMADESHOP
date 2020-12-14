@@ -1,8 +1,11 @@
 package repository;
 
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface TrangThaiDonHangRepository {
+import model.TrangThaiDonHang;
 
+@Repository
+public interface TrangThaiDonHangRepository extends PagingAndSortingRepository<TrangThaiDonHang, Long>{
+	TrangThaiDonHang findByTenTrangThai(String tenTrangThai);
 }

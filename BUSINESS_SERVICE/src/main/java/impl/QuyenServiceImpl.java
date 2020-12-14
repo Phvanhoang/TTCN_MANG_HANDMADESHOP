@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import model.DacQuyen;
+import model.GioiTinh;
+import model.TrangThaiDonHang;
 import repository.QuyenRepository;
+import service.GioiTinhService;
 import service.QuyenService;
+import service.TrangThaiDonHangService;
 
+import javax.annotation.PostConstruct;
 @Service
 public class QuyenServiceImpl implements QuyenService {
 	@Autowired

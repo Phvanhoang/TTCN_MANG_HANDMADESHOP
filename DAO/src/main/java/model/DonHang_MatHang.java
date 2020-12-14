@@ -21,15 +21,15 @@ public class DonHang_MatHang extends AuditModel<TaiKhoan>{
 	@EmbeddedId
 	private DonHang_MatHang_Key id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@MapsId("maDonHang")
 	@JoinColumn(name = "MaDonHang")
 	private DonHang donHang;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@MapsId("maMatHang")
 	@JoinColumn(name = "MaMatHang")
-	private MatHang matHang_DonHang;
+	private MatHang matHang;
 	
 	@Column(name = "SoLuong", nullable = true)
 	private int soLuong;
@@ -39,7 +39,7 @@ public class DonHang_MatHang extends AuditModel<TaiKhoan>{
 	}
 	
 	public MatHang getMatHang() {
-		return matHang_DonHang;
+		return matHang;
 	}
 	
 	public DonHang_MatHang_Key getId() {
@@ -59,7 +59,7 @@ public class DonHang_MatHang extends AuditModel<TaiKhoan>{
 	}
 	
 	public void setMatHang(MatHang matHang) {
-		this.matHang_DonHang = matHang;
+		this.matHang = matHang;
 	}
 	
 	public void setSoLuong(int soLuong) {

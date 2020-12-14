@@ -16,27 +16,10 @@ import service.QuyenService;
 import service.TaiKhoanService;
 
 public class SpringSecurityAuditorAware implements AuditorAware<TaiKhoan> {
-
+	private long maTaiKhoan = 1L;
 	private TaiKhoan taiKhoan;
-	private static long maTaiKhoan = 1L;
-
-	public SpringSecurityAuditorAware(TaiKhoanService taiKhoanService, QuyenService quyenService) {
-		if (taiKhoanService.existsById(maTaiKhoan)) {
-			taiKhoan = taiKhoanService.findByMaTaiKhoan(1L);
-		} else {
-			ArrayList<DacQuyen> danhSachDacQuyen = quyenService.getDanhSachDacQuyen();
-			for(int i=0;i<danhSachDacQuyen.size();i++) {
-				if(danhSachDacQuyen.get(i).getTenDacQuyen().equals("ROLE_USER")) {
-					taiKhoan.setDacQuyen(danhSachDacQuyen.get(i));
-					break;
-				}
-			}
-			taiKhoan = new TaiKhoan();
-			taiKhoan.setMaTaiKhoan(maTaiKhoan);
-			taiKhoan.setTenDangNhap("username");
-			taiKhoan.setMatKhau("password");
-			taiKhoanService.save(taiKhoan);
-		}
+	public SpringSecurityAuditorAware(TaiKhoan taiKhoan) {
+		this.taiKhoan = taiKhoan;
 	}
 	
 	public Optional<TaiKhoan> getCurrentAuditor() {
@@ -49,7 +32,11 @@ public class SpringSecurityAuditorAware implements AuditorAware<TaiKhoan> {
 			return Optional.of(taiKhoanNguoiDung);
 		} catch (Exception e) {
 		}
+		if (taiKhoan == null) {
+			taiKhoan = new TaiKhoan();
+			taiKhoan.setMaTaiKhoan(maTaiKhoan);
+		}
+//		System.out.println(maTaiKhoan);
 		return Optional.of(taiKhoan);
-
 	}
 }

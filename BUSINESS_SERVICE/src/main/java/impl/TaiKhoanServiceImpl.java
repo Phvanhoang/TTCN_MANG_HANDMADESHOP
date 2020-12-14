@@ -30,4 +30,10 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
 		if (option.isPresent()) return option.get();
 		return null;
 	}
+	public TaiKhoan findTopByMaTaiKhoanDesc() {
+		return taiKhoanRepository.findTopByOrderByMaTaiKhoanDesc();
+	}
+	public TaiKhoan findByTenDangNhapAndMatKhau(String tenDangNhap, String matKhau) {
+		return taiKhoanRepository.findByTenDangNhapAndMatKhauAndDeletedFalse(tenDangNhap, matKhau);
+	}
 }

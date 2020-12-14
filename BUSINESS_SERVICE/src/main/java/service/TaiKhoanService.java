@@ -7,4 +7,6 @@ public interface TaiKhoanService {
 	void save(TaiKhoan taiKhoan);
 	boolean existsById(long id);
 	TaiKhoan findByMaTaiKhoan(long id);
+	TaiKhoan findTopByMaTaiKhoanDesc();
+	TaiKhoan findByTenDangNhapAndMatKhau(String tenDangNhap,String matKhau);
 }

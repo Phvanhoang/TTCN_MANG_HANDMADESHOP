@@ -1,5 +1,6 @@
 package model;
-import java.sql.Date;
+
+import java.util.Date;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -44,10 +47,11 @@ public class TaiKhoan extends AuditModel<TaiKhoan>{
 	@JoinColumn(name = "MaDacQuyen", nullable = false)
 	private DacQuyen dacQuyen;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "ThoiGianDangKy", nullable = false)
 	private Date thoiGianDangKy;
 	
-	@Column(name = "TrangThai", nullable = false)
+	@Column(name = "TrangThai", nullable = false, columnDefinition = "boolean default true")
 	private boolean trangThai;
 
 	@JsonBackReference
