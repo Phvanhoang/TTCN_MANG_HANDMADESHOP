@@ -1,5 +1,8 @@
 package service;
 
-public interface TrangThaiDonHangService {
+import model.TrangThaiDonHang;
 
+public interface TrangThaiDonHangService {
+	boolean checkTenTrangThai(String tenTrangThai);
+	void save(TrangThaiDonHang trangThaiDonHang);
 }

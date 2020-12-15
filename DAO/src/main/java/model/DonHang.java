@@ -48,7 +48,7 @@ public class DonHang extends AuditModel<TaiKhoan>{
 	private String chuThich;
 	
 	@JsonBackReference
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "donHang")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "donHang", cascade = CascadeType.PERSIST)
 	private Set<DonHang_MatHang> danhSachMatHang;
 
 	public Set<DonHang_MatHang> getDanhSachMatHang() {

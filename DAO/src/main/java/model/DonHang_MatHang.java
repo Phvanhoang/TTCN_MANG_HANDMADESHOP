@@ -1,5 +1,6 @@
 package model;
 import java.sql.Date;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -19,17 +20,17 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class DonHang_MatHang extends AuditModel<TaiKhoan>{
 	private static final long serialVersionUID = 4241860765887281677L;
 	@EmbeddedId
-	private DonHang_MatHang_Key id;
+	private DonHang_MatHang_Key id = new DonHang_MatHang_Key();
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@MapsId("maDonHang")
-	@JoinColumn(name = "MaDonHang")
+	@JoinColumn(name = "ma_don_hang")
 	private DonHang donHang;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@MapsId("maMatHang")
-	@JoinColumn(name = "MaMatHang")
-	private MatHang matHang_DonHang;
+	@JoinColumn(name = "ma_mat_hang")
+	private MatHang matHang;
 	
 	@Column(name = "SoLuong", nullable = true)
 	private int soLuong;
@@ -39,7 +40,7 @@ public class DonHang_MatHang extends AuditModel<TaiKhoan>{
 	}
 	
 	public MatHang getMatHang() {
-		return matHang_DonHang;
+		return matHang;
 	}
 	
 	public DonHang_MatHang_Key getId() {
@@ -59,10 +60,12 @@ public class DonHang_MatHang extends AuditModel<TaiKhoan>{
 	}
 	
 	public void setMatHang(MatHang matHang) {
-		this.matHang_DonHang = matHang;
+		this.matHang = matHang;
 	}
 	
 	public void setSoLuong(int soLuong) {
 		this.soLuong = soLuong;
 	}
+	
+	
 }

@@ -27,6 +27,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserById(Long maTaiKhoan) {
         TaiKhoan taiKhoan = taiKhoanRepository.findById(maTaiKhoan).get();
         if (taiKhoan == null) {
+        	System.out.println("Lỗi");
         	throw new UsernameNotFoundException("User not found with id : " + maTaiKhoan);
         }
         return new CustomUserDetails(taiKhoan);

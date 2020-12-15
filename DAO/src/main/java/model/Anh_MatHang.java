@@ -27,7 +27,7 @@ public class Anh_MatHang extends AuditModel<TaiKhoan>{
 	private byte[] anh;
 	
 	@JsonManagedReference
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "MaMatHang", nullable = false)
 	private MatHang matHang;
 	

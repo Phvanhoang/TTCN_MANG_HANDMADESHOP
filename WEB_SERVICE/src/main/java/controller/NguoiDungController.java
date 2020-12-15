@@ -50,21 +50,21 @@ public class NguoiDungController {
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
 
-	// tao nguoi dung
-	@PostMapping("/nguoi_dung")
-	public ResponseEntity<Void> createND(@RequestParam String hoTen,
-			@RequestParam("avatar") MultipartFile multipartFile) {
-
-		NguoiDung nguoiDung = new NguoiDung();
-		nguoiDung.setHoTen(hoTen);
-		try {
-			nguoiDung.setAnhDaiDien(multipartFile.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		nguoiDungService.save(nguoiDung);
-		return new ResponseEntity<Void>(HttpStatus.CREATED);
-	}
+//	// tao nguoi dung
+//	@PostMapping("/nguoi_dung")
+//	public ResponseEntity<Void> createND(@RequestParam String hoTen,
+//			@RequestParam("avatar") MultipartFile multipartFile) {
+//
+//		NguoiDung nguoiDung = new NguoiDung();
+//		nguoiDung.setHoTen(hoTen);
+//		try {
+//			nguoiDung.setAnhDaiDien(multipartFile.getBytes());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		nguoiDungService.save(nguoiDung);
+//		return new ResponseEntity<Void>(HttpStatus.CREATED);
+//	}
 
 	// chinh sua thong tin nguoi dung
 	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")

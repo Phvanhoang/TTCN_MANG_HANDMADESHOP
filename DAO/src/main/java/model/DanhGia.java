@@ -1,5 +1,5 @@
 package model;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -22,11 +22,11 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 	@GeneratedValue
 	private long maDanhGia;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "MaMatHang", nullable = false)
 	private MatHang matHang;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "MaNguoiDung", nullable = false)
 	private NguoiDung nguoiDung;
 	
@@ -36,6 +36,7 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 	@Column(name = "NoiDung", nullable = false, columnDefinition = "TEXT")
 	private String noiDung;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "ThoiGianDanhGia", nullable = false)
 	private Date thoiGianDanhGia;
 
