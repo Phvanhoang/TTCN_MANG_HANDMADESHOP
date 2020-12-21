@@ -36,7 +36,6 @@ public class SpringSecurityAuditorAware implements AuditorAware<TaiKhoan> {
 			taiKhoan = new TaiKhoan();
 			taiKhoan.setMaTaiKhoan(maTaiKhoan);
 		}
-//		System.out.println(maTaiKhoan);
 		return Optional.of(taiKhoan);
 	}
 }

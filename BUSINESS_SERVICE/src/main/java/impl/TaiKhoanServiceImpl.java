@@ -17,8 +17,9 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
 	public TaiKhoan findByMaTaiKhoanAndDeletedFalse(Long maTaiKhoan) {
 		return taiKhoanRepository.findByMaTaiKhoan(maTaiKhoan);
 	}
-	public void save(TaiKhoan taiKhoan) {
-		taiKhoanRepository.save(taiKhoan);
+	public TaiKhoan save(TaiKhoan taiKhoan) {
+		
+		return taiKhoanRepository.save(taiKhoan);
 		
 	}
 	public boolean existsById(long id) {

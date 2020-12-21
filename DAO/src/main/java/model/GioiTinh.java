@@ -11,13 +11,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "GIOITINH")
-@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "maGioiTinh")
-public class GioiTinh extends AuditModel<TaiKhoan>{
-	private static final long serialVersionUID = -2020016808764045972L;
-
+public class GioiTinh {
 	@Id
 	@Column(name = "MaGioiTinh", nullable = false)
 	@GeneratedValue

@@ -22,8 +22,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import impl.TaiKhoanServiceImpl;
 import model.DacQuyen;
+import model.DacQuyenNames;
 import model.GioiTinh;
+import model.GioiTinhNames;
 import model.TaiKhoan;
+import model.TinhTrangDonHangNames;
 import model.TrangThaiDonHang;
 import repository.TaiKhoanRepository;
 import security.auditor_aware.SpringSecurityAuditorAware;
@@ -77,7 +80,6 @@ public class SpringBootProjectApplication {
 		TaiKhoan taiKhoan = new TaiKhoan();
 		taiKhoan.setTenDangNhap(tenDangNhap);
 		taiKhoan.setMatKhau(encodedPassword);
-		taiKhoan.setThoiGianDangKy(new Date());
 	  	ArrayList<DacQuyen> danhSachDacQuyen = quyenService.getDanhSachDacQuyen();
   		for(int i=0; i<danhSachDacQuyen.size(); i++) {
   			if(danhSachDacQuyen.get(i).getTenDacQuyen().equals("ROLE_ADMIN")) {
@@ -93,55 +95,44 @@ public class SpringBootProjectApplication {
 		TaiKhoan taiKhoan = new TaiKhoan();
 		ArrayList<DacQuyen> danhSachDacQuyen = quyenService.getDanhSachDacQuyen();
 		for(int i=0; i<danhSachDacQuyen.size(); i++) {
-			if(danhSachDacQuyen.get(i).getTenDacQuyen().equals("ROLE_USER")) {
+			if(DacQuyenNames.ROLE_ADMIN.equals(danhSachDacQuyen.get(i).getTenDacQuyen())) {
 				taiKhoan.setDacQuyen(danhSachDacQuyen.get(i));
 				break;
 			}
 		}
 		taiKhoan.setTenDangNhap(username);
 		taiKhoan.setMatKhau(password);
-		taiKhoan.setThoiGianDangKy(new Date());
 		taiKhoanService.save(taiKhoan);
 	}
 	
 	public static void createGioiTinhList(GioiTinhService gioiTinhService){
-		List<String> gioiTinhList = new ArrayList<String>();
-		gioiTinhList.add("Nam");
-		gioiTinhList.add("Nữ");
-		gioiTinhList.add("Khác");
-		for (int i = 0; i < gioiTinhList.size(); i++) {
-			if (!gioiTinhService.checkTenGioiTinh(gioiTinhList.get(i))) {
+		String[] gioiTinhList = GioiTinhNames.ALL_GT;
+		for (int i = 0; i < gioiTinhList.length; i++) {
+			if (!gioiTinhService.checkTenGioiTinh(gioiTinhList[i])) {
 				GioiTinh gioiTinh = new GioiTinh();
-				gioiTinh.setTenGioiTinh(gioiTinhList.get(i));
+				gioiTinh.setTenGioiTinh(gioiTinhList[i]);
 				gioiTinhService.save(gioiTinh);
 			}
 		}
 	}
 
 	public static void createTrangThaiDonHangList(TrangThaiDonHangService trangThaiDHService){
-		List<String> trangThaiDHList = new ArrayList<String>();
-		trangThaiDHList.add("PENDING");
-		trangThaiDHList.add("ACCEPTED");
-		trangThaiDHList.add("SENDING");
-		trangThaiDHList.add("COMPLETED");
-		trangThaiDHList.add("CANCELED");
-		for (int i = 0; i < trangThaiDHList.size(); i++) {
-			if (!trangThaiDHService.checkTenTrangThai((trangThaiDHList.get(i)))) {
+		String[] trangThaiDHList = TinhTrangDonHangNames.ALL_TTDH;
+		for (int i = 0; i < trangThaiDHList.length; i++) {
+			if (!trangThaiDHService.checkTenTrangThai((trangThaiDHList[i]))) {
 				TrangThaiDonHang trangThaiDH = new TrangThaiDonHang();
-				trangThaiDH.setTenTrangThai(trangThaiDHList.get(i));
+				trangThaiDH.setTenTrangThai(trangThaiDHList[i]);
 				trangThaiDHService.save(trangThaiDH);
 			}
 		}
 	}
 
 	public static void createDacQuyenList(QuyenService quyenService){
-		List<String> dacQuyenList = new ArrayList<String>();
-		dacQuyenList.add("ROLE_ADMIN");
-		dacQuyenList.add("ROLE_USER");
-		for (int i = 0; i < dacQuyenList.size(); i++) {
-			if (!quyenService.checkTenDacQuyen(dacQuyenList.get(i))) {
+		String[] dacQuyenList = DacQuyenNames.ALL_ROLES;
+		for (int i = 0; i < dacQuyenList.length; i++) {
+			if (!quyenService.checkTenDacQuyen(dacQuyenList[i])) {
 				DacQuyen dacQuyen = new DacQuyen();
-				dacQuyen.setTenDacQuyen(dacQuyenList.get(i));
+				dacQuyen.setTenDacQuyen(dacQuyenList[i]);
 				quyenService.save(dacQuyen);
 			}
 		}

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
@@ -12,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -47,16 +49,16 @@ public class TaiKhoan extends AuditModel<TaiKhoan>{
 	@JoinColumn(name = "MaDacQuyen", nullable = false)
 	private DacQuyen dacQuyen;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "ThoiGianDangKy", nullable = false)
-	private Date thoiGianDangKy;
-	
-	@Column(name = "TrangThai", nullable = false, columnDefinition = "boolean default true")
-	private boolean trangThai;
+	@Column(name = "Locked", nullable = false, columnDefinition = "boolean default false")
+	private boolean locked;
 
 	@JsonBackReference
-	@OneToOne(fetch = FetchType.LAZY, mappedBy="taiKhoan")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy="taiKhoan", cascade = CascadeType.PERSIST)
 	private NguoiDung nguoiDung;
+	
+	@JsonBackReference
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
+	private Set<DonHang> sanhSachDonHang;
 	
 	public long getMaTaiKhoan() {
 		return maTaiKhoan;
@@ -70,20 +72,20 @@ public class TaiKhoan extends AuditModel<TaiKhoan>{
 		return nguoiDung;
 	}
 	
+	public Set<DonHang> getSanhSachDonHang() {
+		return sanhSachDonHang;
+	}
+	
+	public void setSanhSachDonHang(Set<DonHang> sanhSachDonHang) {
+		this.sanhSachDonHang = sanhSachDonHang;
+	}
+	
 	public DacQuyen getDacQuyen() {
 		return dacQuyen;
 	}
 	
 	public String getTenDangNhap() {
 		return tenDangNhap;
-	}
-	
-	public Date getThoiGianDangKy() {
-		return thoiGianDangKy;
-	}
-	
-	public boolean isTrangThai() {
-		return trangThai;
 	}
 	
 	public void setMaTaiKhoan(long maTaiKhoan) {
@@ -105,13 +107,13 @@ public class TaiKhoan extends AuditModel<TaiKhoan>{
 	public void setTenDangNhap(String tenDangNhap) {
 		this.tenDangNhap = tenDangNhap;
 	}
-	
-	public void setThoiGianDangKy(Date thoiGianDangKy) {
-		this.thoiGianDangKy = thoiGianDangKy;
+
+	public boolean isLocked() {
+		return locked;
 	}
 	
-	public void setTrangThai(boolean trangThai) {
-		this.trangThai = trangThai;
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 
 }

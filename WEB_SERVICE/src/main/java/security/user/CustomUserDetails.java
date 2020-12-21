@@ -46,7 +46,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public boolean isAccountNonLocked() {
-        return taiKhoan.isTrangThai();
+        return !taiKhoan.isLocked();
     }
 
     public boolean isCredentialsNonExpired() {
