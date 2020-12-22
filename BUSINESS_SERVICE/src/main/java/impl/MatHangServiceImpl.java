@@ -46,12 +46,12 @@ public class MatHangServiceImpl implements MatHangService {
 	}
 
 	public Page<MatHang> findWithoutLoaiMatHang(Pageable pageable, String tenMatHang, long giaBatDau, long giaKetThuc) {
-		return matHangRepository.findByTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(pageable, tenMatHang, giaBatDau, giaKetThuc);
+		return matHangRepository.findByDeletedFalseAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(pageable, tenMatHang, giaBatDau, giaKetThuc);
 	}
 
 	public Page<MatHang> findWithFilter(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang, long giaBatDau,
 			long giaKetThuc) {
-		return matHangRepository.findByLoaiMatHangAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(pageable, loaiMatHang, tenMatHang, giaBatDau, giaKetThuc);
+		return matHangRepository.findByDeletedFalseAndLoaiMatHangAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(pageable, loaiMatHang, tenMatHang, giaBatDau, giaKetThuc);
 	}
 
 }

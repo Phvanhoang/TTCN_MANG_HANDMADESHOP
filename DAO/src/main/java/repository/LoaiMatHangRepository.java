@@ -13,5 +13,6 @@ import model.LoaiMatHang;
 public interface LoaiMatHangRepository extends CrudRepository<LoaiMatHang, Long>{
 	ArrayList<LoaiMatHang> findByDeletedFalse();
 	LoaiMatHang findByMaLoaiMatHangAndDeletedFalse(Long maLoaiMatHang);
+	Page<LoaiMatHang> findByDeletedFalseAndTenLoaiMatHangContaining(Pageable pageable, String tenLoaiMatHang);
 
 }

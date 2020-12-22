@@ -54,7 +54,7 @@ public class LoaiMatHangController {
 		return new ResponseEntity<JSONObject>(returnedLMH, HttpStatus.OK);
 	}
 	
-	// lấy thông tin tất cả loại mặt hàng
+//	// lấy thông tin tất cả loại mặt hàng
 //	@GetMapping("/loai-mat-hang")
 //	public ResponseEntity<JSONObject> getAllLoaiMatHang() {
 //		ArrayList<LoaiMatHang> list = loaiMatHangService.findAll();
@@ -67,44 +67,47 @@ public class LoaiMatHangController {
 //		returnJson.put("size", list.size());
 //		return new ResponseEntity<JSONObject>(returnJson, HttpStatus.OK);
 //	}
+	// lấy thông tin tất cả loại mặt hàng
+	@GetMapping("/loai-mat-hang")
+	public ResponseEntity<JSONObject> getAllLoaiMatHang(
+			@RequestParam(name="tenLoaiMatHang", required=false, defaultValue="") String tenLoaiMatHang,
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "20") int size,
+			@RequestParam(name="sortType", required=false, defaultValue="maLoaiMatHang") String sortType,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) throws JSONException {
+		Sort sortable = null;
+		if (sort.equals("ASC")) {
+			sortable = Sort.by(sortType).ascending();
+		}
+		if (sort.equals("DESC")) {
+			sortable = Sort.by(sortType).descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
 
-//	public ResponseEntity<JSONObject> getAllLoaiMatHang(
-//			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-//			@RequestParam(name = "size", required = false, defaultValue = "20") int size,
-//			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) throws JSONException {
-//		Sort sortable = null;
-//		if (sort.equals("ASC")) {
-//			sortable = Sort.by("maLoaiMatHang").ascending();
-//		}
-//		if (sort.equals("DESC")) {
-//			sortable = Sort.by("maLoaiMatHang").descending();
-//		}
-//		Pageable pageable = PageRequest.of(page, size, sortable);
-//
-//		Page<LoaiMatHang> returnedPage = loaiMatHangService.findByDeletedFalse(pageable);
-//		List<LoaiMatHang> listLoaiMatHang = returnedPage.getContent();
-//
-//		List<JSONObject> data = new ArrayList<JSONObject>();
-//		for (int i = 0; i < listLoaiMatHang.size(); i++) {
-//			JSONObject matHang = new JSONObject();
-//			LoaiMatHang lmh = listLoaiMatHang.get(i);
-//			matHang.put("maLoaiMatHang", lmh.getMaLoaiMatHang());
-//			matHang.put("tenLoaiMatHang", lmh.getTenLoaiMatHang());
-//			matHang.put("createdAt", lmh.getCreatedAt());
-//			matHang.put("createdBy", lmh.getCreatedBy().getMaTaiKhoan());
-//			matHang.put("updatedAt", lmh.getUpdatedAt());
-//			matHang.put("updatedBy", lmh.getUpdatedBy().getMaTaiKhoan());
-//			matHang.put("deleted", lmh.isDeleted());
-//
-//			data.add(matHang);
-//		}
-//		JSONObject returnedObject = new JSONObject();
-//		returnedObject.put("data", data);
-//		returnedObject.put("currentPage", returnedPage.getNumber());
-//		returnedObject.put("totalItems", returnedPage.getTotalElements());
-//		returnedObject.put("totalPages", returnedPage.getTotalPages());
-//		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
-//	}
+		Page<LoaiMatHang> returnedPage = loaiMatHangService.findWithFilter(pageable, tenLoaiMatHang);
+		List<LoaiMatHang> listLoaiMatHang = returnedPage.getContent();
+
+		List<JSONObject> data = new ArrayList<JSONObject>();
+		for (int i = 0; i < listLoaiMatHang.size(); i++) {
+			JSONObject matHang = new JSONObject();
+			LoaiMatHang lmh = listLoaiMatHang.get(i);
+			matHang.put("maLoaiMatHang", lmh.getMaLoaiMatHang());
+			matHang.put("tenLoaiMatHang", lmh.getTenLoaiMatHang());
+			matHang.put("createdAt", lmh.getCreatedAt());
+			matHang.put("createdBy", lmh.getCreatedBy().getMaTaiKhoan());
+			matHang.put("updatedAt", lmh.getUpdatedAt());
+			matHang.put("updatedBy", lmh.getUpdatedBy().getMaTaiKhoan());
+			matHang.put("deleted", lmh.isDeleted());
+
+			data.add(matHang);
+		}
+		JSONObject returnedObject = new JSONObject();
+		returnedObject.put("data", data);
+		returnedObject.put("currentPage", returnedPage.getNumber());
+		returnedObject.put("totalItems", returnedPage.getTotalElements());
+		returnedObject.put("totalPages", returnedPage.getTotalPages());
+		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
+	}
 
 	// thêm một loại mặt hàng vào CSDL
 //	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")

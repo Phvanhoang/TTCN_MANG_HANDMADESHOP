@@ -32,4 +32,7 @@ public class LoaiMatHangServiceImpl implements LoaiMatHangService{
 		loaiMatHangRepository.delete(loaiMatHang);
 	}
 
+	public Page<LoaiMatHang> findWithFilter(Pageable pageable, String tenLoaiMatHang) {
+		return loaiMatHangRepository.findByDeletedFalseAndTenLoaiMatHangContaining(pageable, tenLoaiMatHang);
+	}
 }
