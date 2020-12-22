@@ -26,11 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.google.gson.Gson;
+
 import exception.MatHangNotFoundException;
 import model.Anh_MatHang;
+import model.LoaiMatHang;
 import model.MatHang;
 import net.minidev.json.JSONObject;
 import service.Anh_MatHangService;
+import service.LoaiMatHangService;
 import service.MatHangService;
 
 @CrossOrigin(origins = { "http://localhost:3000" })
@@ -41,6 +44,8 @@ public class MatHangController {
 	private Anh_MatHangService anh_MatHangService;
 	@Autowired 
 	private MatHangService matHangService;
+	@Autowired
+	private LoaiMatHangService loaiMatHangService;
 	
 	// Thêm ảnh - mặt hàng
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
@@ -99,22 +104,28 @@ public class MatHangController {
 	}
 	
 	// Lấy thông tin tất cả mặt hàng theo loại mặt hàng
-	@GetMapping("/mat-hang/loai-mat-hang/{maLoai}")
+	@GetMapping("/mat-hang/loai-mat-hang/{maLoaiMatHang}")
 	public ResponseEntity<JSONObject> getAllMatHangByLoaiMatHang(
-			@PathVariable long maLoai,
+			@PathVariable long maLoaiMatHang,
 			@RequestParam(name="page", required=false, defaultValue="0") int page,
 			@RequestParam(name="size", required=false, defaultValue="15") int size,
 			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort) throws JSONException{
 		Sort sortable = null;
+		JSONObject result = new JSONObject();
 		if(sort.equals("ASC")) {
 			sortable = Sort.by("maMatHang").ascending();
 		}
 		if(sort.equals("DESC")) {
 			sortable = Sort.by("maMatHang").descending();
 		}
+		LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHang(maLoaiMatHang);
+		if(loaiMatHang==null) {
+			return new ResponseEntity<JSONObject>(result, HttpStatus.NOT_FOUND);
+
+		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
-		Page<MatHang> returnedPage = matHangService.findByMaLoaiMatHang(pageable, maLoai);
-		JSONObject result = getResultData(returnedPage);
+		Page<MatHang> returnedPage = matHangService.findByLoaiMatHang(pageable, loaiMatHang);
+		result = getResultData(returnedPage);
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 	
