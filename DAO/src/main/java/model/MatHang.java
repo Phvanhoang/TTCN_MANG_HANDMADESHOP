@@ -61,6 +61,19 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	@OneToMany( mappedBy = "matHang")
 	private List<Anh_MatHang> danhSachHinhAnh;
 	
+	@JsonBackReference
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany( mappedBy = "matHang")
+	private List<DonHang_MatHang> danhSachDonHang;
+	
+	public List<DonHang_MatHang> getDanhSachDonHang() {
+		return danhSachDonHang;
+	}
+	
+	public void setDanhSachDonHang(List<DonHang_MatHang> danhSachDonHang) {
+		this.danhSachDonHang = danhSachDonHang;
+	}
+	
 	public List<DanhGia> getDanhSachDanhGia() {
 		return danhSachDanhGia;
 	}
