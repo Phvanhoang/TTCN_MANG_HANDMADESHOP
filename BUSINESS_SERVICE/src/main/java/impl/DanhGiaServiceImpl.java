@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import exception.DanhGiaNotFoundException;
 import model.DanhGia;
 import model.MatHang;
+import model.TaiKhoan;
 import repository.DanhGiaRepository;
 import repository.MatHangRepository;
 import service.DanhGiaService;
@@ -23,18 +24,15 @@ public class DanhGiaServiceImpl implements DanhGiaService{
 	private MatHangRepository matHangRepository;
 	
 	public Page<DanhGia> findAll(Pageable pageable) {
-		danhGiaRepository.findByDeletedFalse(pageable);
-		return null;
+		return danhGiaRepository.findByDeletedFalse(pageable);
 	}
 
-	public Page<DanhGia> findByMatHang(Pageable pageable, long maMatHang) {
-		danhGiaRepository.findByDeletedFalseAndMatHang(pageable, maMatHang);
-		return null;
+	public Page<DanhGia> findByMatHang(Pageable pageable, MatHang matHang) {
+		return danhGiaRepository.findByDeletedFalseAndMatHang(pageable, matHang);
 	}
 
-	public Page<DanhGia> findByCreatedBy(Pageable pageable, long maTaiKhoan) {
-		danhGiaRepository.findByDeletedFalseAndCreatedBy(pageable, maTaiKhoan);
-		return null;
+	public Page<DanhGia> findByCreatedBy(Pageable pageable, TaiKhoan taiKhoan) {
+		return danhGiaRepository.findByDeletedFalseAndCreatedBy(pageable, taiKhoan);
 	}
 
 	@Transactional
@@ -57,7 +55,7 @@ public class DanhGiaServiceImpl implements DanhGiaService{
 	}
 
 	public boolean delete(long maDanhGia) throws DanhGiaNotFoundException {
-		if (danhGiaRepository.existsByDeletedFalseAndMaDanhGiaEquals(maDanhGia)) {
+		if (!danhGiaRepository.existsByDeletedFalseAndMaDanhGiaEquals(maDanhGia)) {
 			throw new DanhGiaNotFoundException("Not Found Danh Gia");
 		}
 		DanhGia danhgia = danhGiaRepository.findById(maDanhGia).get();
@@ -65,5 +63,4 @@ public class DanhGiaServiceImpl implements DanhGiaService{
 		danhGiaRepository.save(danhgia);
 		return false;
 	}
-
 }

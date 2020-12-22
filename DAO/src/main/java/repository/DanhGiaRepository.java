@@ -6,11 +6,14 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import model.DanhGia;
+import model.MatHang;
+import model.TaiKhoan;
 
 @Repository
 public interface DanhGiaRepository extends PagingAndSortingRepository<DanhGia, Long>{
 	Page<DanhGia> findByDeletedFalse(Pageable pageable);
-	Page<DanhGia> findByDeletedFalseAndMatHang(Pageable pageable, long maMatHang);
-	Page<DanhGia> findByDeletedFalseAndCreatedBy(Pageable pageable, long maTaiKhoan);
+	Page<DanhGia> findByDeletedFalseAndMatHang(Pageable pageable, MatHang matHang);
+	Page<DanhGia> findByDeletedFalseAndCreatedBy(Pageable pageable, TaiKhoan taiKhoan);
+	//<DanhGia> findByMaDanhGiaAndDeletedFalse(longM)
 	boolean existsByDeletedFalseAndMaDanhGiaEquals(long maDanhGia);
 }

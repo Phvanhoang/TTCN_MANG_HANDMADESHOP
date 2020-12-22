@@ -28,8 +28,11 @@ import com.google.gson.Gson;
 import exception.DanhGiaNotFoundException;
 import model.DanhGia;
 import model.MatHang;
+import model.TaiKhoan;
 import net.minidev.json.JSONObject;
 import service.DanhGiaService;
+import service.MatHangService;
+import service.TaiKhoanService;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
@@ -37,6 +40,10 @@ import service.DanhGiaService;
 public class DanhGiaController {
 	@Autowired
 	private DanhGiaService danhGiaService;
+	@Autowired
+	private MatHangService matHangService;
+	@Autowired
+	private TaiKhoanService taiKhoanService;
 	
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
 	@PostMapping("/authorized/danh-gia")
@@ -68,21 +75,28 @@ public class DanhGiaController {
 	
 
 	@GetMapping("/danh-gia/mat-hang/{maMatHang}")
-	public ResponseEntity<JSONObject> GetAllDanhGiaByMatHang(
+	public ResponseEntity<JSONObject> GetAllDanhGiaByMaMatHang(
 		@PathVariable int maMatHang,	
 		@RequestParam(name="page", required=false, defaultValue="0") int page,
 		@RequestParam(name="size", required=false, defaultValue="15") int size,
 		@RequestParam(name="sort", required=false, defaultValue="ASC") String sort) throws JSONException{
 		Sort sortable = null;
+		JSONObject result = new JSONObject();
 		if(sort.equals("ASC")) {
-			sortable = Sort.by("maMatHang").ascending();
+			sortable = Sort.by("maDanhGia").ascending();
 		}
 		if(sort.equals("DESC")) {
-			sortable = Sort.by("maMatHang").descending();
+			sortable = Sort.by("maDanhGia").descending();
 		}
+		MatHang matHang = matHangService.findByMaMatHang(maMatHang);
+		if(matHang == null) {
+			return new ResponseEntity<JSONObject>(result, HttpStatus.NOT_FOUND);
+		}
+		System.out.println("matHang:" + matHang.getMaMatHang());
+		
 		Pageable pageable = PageRequest.of(page, size, sortable);
-		Page<DanhGia> returnedPage = danhGiaService.findByMatHang(pageable, maMatHang);
-		JSONObject result = getResultData(returnedPage);
+		Page<DanhGia> returnedPage = danhGiaService.findByMatHang(pageable, matHang);
+		result = getResultData(returnedPage);
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 
@@ -94,15 +108,20 @@ public class DanhGiaController {
 		@RequestParam(name="size", required=false, defaultValue="15") int size,
 		@RequestParam(name="sort", required=false, defaultValue="ASC") String sort) throws JSONException{
 		Sort sortable = null;
+		JSONObject result = new JSONObject();
 		if(sort.equals("ASC")) {
-			sortable = Sort.by("maMatHang").ascending();
+			sortable = Sort.by("maDanhGia").ascending();
 		}
 		if(sort.equals("DESC")) {
-			sortable = Sort.by("maMatHang").descending();
+			sortable = Sort.by("maDanhGia").descending();
+		}
+		TaiKhoan taiKhoan = taiKhoanService.findByMaTaiKhoan(maTaiKhoan);
+		if(taiKhoan==null) {
+			return new ResponseEntity<JSONObject>(result, HttpStatus.NOT_FOUND);
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
-		Page<DanhGia> returnedPage = danhGiaService.findByCreatedBy(pageable, maTaiKhoan);
-		JSONObject result = getResultData(returnedPage);
+		Page<DanhGia> returnedPage = danhGiaService.findByCreatedBy(pageable, taiKhoan);
+		result = getResultData(returnedPage);
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 	
@@ -114,10 +133,10 @@ public class DanhGiaController {
 		@RequestParam(name="sort", required=false, defaultValue="ASC") String sort) throws JSONException{
 		Sort sortable = null;
 		if(sort.equals("ASC")) {
-			sortable = Sort.by("maMatHang").ascending();
+			sortable = Sort.by("maDanhGia").ascending();
 		}
 		if(sort.equals("DESC")) {
-			sortable = Sort.by("maMatHang").descending();
+			sortable = Sort.by("maDanhGia").descending();
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
 		Page<DanhGia> returnedPage = danhGiaService.findAll(pageable);

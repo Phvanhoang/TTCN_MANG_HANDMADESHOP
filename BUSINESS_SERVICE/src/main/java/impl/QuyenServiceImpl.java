@@ -15,7 +15,6 @@ import service.GioiTinhService;
 import service.QuyenService;
 import service.TrangThaiDonHangService;
 
-import javax.annotation.PostConstruct;
 @Service
 public class QuyenServiceImpl implements QuyenService {
 	@Autowired

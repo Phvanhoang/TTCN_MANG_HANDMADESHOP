@@ -168,4 +168,9 @@ public class MatHang extends AuditModel<TaiKhoan>{
 		this.tenMatHang = tenMatHang;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		MatHang matHang = (MatHang) obj;
+		return matHang.maMatHang == this.maMatHang;
+	}
 }
