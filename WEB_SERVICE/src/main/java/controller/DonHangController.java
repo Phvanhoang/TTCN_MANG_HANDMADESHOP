@@ -3,9 +3,10 @@ package controller;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import javax.management.relation.Role;
+
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,9 +23,10 @@ import com.google.gson.Gson;
 import model.DonHang;
 import model.DonHang_MatHang;
 import model.TaiKhoan;
+import net.minidev.json.JSONObject;
 import service.DonHangService;
 import utils.GetTaiKhoanFromTokenService;
-
+import model.DacQuyenNames;
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 public class DonHangController {
@@ -33,29 +35,22 @@ public class DonHangController {
 	
 	@Autowired
 	private GetTaiKhoanFromTokenService getTaiKhoanFromTokenService;
-	
-	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
+
+	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
+//	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+//	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
 	@PostMapping(value = "/authorized/don_hang/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	@PostMapping("/don_hang/create")
-	public ResponseEntity<Void> createDonHang(@RequestHeader("Authorization") String token, @RequestBody net.minidev.json.JSONObject jObject){
-		
-		JSONObject jsonObject = new JSONObject(jObject);
+	public ResponseEntity<Void> createDonHang(@RequestBody JSONObject jObject){
 		DonHang donHang = new DonHang();
-		try {
-			Gson gson = new Gson();
-			donHang = gson.fromJson(jObject.toString(), DonHang.class);
-			TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(token);
-			donHang.setNguoiDung(taiKhoan.getNguoiDung());
-//			donHang.setUpdatedBy(taiKhoan);
-			try {
-				donHangService.createDonHang(donHang);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
+		Gson gson = new Gson();
+		donHang = gson.fromJson(jObject.toString(), DonHang.class);
+//		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(token);
+//		donHang.setNguoiDung(taiKhoan.getNguoiDung());
+//		try {
+			donHangService.createDonHang(donHang);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 }

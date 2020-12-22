@@ -7,8 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import model.DonHang;
 import model.NguoiDung;
+import model.TaiKhoan;
 
 @Repository
 public interface DonHangRepository extends PagingAndSortingRepository<DonHang, Long>{
-	Page<DonHang> findByNguoiDung(Pageable pageable, NguoiDung nguoiDung);
+	Page<DonHang> findByCreatedBy(Pageable pageable, TaiKhoan taiKhoan);
 }

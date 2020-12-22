@@ -44,6 +44,12 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	@Column(name = "SoLuong", nullable = false)
 	private int soLuong;
 	
+	@Column(name = "Rate", nullable = false)
+	private int rate;
+	
+	@Column(name = "SoLuotDanhGia", nullable = false)
+	private int soLuotDanhGia;
+	
 	@Column(name = "SoLuongDaBan", nullable = false)
 	private int soLuongDaBan;
 	
@@ -65,6 +71,22 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany( mappedBy = "matHang")
 	private List<DonHang_MatHang> danhSachDonHang;
+	
+	public int getRate() {
+		return rate;
+	}
+	
+	public void setRate(int rate) {
+		this.rate = rate;
+	}
+	
+	public int getSoLuotDanhGia() {
+		return soLuotDanhGia;
+	}
+	
+	public void setSoLuotDanhGia(int soLuotDanhGia) {
+		this.soLuotDanhGia = soLuotDanhGia;
+	}
 	
 	public List<DonHang_MatHang> getDanhSachDonHang() {
 		return danhSachDonHang;
@@ -146,4 +168,9 @@ public class MatHang extends AuditModel<TaiKhoan>{
 		this.tenMatHang = tenMatHang;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		MatHang matHang = (MatHang) obj;
+		return matHang.maMatHang == this.maMatHang;
+	}
 }

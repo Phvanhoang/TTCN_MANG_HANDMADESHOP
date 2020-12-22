@@ -25,21 +25,13 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "MaMatHang", nullable = false)
 	private MatHang matHang;
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "MaNguoiDung", nullable = false)
-	private NguoiDung nguoiDung;
-	
+
 	@Column(name = "SoSao", nullable = false)
 	private int soSao;
 	
 	@Column(name = "NoiDung", nullable = false, columnDefinition = "TEXT")
 	private String noiDung;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "ThoiGianDanhGia", nullable = false)
-	private Date thoiGianDanhGia;
-
 	public long getMaDanhGia() {
 		return maDanhGia;
 	}
@@ -47,11 +39,7 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 	public MatHang getMatHang() {
 		return matHang;
 	}
-	
-	public NguoiDung getNguoiDung() {
-		return nguoiDung;
-	}
-	
+
 	public String getNoiDung() {
 		return noiDung;
 	}
@@ -59,11 +47,7 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 	public int getSoSao() {
 		return soSao;
 	}
-	
-	public Date getThoiGianDanhGia() {
-		return thoiGianDanhGia;
-	}
-	
+
 	public void setMaDanhGia(long maDanhGia) {
 		this.maDanhGia = maDanhGia;
 	}
@@ -71,21 +55,13 @@ public class DanhGia extends AuditModel<TaiKhoan>{
 	public void setMatHang(MatHang matHang) {
 		this.matHang = matHang;
 	}
-	
-	public void setNguoiDung(NguoiDung nguoiDung) {
-		this.nguoiDung = nguoiDung;
-	}
-	
+
 	public void setNoiDung(String noiDung) {
 		this.noiDung = noiDung;
 	}
 	
 	public void setSoSao(int soSao) {
 		this.soSao = soSao;
-	}
-	
-	public void setThoiGianDanhGia(Date thoiGianDanhGia) {
-		this.thoiGianDanhGia = thoiGianDanhGia;
 	}
 	
 }

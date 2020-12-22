@@ -35,7 +35,7 @@ public class NguoiDungController {
 	private NguoiDungService nguoiDungService;
 
 	// lay thong tin nguoi dung
-	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
+	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
 	@GetMapping("/authorized/nguoi_dung/{maNguoiDung}")
 	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung) {
 		JSONObject returnedObject = new JSONObject();
@@ -50,24 +50,8 @@ public class NguoiDungController {
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
 
-//	// tao nguoi dung
-//	@PostMapping("/nguoi_dung")
-//	public ResponseEntity<Void> createND(@RequestParam String hoTen,
-//			@RequestParam("avatar") MultipartFile multipartFile) {
-//
-//		NguoiDung nguoiDung = new NguoiDung();
-//		nguoiDung.setHoTen(hoTen);
-//		try {
-//			nguoiDung.setAnhDaiDien(multipartFile.getBytes());
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		nguoiDungService.save(nguoiDung);
-//		return new ResponseEntity<Void>(HttpStatus.CREATED);
-//	}
-
 	// chinh sua thong tin nguoi dung
-	@PreAuthorize("hasAnyAuthority({'ROLE_ADMIN', 'ROLE_USER'})")
+	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
 	@PutMapping("/authorized/nguoi_dung/{maNguoiDung}")
 	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maNguoiDung, @RequestParam("hoTen") String hoTen,
 			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
@@ -103,7 +87,7 @@ public class NguoiDungController {
 	}
 
 	// lay thong tin TAT CA nguoi dung
-	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@GetMapping("/authorized/nguoi_dung")
 	public ResponseEntity<JSONObject> getAllNguoiDung(
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,

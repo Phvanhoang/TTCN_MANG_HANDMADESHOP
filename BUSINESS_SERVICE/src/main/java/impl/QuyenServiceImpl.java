@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import model.DacQuyen;
 import repository.QuyenRepository;
 import service.QuyenService;
+
 @Service
 public class QuyenServiceImpl implements QuyenService {
 	@Autowired

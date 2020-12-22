@@ -19,22 +19,14 @@ public class DonHang extends AuditModel<TaiKhoan>{
 	@Column(name = "MaDonHang")
 	@GeneratedValue
 	private long maDonHang;
-	
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name = "MaNguoiDung", nullable = false)
-	private NguoiDung nguoiDung;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MaTrangThaiDonHang", nullable = false)
 	private TrangThaiDonHang trangThaiDonHang;
 	
 	@Column(name="TenNguoiNhanHang", nullable = true)
 	private String tenNguoiNhanHang;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "ThoiGian", nullable = false)
-	private Date thoiGian;
-	
+
 	@Column(name = "GiaTongCong", nullable = false)
 	private long giaTongCong;
 	
@@ -67,18 +59,10 @@ public class DonHang extends AuditModel<TaiKhoan>{
 		return maDonHang;
 	}
 	
-	public NguoiDung getNguoiDung() {
-		return nguoiDung;
-	}
-	
 	public String getSDTGiaoHang() {
 		return SDTGiaoHang;
 	}
-	
-	public Date getThoiGian() {
-		return thoiGian;
-	}
-	
+
 	public TrangThaiDonHang getTrangThaiDonHang() {
 		return trangThaiDonHang;
 	}
@@ -98,19 +82,11 @@ public class DonHang extends AuditModel<TaiKhoan>{
 	public void setMaDonHang(long maDonHang) {
 		this.maDonHang = maDonHang;
 	}
-	
-	public void setNguoiDung(NguoiDung nguoiDung) {
-		this.nguoiDung = nguoiDung;
-	}
-	
+
 	public void setSDTGiaoHang(String sDTGiaoHang) {
 		SDTGiaoHang = sDTGiaoHang;
 	}
-	
-	public void setThoiGian(Date thoiGian) {
-		this.thoiGian = thoiGian;
-	}
-	
+
 	public void setTrangThaiDonHang(TrangThaiDonHang trangThaiDonHang) {
 		this.trangThaiDonHang = trangThaiDonHang;
 	}

@@ -19,29 +19,47 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.google.gson.Gson;
-
-import model.LoaiMatHang;
+import exception.MatHangNotFoundException;
+import model.Anh_MatHang;
 import model.MatHang;
 import net.minidev.json.JSONObject;
-import service.LoaiMatHangService;
+import service.Anh_MatHangService;
 import service.MatHangService;
 
 @CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
+@RequestMapping(path = "mat-hang-management")
 public class MatHangController {
 	@Autowired
+	private Anh_MatHangService anh_MatHangService;
+	@Autowired 
 	private MatHangService matHangService;
 	
-	@Autowired LoaiMatHangService loaiMatHangService;
-
-	// tạo mặt hàng
-	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
-	@PostMapping(value = "/authorized/mat_hang")
-	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) {
+	// Thêm ảnh - mặt hàng
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PostMapping("/authorized/anh-mat-hang")
+	public ResponseEntity<Void> upload(@RequestParam("image") MultipartFile multipartFile,
+										@RequestParam("maMatHang") long maMatHang) {
+		MatHang matHang = matHangService.findByMaMatHang(maMatHang);
+		try {
+			anh_MatHangService.save(new Anh_MatHang(multipartFile.getBytes(), matHang));
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	// Thêm mặt hàng
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PostMapping(value="/authorized/mat-hang")
+	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) { 
 		try {
 			Gson gson = new Gson();
 			matHangService.save(gson.fromJson(matHang.toString(), MatHang.class));
@@ -50,35 +68,19 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
-
-	// lấy thông tin mặt hàng theo mã mặt hàng
-	@GetMapping("/mat_hang/{maMatHang}")
-	public ResponseEntity<JSONObject> timMatHang(@PathVariable Long maMatHang) {
-		try {
-			MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
-
-			JSONObject returnedMatHang = new JSONObject();
-			returnedMatHang.put("maMatHang", matHang.getMaMatHang());
-			returnedMatHang.put("tenMatHang", matHang.getTenMatHang());
-			returnedMatHang.put("maLoaiMatHang", matHang.getLoaiMatHang().getMaLoaiMatHang());
-			returnedMatHang.put("gia", matHang.getGia());
-			returnedMatHang.put("soLuong", matHang.getSoLuong());
-			returnedMatHang.put("soLuongDaBan", matHang.getSoLuongDaBan());
-			returnedMatHang.put("moTa", matHang.getMoTa());
-			returnedMatHang.put("createdAt", matHang.getCreatedAt());
-			returnedMatHang.put("createdBy", matHang.getCreatedBy().getMaTaiKhoan());
-			returnedMatHang.put("updatedAt", matHang.getUpdatedAt());
-			returnedMatHang.put("updatedBy", matHang.getUpdatedBy().getMaTaiKhoan());
-
-			return new ResponseEntity<JSONObject>(returnedMatHang, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<JSONObject>(HttpStatus.NOT_FOUND);
+	
+	// Lấy thông tin mặt hàng theo mã mặt hàng
+	@GetMapping("/mat-hang/{maMatHang}")
+	public ResponseEntity<MatHang> timMatHang(@PathVariable Long maMatHang) {
+		MatHang matHang = matHangService.findByMaMatHang(maMatHang);
+		if(matHang==null) {
+			return new ResponseEntity<MatHang>(matHang, HttpStatus.NOT_FOUND);
 		}
-
+		return new ResponseEntity<MatHang>(matHang, HttpStatus.ACCEPTED);
 	}
-
-	// lấy thông tin tất cả mặt hàng
-	@GetMapping("/mat_hang")
+	
+	// lấy thông tin tất cả mặt hàng 
+	@GetMapping("/mat-hang")
 	public ResponseEntity<JSONObject> getAllMatHang(
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
@@ -91,10 +93,33 @@ public class MatHangController {
 			sortable = Sort.by("maMatHang").descending();
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
-
-		Page<MatHang> returnedPage = matHangService.findByDeletedFalse(pageable);
+		Page<MatHang> returnedPage = matHangService.findAll(pageable);
+		JSONObject result = getResultData(returnedPage);
+		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
+	}
+	
+	// Lấy thông tin tất cả mặt hàng theo loại mặt hàng
+	@GetMapping("/mat-hang/loai-mat-hang/{maLoai}")
+	public ResponseEntity<JSONObject> getAllMatHangByLoaiMatHang(
+			@PathVariable long maLoai,
+			@RequestParam(name="page", required=false, defaultValue="0") int page,
+			@RequestParam(name="size", required=false, defaultValue="15") int size,
+			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort) throws JSONException{
+		Sort sortable = null;
+		if(sort.equals("ASC")) {
+			sortable = Sort.by("maMatHang").ascending();
+		}
+		if(sort.equals("DESC")) {
+			sortable = Sort.by("maMatHang").descending();
+		}
+		Pageable pageable = PageRequest.of(page, size, sortable);
+		Page<MatHang> returnedPage = matHangService.findByMaLoaiMatHang(pageable, maLoai);
+		JSONObject result = getResultData(returnedPage);
+		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
+	}
+	
+	private JSONObject getResultData(Page<MatHang> returnedPage) {
 		List<MatHang> listMatHang = returnedPage.getContent();
-
 		List<JSONObject> data = new ArrayList<JSONObject>();
 		for (int i = 0; i < listMatHang.size(); i++) {
 			JSONObject matHang = new JSONObject();
@@ -118,60 +143,34 @@ public class MatHangController {
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", data);
 		returnedObject.put("currentPage", returnedPage.getNumber());
-		returnedObject.put("totalItems", returnedPage.getTotalElements());
-		returnedObject.put("totalPages", returnedPage.getTotalPages());
-
-		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.CREATED);
-	}
-
-	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
-	@PutMapping("/authorized/mat_hang/{maMatHang}")
-	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody net.minidev.json.JSONObject mhInput){
-		org.springframework.boot.configurationprocessor.json.JSONObject mh = new org.springframework.boot.configurationprocessor.json.JSONObject(mhInput);
-		System.out.println(mh.toString());
-		try {
-			MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
-			try {
-				
-				String tenMatHang = mh.getString("tenMatHang");
-				System.out.println("tenMatHang: "+ tenMatHang );
-				Long maLoaiMatHang = mh.getLong("maLoaiMatHang");
-				Long gia = mh.getLong("gia");
-				int soLuong = mh.getInt("soLuong");
-				int soLuongDaBan = mh.getInt("soLuongDaBan");
-				String moTa = mh.getString("moTa");
-				
-				LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHangAndDeletedFalse(maLoaiMatHang);
-				
-				matHang.setTenMatHang(mh.getString("tenMatHang"));
-				matHang.setLoaiMatHang(loaiMatHang);
-				matHang.setGia(gia);
-				matHang.setSoLuong(soLuong);
-				matHang.setSoLuongDaBan(soLuongDaBan);
-				matHang.setMoTa(moTa);
-				
-				matHangService.save(matHang);
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-		} catch(Exception e) {
-			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<Void>(HttpStatus.ACCEPTED);	
+	    returnedObject.put("totalItems", returnedPage.getTotalElements());
+	    returnedObject.put("totalPages", returnedPage.getTotalPages());
+	    return returnedObject;
 	}
 	
-	@PreAuthorize("hasAuthority({'ROLE_ADMIN'})")
-	@DeleteMapping("/authorized/mat_hang/{maMatHang}")
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PutMapping("/mat-hang/{maMatHang}")
+	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody JSONObject mh){
+		try {
+			Gson gson = new Gson();
+			MatHang updateMatHang = matHangService.findByMaMatHang(maMatHang);
+			MatHang matHang = gson.fromJson(mh.toString(), MatHang.class);
+			matHang.setMaMatHang(updateMatHang.getMaMatHang());
+			matHangService.save(matHang);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cập nhật mặt hàng thất bại");
+		}
+	}
+	
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@DeleteMapping("/mat-hang/{maMatHang}")
 	public ResponseEntity<Void> xoaMatHang(@PathVariable Long maMatHang){
 		try {
-			MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
-			matHang.setDeleted(true);
-			matHangService.save(matHang);
-		} catch(Exception e) {
-			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+			matHangService.delete(maMatHang);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		} catch (MatHangNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cung cấp đúng Ma Mat Hang", e);
 		}
-		
-		return new ResponseEntity<Void>(HttpStatus.ACCEPTED);	
 	}
 }

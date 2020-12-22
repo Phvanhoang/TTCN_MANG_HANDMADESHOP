@@ -53,10 +53,6 @@ public class NguoiDung extends AuditModel<TaiKhoan>{
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "MaTaiKhoan", nullable = false)
 	private TaiKhoan taiKhoan;
-	
-	@JsonBackReference
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nguoiDung")
-	private Set<DonHang> sanhSachDonHang;
 
 	public byte[] getAnhDaiDien() {
 		return anhDaiDien;
@@ -72,10 +68,6 @@ public class NguoiDung extends AuditModel<TaiKhoan>{
 	
 	public Date getNgaySinh() {
 		return NgaySinh;
-	}
-	
-	public Set<DonHang> getSanhSachDonHang() {
-		return sanhSachDonHang;
 	}
 	
 	public String getSDT() {
@@ -104,10 +96,6 @@ public class NguoiDung extends AuditModel<TaiKhoan>{
 	
 	public void setNgaySinh(Date ngaySinh) {
 		NgaySinh = ngaySinh;
-	}
-	
-	public void setSanhSachDonHang(Set<DonHang> sanhSachDonHang) {
-		this.sanhSachDonHang = sanhSachDonHang;
 	}
 	
 	public void setSDT(String sDT) {

@@ -17,7 +17,7 @@ import security.user.CustomUserDetails;
 @Service
 public class JwtTokenProvider {
     private final String JWT_SECRET = "WEB TTCN";
-    private final long JWT_EXPIRATION = 604800000L;
+    private final long JWT_EXPIRATION = 3 * 604800000L;
 
     public String generateToken(CustomUserDetails userDetails) {
         Date now = new Date();

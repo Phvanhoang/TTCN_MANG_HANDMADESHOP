@@ -39,7 +39,7 @@ public class DonHangServiceImpl implements DonHangService{
 	}
 
 	@Transactional
-	public void createDonHang(DonHang donHang) throws Exception {
+	public void createDonHang(DonHang donHang) {
 		int sum = 0;
 		Set<DonHang_MatHang> list = donHang.getDanhSachMatHang();
 		Iterator<DonHang_MatHang> itr = list.iterator();
@@ -56,7 +56,7 @@ public class DonHangServiceImpl implements DonHangService{
 			matHangRepository.save(matHang);
 		}
 		donHang.setGiaTongCong(sum);
-		donHang.setThoiGian(new Date());
+//		donHang.setThoiGian(new Date());
 		TrangThaiDonHang trangThaiDonHang = new TrangThaiDonHang();
 		trangThaiDonHang.setMatrangThai(1);
 		donHang.setTrangThaiDonHang(trangThaiDonHang);
