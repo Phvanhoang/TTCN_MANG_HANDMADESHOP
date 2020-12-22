@@ -44,4 +44,12 @@ public class MatHangServiceImpl implements MatHangService{
 	public boolean existMatHangByMaMatHang(long maMatHang) {
 		return matHangRepository.existsById(maMatHang);
 	}
+
+	public Page<MatHang> findByTenMatHang(Pageable pageable, String tenMatHang) {
+		return matHangRepository.findByTenMatHangContaining(pageable, tenMatHang);
+	}
+
+	public Page<MatHang> findByLoaiMatHangAndTenMatHang(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang) {
+		return matHangRepository.findByLoaiMatHangAndTenMatHangContaining(pageable, loaiMatHang, tenMatHang);
+	}
 }

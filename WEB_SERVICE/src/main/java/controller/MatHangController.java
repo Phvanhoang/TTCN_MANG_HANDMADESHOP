@@ -184,4 +184,38 @@ public class MatHangController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cung cấp đúng Ma Mat Hang", e);
 		}
 	}
+	
+	@GetMapping("/mat-hang/filter")
+	public ResponseEntity<JSONObject> timKiemMatHang(
+			@RequestParam(name="maLoaiMatHang", required=false,defaultValue="0") int maLoaiMatHang,
+			@RequestParam(name="tenMatHang", required=false, defaultValue="") String tenMatHang,
+			@RequestParam(name="page", required=false, defaultValue="0") int page,
+			@RequestParam(name="size", required=false, defaultValue="15") int size,
+			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort){
+		try {
+			Sort sortable = null;
+			JSONObject result = new JSONObject();
+			if(sort.equals("ASC")) {
+				sortable = Sort.by("maMatHang").ascending();
+			}
+			if(sort.equals("DESC")) {
+				sortable = Sort.by("maMatHang").descending();
+			}
+			
+			Pageable pageable = PageRequest.of(page, size, sortable);
+			if(maLoaiMatHang==0) {
+				Page<MatHang> returnedPage = matHangService.findByTenMatHang(pageable, tenMatHang);
+				result = getResultData(returnedPage);
+			}
+			else { 
+				LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHang(maLoaiMatHang);
+				Page<MatHang> returnedPage = matHangService.findByLoaiMatHangAndTenMatHang(pageable, loaiMatHang, tenMatHang); 
+				result = getResultData(returnedPage);
+			}
+			 
+			return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
+		}catch(Exception e){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tìm kiếm mặt hàng thất bại");
+		}
+	}
 }
