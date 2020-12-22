@@ -191,15 +191,16 @@ public class MatHangController {
 			@RequestParam(name="tenMatHang", required=false, defaultValue="") String tenMatHang,
 			@RequestParam(name="page", required=false, defaultValue="0") int page,
 			@RequestParam(name="size", required=false, defaultValue="15") int size,
+			@RequestParam(name="sortType", required=false, defaultValue="maMatHang") String sortType,
 			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort){
 		try {
 			Sort sortable = null;
 			JSONObject result = new JSONObject();
 			if(sort.equals("ASC")) {
-				sortable = Sort.by("maMatHang").ascending();
+				sortable = Sort.by(sortType).ascending();
 			}
 			if(sort.equals("DESC")) {
-				sortable = Sort.by("maMatHang").descending();
+				sortable = Sort.by(sortType).descending();
 			}
 			
 			Pageable pageable = PageRequest.of(page, size, sortable);
