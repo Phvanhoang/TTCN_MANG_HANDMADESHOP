@@ -14,6 +14,6 @@ public interface MatHangService {
 	Page<MatHang> findByLoaiMatHang(Pageable pageable, LoaiMatHang loaiMatHang);
 	boolean delete(long maMatHang) throws MatHangNotFoundException;
 	boolean existMatHangByMaMatHang(long maMatHang);
-	Page<MatHang> findByTenMatHang(Pageable pageable, String tenMatHang);
-	Page<MatHang> findByLoaiMatHangAndTenMatHang(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang);
+	Page<MatHang> findWithoutLoaiMatHang(Pageable pageable, String tenMatHang, long giaBatDau, long giaKetThuc);
+	Page<MatHang> findWithFilter(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang, long giaBatDau, long giaKetThuc);
 }

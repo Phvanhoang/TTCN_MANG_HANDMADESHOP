@@ -12,14 +12,14 @@ import repository.MatHangRepository;
 import service.MatHangService;
 
 @Service
-public class MatHangServiceImpl implements MatHangService{
+public class MatHangServiceImpl implements MatHangService {
 	@Autowired
 	private MatHangRepository matHangRepository;
-	
+
 	public MatHang save(MatHang matHang) {
 		return matHangRepository.save(matHang);
 	}
-	
+
 	public MatHang findByMaMatHang(long maMatHang) {
 		return matHangRepository.findByMaMatHangAndDeletedFalse(maMatHang);
 	}
@@ -45,11 +45,13 @@ public class MatHangServiceImpl implements MatHangService{
 		return matHangRepository.existsById(maMatHang);
 	}
 
-	public Page<MatHang> findByTenMatHang(Pageable pageable, String tenMatHang) {
-		return matHangRepository.findByTenMatHangContaining(pageable, tenMatHang);
+	public Page<MatHang> findWithoutLoaiMatHang(Pageable pageable, String tenMatHang, long giaBatDau, long giaKetThuc) {
+		return matHangRepository.findByTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(pageable, tenMatHang, giaBatDau, giaKetThuc);
 	}
 
-	public Page<MatHang> findByLoaiMatHangAndTenMatHang(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang) {
-		return matHangRepository.findByLoaiMatHangAndTenMatHangContaining(pageable, loaiMatHang, tenMatHang);
+	public Page<MatHang> findWithFilter(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang, long giaBatDau,
+			long giaKetThuc) {
+		return matHangRepository.findByLoaiMatHangAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(pageable, loaiMatHang, tenMatHang, giaBatDau, giaKetThuc);
 	}
+
 }

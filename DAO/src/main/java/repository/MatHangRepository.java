@@ -13,7 +13,7 @@ public interface MatHangRepository extends PagingAndSortingRepository<MatHang, L
 	Page<MatHang> findByDeletedFalse(Pageable pageable);
 	MatHang findByMaMatHangAndDeletedFalse(Long maMatHang);
 	Page<MatHang> findByDeletedFalseAndLoaiMatHang(Pageable pageable, LoaiMatHang loaiMatHang);
-	Page<MatHang> findByTenMatHangContaining(Pageable pageable, String tenMatHang);
-	Page<MatHang> findByLoaiMatHangAndTenMatHangContaining(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang);
+	Page<MatHang> findByTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(Pageable pageable, String tenMatHang, long giaBatDau, long giaKetThuc);
+	Page<MatHang> findByLoaiMatHangAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang, long giaBatDau, long giaKetThuc);
 
 }

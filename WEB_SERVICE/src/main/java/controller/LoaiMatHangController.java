@@ -55,18 +55,18 @@ public class LoaiMatHangController {
 	}
 	
 	// lấy thông tin tất cả loại mặt hàng
-	@GetMapping("/loai-mat-hang")
-	public ResponseEntity<JSONObject> getAllLoaiMatHang() {
-		ArrayList<LoaiMatHang> list = loaiMatHangService.findAll();
-		JSONObject returnJson = new JSONObject();
-		for (int i = 0; i < list.size(); i++) {
-			LoaiMatHang loaiMatHang = list.get(i);
-			loaiMatHang.setDanhSachMatHang(null);
-		}
-		returnJson.put("data", list);
-		returnJson.put("size", list.size());
-		return new ResponseEntity<JSONObject>(returnJson, HttpStatus.OK);
-	}
+//	@GetMapping("/loai-mat-hang")
+//	public ResponseEntity<JSONObject> getAllLoaiMatHang() {
+//		ArrayList<LoaiMatHang> list = loaiMatHangService.findAll();
+//		JSONObject returnJson = new JSONObject();
+//		for (int i = 0; i < list.size(); i++) {
+//			LoaiMatHang loaiMatHang = list.get(i);
+//			loaiMatHang.setDanhSachMatHang(null);
+//		}
+//		returnJson.put("data", list);
+//		returnJson.put("size", list.size());
+//		return new ResponseEntity<JSONObject>(returnJson, HttpStatus.OK);
+//	}
 
 //	public ResponseEntity<JSONObject> getAllLoaiMatHang(
 //			@RequestParam(name = "page", required = false, defaultValue = "0") int page,

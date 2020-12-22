@@ -85,23 +85,23 @@ public class MatHangController {
 	}
 	
 	// lấy thông tin tất cả mặt hàng 
-	@GetMapping("/mat-hang")
-	public ResponseEntity<JSONObject> getAllMatHang(
-			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
-			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) throws JSONException {
-		Sort sortable = null;
-		if (sort.equals("ASC")) {
-			sortable = Sort.by("maMatHang").ascending();
-		}
-		if (sort.equals("DESC")) {
-			sortable = Sort.by("maMatHang").descending();
-		}
-		Pageable pageable = PageRequest.of(page, size, sortable);
-		Page<MatHang> returnedPage = matHangService.findAll(pageable);
-		JSONObject result = getResultData(returnedPage);
-		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
-	}
+//	@GetMapping("/mat-hang")
+//	public ResponseEntity<JSONObject> getAllMatHang(
+//			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+//			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
+//			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) throws JSONException {
+//		Sort sortable = null;
+//		if (sort.equals("ASC")) {
+//			sortable = Sort.by("maMatHang").ascending();
+//		}
+//		if (sort.equals("DESC")) {
+//			sortable = Sort.by("maMatHang").descending();
+//		}
+//		Pageable pageable = PageRequest.of(page, size, sortable);
+//		Page<MatHang> returnedPage = matHangService.findAll(pageable);
+//		JSONObject result = getResultData(returnedPage);
+//		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
+//	}
 	
 	// Lấy thông tin tất cả mặt hàng theo loại mặt hàng
 	@GetMapping("/mat-hang/loai-mat-hang/{maLoaiMatHang}")
@@ -185,10 +185,12 @@ public class MatHangController {
 		}
 	}
 	
-	@GetMapping("/mat-hang/filter")
+	@GetMapping("/mat-hang")
 	public ResponseEntity<JSONObject> timKiemMatHang(
 			@RequestParam(name="maLoaiMatHang", required=false,defaultValue="0") int maLoaiMatHang,
 			@RequestParam(name="tenMatHang", required=false, defaultValue="") String tenMatHang,
+			@RequestParam(name="giaBatDau", required=false, defaultValue="0") long giaBatDau,
+			@RequestParam(name="giaKetThuc", required=false, defaultValue="9999999999") long giaKetThuc,
 			@RequestParam(name="page", required=false, defaultValue="0") int page,
 			@RequestParam(name="size", required=false, defaultValue="15") int size,
 			@RequestParam(name="sortType", required=false, defaultValue="maMatHang") String sortType,
@@ -205,12 +207,12 @@ public class MatHangController {
 			
 			Pageable pageable = PageRequest.of(page, size, sortable);
 			if(maLoaiMatHang==0) {
-				Page<MatHang> returnedPage = matHangService.findByTenMatHang(pageable, tenMatHang);
+				Page<MatHang> returnedPage = matHangService.findWithoutLoaiMatHang(pageable, tenMatHang, giaBatDau, giaKetThuc);
 				result = getResultData(returnedPage);
 			}
 			else { 
 				LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHang(maLoaiMatHang);
-				Page<MatHang> returnedPage = matHangService.findByLoaiMatHangAndTenMatHang(pageable, loaiMatHang, tenMatHang); 
+				Page<MatHang> returnedPage = matHangService.findWithFilter(pageable, loaiMatHang, tenMatHang, giaBatDau, giaKetThuc); 
 				result = getResultData(returnedPage);
 			}
 			 
