@@ -32,6 +32,7 @@ import model.TaiKhoan;
 import net.minidev.json.JSONObject;
 import service.DanhGiaService;
 import service.MatHangService;
+import service.NguoiDungService;
 import service.TaiKhoanService;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
@@ -128,19 +129,44 @@ public class DanhGiaController {
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@GetMapping("/authorized/danh-gia")
 	public ResponseEntity<JSONObject> GetAllDanhGia(
+		@RequestParam(name="maTaiKhoan", required=false, defaultValue="0") int maTaiKhoan,
+		@RequestParam(name="maMatHang", required=false, defaultValue="0") int maMatHang,
 		@RequestParam(name="page", required=false, defaultValue="0") int page,
 		@RequestParam(name="size", required=false, defaultValue="15") int size,
+		@RequestParam(name="sortType", required=false, defaultValue="maDanhGia") String sortType,
 		@RequestParam(name="sort", required=false, defaultValue="ASC") String sort) throws JSONException{
 		Sort sortable = null;
+		JSONObject result = new JSONObject();
 		if(sort.equals("ASC")) {
-			sortable = Sort.by("maDanhGia").ascending();
+			sortable = Sort.by(sortType).ascending();
 		}
 		if(sort.equals("DESC")) {
-			sortable = Sort.by("maDanhGia").descending();
+			sortable = Sort.by(sortType).descending();
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
-		Page<DanhGia> returnedPage = danhGiaService.findAll(pageable);
-		JSONObject result = getResultData(returnedPage);
+
+		if(maTaiKhoan==0&&maMatHang==0) {
+			Page<DanhGia> returnedPage = danhGiaService.findAll(pageable);
+			result = getResultData(returnedPage);
+		}
+		else if(maTaiKhoan==0&maMatHang!=0) {
+			MatHang matHang = matHangService.findByMaMatHang(maMatHang);
+			Page<DanhGia> returnedPage = danhGiaService.findByMatHang(pageable, matHang);
+			result = getResultData(returnedPage);
+		}
+		else if(maTaiKhoan!=0&&maMatHang==0) {
+			TaiKhoan taiKhoan = taiKhoanService.findByMaTaiKhoan(maTaiKhoan);
+			Page<DanhGia> returnedPage = danhGiaService.findByCreatedBy(pageable, taiKhoan);
+			result = getResultData(returnedPage);
+		}
+		else {
+			MatHang matHang = matHangService.findByMaMatHang(maMatHang);
+			TaiKhoan taiKhoan = taiKhoanService.findByMaTaiKhoan(maTaiKhoan);
+			Page<DanhGia> returnedPage = danhGiaService.findByMatHangAndCreatedBy(pageable, matHang, taiKhoan);
+			result = getResultData(returnedPage);
+
+
+		}
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 	
@@ -150,11 +176,12 @@ public class DanhGiaController {
 		for(int i=0; i<listDanhGia.size(); i++) {
 			JSONObject danhGia = new JSONObject();
 			DanhGia dg = listDanhGia.get(i);
+			danhGia.put("maMatHang", dg.getMatHang().getMaMatHang());
 			danhGia.put("maDanhGia", dg.getMaDanhGia());
 			danhGia.put("noiDung", dg.getNoiDung());
 			danhGia.put("soSao", dg.getSoSao());
 			danhGia.put("createdAt", dg.getCreatedAt());
-			danhGia.put("createdBy", dg.getCreatedBy().getMaTaiKhoan());
+			danhGia.put("maNguoiDung", dg.getCreatedBy().getMaTaiKhoan());
 			danhGia.put("updatedAt", dg.getUpdatedAt());
 			danhGia.put("updatedBy", dg.getUpdatedBy().getMaTaiKhoan());
 			danhGia.put("deleted", dg.isDeleted());

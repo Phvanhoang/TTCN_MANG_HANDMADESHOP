@@ -63,4 +63,8 @@ public class DanhGiaServiceImpl implements DanhGiaService{
 		danhGiaRepository.save(danhgia);
 		return false;
 	}
+
+	public Page<DanhGia> findByMatHangAndCreatedBy(Pageable pageable, MatHang matHang, TaiKhoan taiKhoan) {
+		return danhGiaRepository.findByDeletedFalseAndMatHangAndCreatedBy(pageable, matHang, taiKhoan);
+	}
 }

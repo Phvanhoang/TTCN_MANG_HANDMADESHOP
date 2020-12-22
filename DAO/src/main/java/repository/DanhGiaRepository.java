@@ -14,6 +14,6 @@ public interface DanhGiaRepository extends PagingAndSortingRepository<DanhGia, L
 	Page<DanhGia> findByDeletedFalse(Pageable pageable);
 	Page<DanhGia> findByDeletedFalseAndMatHang(Pageable pageable, MatHang matHang);
 	Page<DanhGia> findByDeletedFalseAndCreatedBy(Pageable pageable, TaiKhoan taiKhoan);
-	//<DanhGia> findByMaDanhGiaAndDeletedFalse(longM)
+	Page<DanhGia> findByDeletedFalseAndMatHangAndCreatedBy(Pageable pageable, MatHang matHang, TaiKhoan taiKhoan);
 	boolean existsByDeletedFalseAndMaDanhGiaEquals(long maDanhGia);
 }
