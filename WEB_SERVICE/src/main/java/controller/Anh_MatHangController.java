@@ -22,24 +22,8 @@ import service.MatHangService;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
+@RequestMapping(path = "mat-hang-management")
 public class Anh_MatHangController {
-	@Autowired
-	private Anh_MatHangService anh_MatHangService;
 	
-	@Autowired 
-	private MatHangService matHangService;
-	
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@PostMapping("/admin/anh_mat_hang/upload")
-	public ResponseEntity<Void> upload(@RequestParam("image") MultipartFile multipartFile,
-										@RequestParam("maMatHang") long maMatHang) {
-		MatHang matHang = matHangService.findByMaMatHangAndDeletedFalse(maMatHang);
-		try {
-			anh_MatHangService.save(new Anh_MatHang(multipartFile.getBytes(), matHang));
-		} catch (Exception e) {
-			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<Void>(HttpStatus.OK);
-	}
 	
 }

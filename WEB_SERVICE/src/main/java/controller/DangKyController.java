@@ -36,8 +36,6 @@ public class DangKyController {
 	private NguoiDungService nguoiDungService;
 	@Autowired 
 	private QuyenService quyenService;
-	@Autowired
-	public AuthenticationManager authManager;
 	@PostMapping("/register")
 	public ResponseEntity<Void> dangKy(@RequestBody JSONObject taiKhoanDangKy) {
 		try {

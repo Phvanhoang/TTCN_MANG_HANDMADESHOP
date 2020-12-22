@@ -12,4 +12,5 @@ import model.NguoiDung;
 public interface MatHangRepository extends PagingAndSortingRepository<MatHang, Long>{
 	Page<MatHang> findByDeletedFalse(Pageable pageable);
 	MatHang findByMaMatHangAndDeletedFalse(Long maMatHang);
+	Page<MatHang> findByDeletedFalseAndLoaiMatHang(Pageable pageable, long maLoaiMatHang);
 }

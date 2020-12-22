@@ -1,5 +1,7 @@
 package impl;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,17 +20,16 @@ public class LoaiMatHangServiceImpl implements LoaiMatHangService{
 		loaiMatHangRepository.save(loaiMatHang);
 	}
 
-	public LoaiMatHang findByMaLoaiMatHangAndDeletedFalse(long maLoaiMatHang) {
+	public LoaiMatHang findByMaLoaiMatHang(long maLoaiMatHang) {
 		return loaiMatHangRepository.findByMaLoaiMatHangAndDeletedFalse(maLoaiMatHang);
 	}
 
-	public Page<LoaiMatHang> findByDeletedFalse(Pageable pageable) {
-		return loaiMatHangRepository.findByDeletedFalse(pageable);
+	public ArrayList<LoaiMatHang> findAll() {
+		return loaiMatHangRepository.findByDeletedFalse();
 	}
 
 	public void delete(LoaiMatHang loaiMatHang) {
 		loaiMatHangRepository.delete(loaiMatHang);
-		
 	}
 
 }
