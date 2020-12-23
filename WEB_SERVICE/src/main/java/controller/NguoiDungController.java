@@ -50,7 +50,7 @@ public class NguoiDungController {
 		returnedObject.put("sdt", nguoiDung.getSDT());
 		returnedObject.put("thanhPho", nguoiDung.getThanhPho());
 		returnedObject.put("anhDaiDien", nguoiDung.getAnhDaiDien());
-		returnedObject.put("gioiTinh", nguoiDung.getGioiTinh().getTenGioiTinh());
+		returnedObject.put("gioiTinh", (nguoiDung.getGioiTinh() == null) ? nguoiDung.getGioiTinh().getTenGioiTinh():null);
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
 

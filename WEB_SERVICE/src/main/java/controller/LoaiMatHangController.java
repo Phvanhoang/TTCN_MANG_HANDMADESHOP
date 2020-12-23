@@ -110,8 +110,8 @@ public class LoaiMatHangController {
 	}
 
 	// thêm một loại mặt hàng vào CSDL
-//	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
-	@PostMapping("/loai-mat-hang")
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PostMapping("/authorized/loai-mat-hang")
 	public ResponseEntity<Void> themLoaiMatHang(@RequestBody JSONObject lmh) {
 		try {
 			LoaiMatHang loaiMatHang = new LoaiMatHang();
@@ -125,7 +125,7 @@ public class LoaiMatHangController {
 
 	// chỉnh sửa thông tin loại mặt hàng
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
-	@PutMapping("/loai_mat_hang/{maLoaiMatHang}")
+	@PutMapping("/authorized/loai-mat-hang/{maLoaiMatHang}")
 	public ResponseEntity<Void> suaLoaiMatHang(@PathVariable Long maLoaiMatHang, @RequestBody JSONObject lmh) {
 		try {
 			LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHang(maLoaiMatHang);
@@ -134,6 +134,6 @@ public class LoaiMatHangController {
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

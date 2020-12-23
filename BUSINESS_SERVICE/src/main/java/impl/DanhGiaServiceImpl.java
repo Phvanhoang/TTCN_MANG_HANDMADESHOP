@@ -41,7 +41,7 @@ public class DanhGiaServiceImpl implements DanhGiaService{
 			throw new DanhGiaNotFoundException("Not Found Danh Gia");
 		}
 		MatHang matHang = matHangRepository.findByMaMatHangAndDeletedFalse(danhGia.getMatHang().getMaMatHang());
-		int rate = (matHang.getRate() * matHang.getSoLuotDanhGia() + danhGia.getSoSao()) / (matHang.getSoLuotDanhGia() + 1);
+		float rate = (matHang.getRate() * matHang.getSoLuotDanhGia() + danhGia.getSoSao()) / (matHang.getSoLuotDanhGia() + 1);
 		matHang.setRate(rate);
 		matHang.setSoLuotDanhGia(matHang.getSoLuotDanhGia() + 1);
 		matHang.getDanhSachDanhGia().add(danhGia);

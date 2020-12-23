@@ -24,7 +24,7 @@ public class LoaiMatHang extends AuditModel<TaiKhoan>{
 	@GeneratedValue
 	private long maLoaiMatHang;
 	
-	@Column(name = "TenLoaiMatHang")
+	@Column(name = "TenLoaiMatHang", nullable = false)
 	private String tenLoaiMatHang;
 	
 	@JsonBackReference

@@ -70,7 +70,7 @@ public class DonHangController {
 	/*
 	 * API thay doi trang thai don hang
    	 */
-	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PutMapping(value = "/authorized/don-hang/{maDonHang}/trang-thai-don-hang/{maTTDH}")
 	public ResponseEntity<Void> thayDoiTTDonHang(@PathVariable long maDonHang, 
 				@PathVariable long maTTDH){
@@ -85,7 +85,7 @@ public class DonHangController {
 	/*
 	 * API xoa don hang
    	 */
-	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PutMapping(value = "/authorized/don-hang/{maDonHang}")
 	public ResponseEntity<Void> xoaDonHang(@PathVariable long maDonHang){
 		try {

@@ -51,16 +51,16 @@ public class MatHangController {
 	 * API thêm ảnh - mặt hàng
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
-	@PostMapping("/authorized/anh-mat-hang")
+	@PostMapping("/authorized/mat-hang/{maMatHang}/anh-mat-hang")
 	public ResponseEntity<Void> upload(@RequestParam("image") MultipartFile multipartFile,
-										@RequestParam("maMatHang") long maMatHang) {
+										@PathVariable("maMatHang") long maMatHang) {
 		MatHang matHang = matHangService.findByMaMatHang(maMatHang);
 		try {
 			anh_MatHangService.save(new Anh_MatHang(multipartFile.getBytes(), matHang));
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
 	/*
@@ -87,7 +87,7 @@ public class MatHangController {
 		if(matHang==null) {
 			return new ResponseEntity<MatHang>(matHang, HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<MatHang>(matHang, HttpStatus.ACCEPTED);
+		return new ResponseEntity<MatHang>(matHang, HttpStatus.OK);
 	}
 	
 	/*
@@ -165,6 +165,7 @@ public class MatHangController {
 			matHangService.save(matHang);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cập nhật mặt hàng thất bại");
 		}
 	}
