@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,13 +31,16 @@ import service.NguoiDungService;
 
 @CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
+@RequestMapping("nguoi-dung-management")
 public class NguoiDungController {
 	@Autowired
 	private NguoiDungService nguoiDungService;
 
-	// lay thong tin nguoi dung
+	/*
+	 * API lay thong tin nguoi dung
+	 */
 	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
-	@GetMapping("/authorized/nguoi_dung/{maNguoiDung}")
+	@GetMapping("/authorized/nguoi-dung/{maNguoiDung}")
 	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung) {
 		JSONObject returnedObject = new JSONObject();
 		NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
@@ -50,9 +54,11 @@ public class NguoiDungController {
 		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 	}
 
-	// chinh sua thong tin nguoi dung
+	/*
+	 * API chinh sua thong tin nguoi dung
+	 */
 	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
-	@PutMapping("/authorized/nguoi_dung/{maNguoiDung}")
+	@PutMapping("/authorized/nguoi-dung/{maNguoiDung}")
 	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maNguoiDung, @RequestParam("hoTen") String hoTen,
 			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
 			@RequestParam("thanhPho") String thanhPho, @RequestParam("sdt") String sdt,
@@ -86,9 +92,11 @@ public class NguoiDungController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	// lay thong tin TAT CA nguoi dung
+	/*
+	 * API lay thong tin tat ca nguoi dung
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
-	@GetMapping("/authorized/nguoi_dung")
+	@GetMapping("/authorized/nguoi-dung")
 	public ResponseEntity<JSONObject> getAllNguoiDung(
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(name = "size", required = false, defaultValue = "15") int size,

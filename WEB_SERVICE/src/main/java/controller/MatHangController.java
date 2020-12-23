@@ -47,7 +47,9 @@ public class MatHangController {
 	@Autowired
 	private LoaiMatHangService loaiMatHangService;
 	
-	// Thêm ảnh - mặt hàng
+	/*
+	 * API thêm ảnh - mặt hàng
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PostMapping("/authorized/anh-mat-hang")
 	public ResponseEntity<Void> upload(@RequestParam("image") MultipartFile multipartFile,
@@ -61,7 +63,9 @@ public class MatHangController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	// Thêm mặt hàng
+	/*
+	 * API thêm mặt hàng
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PostMapping(value="/authorized/mat-hang")
 	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) { 
@@ -74,7 +78,9 @@ public class MatHangController {
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
-	// Lấy thông tin mặt hàng theo mã mặt hàng
+	/*
+	 * API lấy thông tin mặt hàng theo mã mặt hàng
+	 */
 	@GetMapping("/mat-hang/{maMatHang}")
 	public ResponseEntity<MatHang> timMatHang(@PathVariable Long maMatHang) {
 		MatHang matHang = matHangService.findByMaMatHang(maMatHang);
@@ -84,26 +90,9 @@ public class MatHangController {
 		return new ResponseEntity<MatHang>(matHang, HttpStatus.ACCEPTED);
 	}
 	
-	// lấy thông tin tất cả mặt hàng 
-//	@GetMapping("/mat-hang")
-//	public ResponseEntity<JSONObject> getAllMatHang(
-//			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-//			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
-//			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) throws JSONException {
-//		Sort sortable = null;
-//		if (sort.equals("ASC")) {
-//			sortable = Sort.by("maMatHang").ascending();
-//		}
-//		if (sort.equals("DESC")) {
-//			sortable = Sort.by("maMatHang").descending();
-//		}
-//		Pageable pageable = PageRequest.of(page, size, sortable);
-//		Page<MatHang> returnedPage = matHangService.findAll(pageable);
-//		JSONObject result = getResultData(returnedPage);
-//		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
-//	}
-	
-	// Lấy thông tin tất cả mặt hàng theo loại mặt hàng
+	/*
+	 * API lấy thông tin tất cả mặt hàng theo loại mặt hàng
+	 */
 	@GetMapping("/mat-hang/loai-mat-hang/{maLoaiMatHang}")
 	public ResponseEntity<JSONObject> getAllMatHangByLoaiMatHang(
 			@PathVariable long maLoaiMatHang,
@@ -129,6 +118,9 @@ public class MatHangController {
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 	
+	/*
+	 * Ham tra ve ket qua cho Client
+	 */
 	private JSONObject getResultData(Page<MatHang> returnedPage) {
 		List<MatHang> listMatHang = returnedPage.getContent();
 		List<JSONObject> data = new ArrayList<JSONObject>();
@@ -140,7 +132,7 @@ public class MatHangController {
 			matHang.put("maLoaiMatHang", mh.getLoaiMatHang().getMaLoaiMatHang());
 			matHang.put("gia", mh.getGia());
 			matHang.put("soLuong", mh.getSoLuong());
-			matHang.put("soLuongDaBang", mh.getSoLuongDaBan());
+			matHang.put("soLuongDaBan", mh.getSoLuongDaBan());
 			matHang.put("moTa", mh.getMoTa());
 			matHang.put("createdAt", mh.getCreatedAt());
 			matHang.put("createdBy", mh.getCreatedBy().getMaTaiKhoan());
@@ -159,8 +151,11 @@ public class MatHangController {
 	    return returnedObject;
 	}
 	
+	/*
+	 * API chinh sua mat hang theo ma mat hang
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
-	@PutMapping("/mat-hang/{maMatHang}")
+	@PutMapping("/authorized/mat-hang/{maMatHang}")
 	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody JSONObject mh){
 		try {
 			Gson gson = new Gson();
@@ -174,8 +169,11 @@ public class MatHangController {
 		}
 	}
 	
+	/*
+	 * API xoa mat hang theo ma mat hang
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
-	@DeleteMapping("/mat-hang/{maMatHang}")
+	@DeleteMapping("/authorized/mat-hang/{maMatHang}")
 	public ResponseEntity<Void> xoaMatHang(@PathVariable Long maMatHang){
 		try {
 			matHangService.delete(maMatHang);
@@ -185,6 +183,9 @@ public class MatHangController {
 		}
 	}
 	
+	/*
+	 * API la filter mat hang
+	 */
 	@GetMapping("/mat-hang")
 	public ResponseEntity<JSONObject> timKiemMatHang(
 			@RequestParam(name="maLoaiMatHang", required=false,defaultValue="0") int maLoaiMatHang,

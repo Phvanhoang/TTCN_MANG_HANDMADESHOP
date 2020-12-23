@@ -29,7 +29,10 @@ public class AuthenticationController {
 
 	@Autowired
 	private JwtTokenProvider tokenProvider;
-
+	
+	/*
+	 * API dang nhap
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(

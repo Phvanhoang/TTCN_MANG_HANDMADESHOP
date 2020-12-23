@@ -12,7 +12,7 @@ public class TrangThaiDonHang {
 	@Id
 	@Column(name = "MaTrangThai")
 	@GeneratedValue
-	private long matrangThai;
+	private long maTrangThai;
 	
 	@Column(name = "TenTrangThai")
 	private String tenTrangThai;
@@ -24,8 +24,8 @@ public class TrangThaiDonHang {
 		return danhSachDonHang;
 	}
 	
-	public long getMatrangThai() {
-		return matrangThai;
+	public long getMaTrangThai() {
+		return maTrangThai;
 	}
 	
 	public String getTenTrangThai() {
@@ -36,8 +36,8 @@ public class TrangThaiDonHang {
 		this.danhSachDonHang = danhSachDonHang;
 	}
 	
-	public void setMatrangThai(long matrangThai) {
-		this.matrangThai = matrangThai;
+	public void setMaTrangThai(long matrangThai) {
+		this.maTrangThai = matrangThai;
 	}
 	
 	public void setTenTrangThai(String tenTrangThai) {

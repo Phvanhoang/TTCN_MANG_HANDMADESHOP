@@ -46,6 +46,9 @@ public class DanhGiaController {
 	@Autowired
 	private TaiKhoanService taiKhoanService;
 	
+	/*
+	 * API tao moi danh gia
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
 	@PostMapping("/authorized/danh-gia")
 	public ResponseEntity<Void> taoDanhGia(@RequestBody JSONObject jsonObject) {
@@ -60,6 +63,9 @@ public class DanhGiaController {
 		}
 	}
 	
+	/*
+	 * API xoa thong tin danh gia theo ma danh gia
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@DeleteMapping("/authorized/danh-gia/{maDanhGia}")
 	public ResponseEntity<Void> xoaDanhGia(@PathVariable long maDanhGia) {
@@ -74,7 +80,9 @@ public class DanhGiaController {
 		}
 	}
 	
-
+	/*
+	 * API lay danh sach danh gia theo ma mat hang
+	 */
 	@GetMapping("/danh-gia/mat-hang/{maMatHang}")
 	public ResponseEntity<JSONObject> GetAllDanhGiaByMaMatHang(
 		@PathVariable int maMatHang,	
@@ -101,6 +109,9 @@ public class DanhGiaController {
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 
+	/*
+	 * API lay danh sach danh gia theo ma tai khoan
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@GetMapping("/authorized/danh-gia/tai-khoan/{maTaiKhoan}")
 	public ResponseEntity<JSONObject> GetAllDanhGiaByTaiKhoan(
@@ -126,6 +137,9 @@ public class DanhGiaController {
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 	
+	/*
+	 * API filter danh sach danh gia
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@GetMapping("/authorized/danh-gia")
 	public ResponseEntity<JSONObject> GetAllDanhGia(
@@ -170,6 +184,9 @@ public class DanhGiaController {
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 	
+	/*
+	 * Ham tao danh sach tra ve cho Client
+	 */
 	private JSONObject getResultData(Page<DanhGia> returnedPage) {
 		List<DanhGia> listDanhGia = returnedPage.getContent();
 		List<JSONObject> data = new ArrayList<JSONObject>();
