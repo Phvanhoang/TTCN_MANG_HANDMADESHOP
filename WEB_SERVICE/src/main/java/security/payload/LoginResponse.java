@@ -1,42 +1,42 @@
 package security.payload;
 
 public class LoginResponse {
-    private String accessToken;
-    private String tokenType = "HANDMADE_SHOP";
-    private String tenDangNhap;
-    private Long id;
-    private String role;
-    
-    public LoginResponse(String accessToken, String tenDangNhap) {
-        this.tenDangNhap = tenDangNhap;
-        this.accessToken = accessToken;
-    }
-    
-    public LoginResponse() {
-    	
-    }
-    
-    public String getAccessToken() {
-		return accessToken;
-	}
-    
-    public String getTokenType() {
-		return tokenType;
-	}
-    
-    public String getTenDangNhap() {
-		return tenDangNhap;
-	}
-    
-    public void setAccessToken(String accessToken) {
+	private String accessToken;
+	private String tokenType = "HANDMADE_SHOP";
+	private String tenDangNhap;
+	private Long id;
+	private String role;
+
+	public LoginResponse(String accessToken, String tenDangNhap) {
+		this.tenDangNhap = tenDangNhap;
 		this.accessToken = accessToken;
 	}
-    
-    public void setTokenType(String tokenType) {
+
+	public LoginResponse() {
+
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public String getTokenType() {
+		return tokenType;
+	}
+
+	public String getTenDangNhap() {
+		return tenDangNhap;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public void setTokenType(String tokenType) {
 		this.tokenType = tokenType;
 	}
-    
-    public void setTenDangNhap(String tenDangNhap) {
+
+	public void setTenDangNhap(String tenDangNhap) {
 		this.tenDangNhap = tenDangNhap;
 	}
 

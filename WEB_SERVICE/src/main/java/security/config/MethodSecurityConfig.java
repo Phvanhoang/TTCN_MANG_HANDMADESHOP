@@ -11,10 +11,10 @@ import security.custom.CustomPermissionEvaluator;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
-    @Override
-    protected MethodSecurityExpressionHandler createExpressionHandler() {
-        final DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator());
-        return expressionHandler;
-    }
+	@Override
+	protected MethodSecurityExpressionHandler createExpressionHandler() {
+		final DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+		expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator());
+		return expressionHandler;
+	}
 }

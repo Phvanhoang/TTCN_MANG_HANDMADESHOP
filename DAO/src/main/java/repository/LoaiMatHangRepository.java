@@ -10,9 +10,11 @@ import org.springframework.stereotype.Repository;
 import model.LoaiMatHang;
 
 @Repository
-public interface LoaiMatHangRepository extends CrudRepository<LoaiMatHang, Long>{
+public interface LoaiMatHangRepository extends CrudRepository<LoaiMatHang, Long> {
 	ArrayList<LoaiMatHang> findByDeletedFalse();
+
 	LoaiMatHang findByMaLoaiMatHangAndDeletedFalse(Long maLoaiMatHang);
+
 	Page<LoaiMatHang> findByDeletedFalseAndTenLoaiMatHangContaining(Pageable pageable, String tenLoaiMatHang);
 
 }

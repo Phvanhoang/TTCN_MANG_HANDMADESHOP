@@ -42,18 +42,18 @@ import service.MatHangService;
 public class MatHangController {
 	@Autowired
 	private Anh_MatHangService anh_MatHangService;
-	@Autowired 
+	@Autowired
 	private MatHangService matHangService;
 	@Autowired
 	private LoaiMatHangService loaiMatHangService;
-	
+
 	/*
 	 * API thêm ảnh - mặt hàng
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PostMapping("/authorized/mat-hang/{maMatHang}/anh-mat-hang")
 	public ResponseEntity<Void> upload(@RequestParam("image") MultipartFile multipartFile,
-										@PathVariable("maMatHang") long maMatHang) {
+			@PathVariable("maMatHang") long maMatHang) {
 		MatHang matHang = matHangService.findByMaMatHang(maMatHang);
 		try {
 			anh_MatHangService.save(new Anh_MatHang(multipartFile.getBytes(), matHang));
@@ -62,13 +62,13 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
-	
+
 	/*
 	 * API thêm mặt hàng
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
-	@PostMapping(value="/authorized/mat-hang")
-	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) { 
+	@PostMapping(value = "/authorized/mat-hang")
+	public ResponseEntity<Void> taoMatHang(@RequestBody JSONObject matHang) {
 		try {
 			Gson gson = new Gson();
 			matHangService.save(gson.fromJson(matHang.toString(), MatHang.class));
@@ -77,38 +77,37 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
-	
+
 	/*
 	 * API lấy thông tin mặt hàng theo mã mặt hàng
 	 */
 	@GetMapping("/mat-hang/{maMatHang}")
 	public ResponseEntity<MatHang> timMatHang(@PathVariable Long maMatHang) {
 		MatHang matHang = matHangService.findByMaMatHang(maMatHang);
-		if(matHang==null) {
+		if (matHang == null) {
 			return new ResponseEntity<MatHang>(matHang, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<MatHang>(matHang, HttpStatus.OK);
 	}
-	
+
 	/*
 	 * API lấy thông tin tất cả mặt hàng theo loại mặt hàng
 	 */
 	@GetMapping("/mat-hang/loai-mat-hang/{maLoaiMatHang}")
-	public ResponseEntity<JSONObject> getAllMatHangByLoaiMatHang(
-			@PathVariable long maLoaiMatHang,
-			@RequestParam(name="page", required=false, defaultValue="0") int page,
-			@RequestParam(name="size", required=false, defaultValue="15") int size,
-			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort) throws JSONException{
+	public ResponseEntity<JSONObject> getAllMatHangByLoaiMatHang(@PathVariable long maLoaiMatHang,
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) throws JSONException {
 		Sort sortable = null;
 		JSONObject result = new JSONObject();
-		if(sort.equals("ASC")) {
+		if (sort.equals("ASC")) {
 			sortable = Sort.by("maMatHang").ascending();
 		}
-		if(sort.equals("DESC")) {
+		if (sort.equals("DESC")) {
 			sortable = Sort.by("maMatHang").descending();
 		}
 		LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHang(maLoaiMatHang);
-		if(loaiMatHang==null) {
+		if (loaiMatHang == null) {
 			return new ResponseEntity<JSONObject>(result, HttpStatus.NOT_FOUND);
 
 		}
@@ -117,7 +116,7 @@ public class MatHangController {
 		result = getResultData(returnedPage);
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
-	
+
 	/*
 	 * Ham tra ve ket qua cho Client
 	 */
@@ -146,17 +145,17 @@ public class MatHangController {
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", data);
 		returnedObject.put("currentPage", returnedPage.getNumber());
-	    returnedObject.put("totalItems", returnedPage.getTotalElements());
-	    returnedObject.put("totalPages", returnedPage.getTotalPages());
-	    return returnedObject;
+		returnedObject.put("totalItems", returnedPage.getTotalElements());
+		returnedObject.put("totalPages", returnedPage.getTotalPages());
+		return returnedObject;
 	}
-	
+
 	/*
 	 * API chinh sua mat hang theo ma mat hang
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PutMapping("/authorized/mat-hang/{maMatHang}")
-	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody JSONObject mh){
+	public ResponseEntity<Void> suaMatHang(@PathVariable Long maMatHang, @RequestBody JSONObject mh) {
 		try {
 			Gson gson = new Gson();
 			MatHang updateMatHang = matHangService.findByMaMatHang(maMatHang);
@@ -169,13 +168,13 @@ public class MatHangController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cập nhật mặt hàng thất bại");
 		}
 	}
-	
+
 	/*
 	 * API xoa mat hang theo ma mat hang
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@DeleteMapping("/authorized/mat-hang/{maMatHang}")
-	public ResponseEntity<Void> xoaMatHang(@PathVariable Long maMatHang){
+	public ResponseEntity<Void> xoaMatHang(@PathVariable Long maMatHang) {
 		try {
 			matHangService.delete(maMatHang);
 			return new ResponseEntity<Void>(HttpStatus.OK);
@@ -183,43 +182,44 @@ public class MatHangController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cung cấp đúng Ma Mat Hang", e);
 		}
 	}
-	
+
 	/*
 	 * API la filter mat hang
 	 */
 	@GetMapping("/mat-hang")
 	public ResponseEntity<JSONObject> timKiemMatHang(
-			@RequestParam(name="maLoaiMatHang", required=false,defaultValue="0") int maLoaiMatHang,
-			@RequestParam(name="tenMatHang", required=false, defaultValue="") String tenMatHang,
-			@RequestParam(name="giaBatDau", required=false, defaultValue="0") long giaBatDau,
-			@RequestParam(name="giaKetThuc", required=false, defaultValue="9999999999") long giaKetThuc,
-			@RequestParam(name="page", required=false, defaultValue="0") int page,
-			@RequestParam(name="size", required=false, defaultValue="15") int size,
-			@RequestParam(name="sortType", required=false, defaultValue="maMatHang") String sortType,
-			@RequestParam(name="sort", required=false, defaultValue="ASC") String sort){
+			@RequestParam(name = "maLoaiMatHang", required = false, defaultValue = "0") int maLoaiMatHang,
+			@RequestParam(name = "tenMatHang", required = false, defaultValue = "") String tenMatHang,
+			@RequestParam(name = "giaBatDau", required = false, defaultValue = "0") long giaBatDau,
+			@RequestParam(name = "giaKetThuc", required = false, defaultValue = "9999999999") long giaKetThuc,
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
+			@RequestParam(name = "sortType", required = false, defaultValue = "maMatHang") String sortType,
+			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) {
 		try {
 			Sort sortable = null;
 			JSONObject result = new JSONObject();
-			if(sort.equals("ASC")) {
+			if (sort.equals("ASC")) {
 				sortable = Sort.by(sortType).ascending();
 			}
-			if(sort.equals("DESC")) {
+			if (sort.equals("DESC")) {
 				sortable = Sort.by(sortType).descending();
 			}
-			
+
 			Pageable pageable = PageRequest.of(page, size, sortable);
-			if(maLoaiMatHang==0) {
-				Page<MatHang> returnedPage = matHangService.findWithoutLoaiMatHang(pageable, tenMatHang, giaBatDau, giaKetThuc);
+			if (maLoaiMatHang == 0) {
+				Page<MatHang> returnedPage = matHangService.findWithoutLoaiMatHang(pageable, tenMatHang, giaBatDau,
+						giaKetThuc);
 				result = getResultData(returnedPage);
-			}
-			else { 
+			} else {
 				LoaiMatHang loaiMatHang = loaiMatHangService.findByMaLoaiMatHang(maLoaiMatHang);
-				Page<MatHang> returnedPage = matHangService.findWithFilter(pageable, loaiMatHang, tenMatHang, giaBatDau, giaKetThuc); 
+				Page<MatHang> returnedPage = matHangService.findWithFilter(pageable, loaiMatHang, tenMatHang, giaBatDau,
+						giaKetThuc);
 				result = getResultData(returnedPage);
 			}
-			 
+
 			return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
-		}catch(Exception e){
+		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tìm kiếm mặt hàng thất bại");
 		}
 	}

@@ -54,16 +54,15 @@ public class NguoiDungController {
 		dacQuyen = taiKhoan.getDacQuyen();
 		String role = dacQuyen.getTenDacQuyen();
 		boolean checkPermission = false;
-		if(role.equals("ROLE_ADMIN")) {
+		if (role.equals("ROLE_ADMIN")) {
 			checkPermission = true;
-		}
-		else if(role.equals("ROLE_USER")) {
-			if(maNguoiDung == taiKhoan.getNguoiDung().getMaNguoiDung()) {
+		} else if (role.equals("ROLE_USER")) {
+			if (maNguoiDung == taiKhoan.getNguoiDung().getMaNguoiDung()) {
 				checkPermission = true;
 			}
-			
+
 		}
-		if(checkPermission) {
+		if (checkPermission) {
 			NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
 			if (nguoiDung == null)
 				return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.NOT_FOUND);
@@ -75,11 +74,10 @@ public class NguoiDungController {
 			returnedObject.put("gioiTinh",
 					!(nguoiDung.getGioiTinh() == null) ? nguoiDung.getGioiTinh().getTenGioiTinh() : null);
 			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
-		}
-		else {
+		} else {
 			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.BAD_REQUEST);
 		}
-		
+
 	}
 
 	/*

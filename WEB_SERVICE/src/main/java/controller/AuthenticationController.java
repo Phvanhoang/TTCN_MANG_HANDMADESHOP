@@ -29,7 +29,7 @@ public class AuthenticationController {
 
 	@Autowired
 	private JwtTokenProvider tokenProvider;
-	
+
 	/*
 	 * API dang nhap
 	 */
@@ -40,18 +40,19 @@ public class AuthenticationController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = "";
 		jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
-		
+
 		LoginResponse loginResponse = new LoginResponse();
-		
+
 		loginResponse.setTenDangNhap(loginRequest.getTenDangNhap());
 		loginResponse.setAccessToken(jwt);
 		loginResponse.setId(tokenProvider.getUserIdFromJWT(jwt));
-		
+
 		TaiKhoan taikhoan = TaiKhoanService.findByMaTaiKhoanAndDeletedFalse(loginResponse.getId());
 		loginResponse.setRole(taikhoan.getDacQuyen().getTenDacQuyen());
-		
-		if(jwt.equals("")) {
-			return new ResponseEntity<LoginResponse>(new LoginResponse(jwt, loginRequest.getTenDangNhap()), HttpStatus.NOT_FOUND);
+
+		if (jwt.equals("")) {
+			return new ResponseEntity<LoginResponse>(new LoginResponse(jwt, loginRequest.getTenDangNhap()),
+					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
 

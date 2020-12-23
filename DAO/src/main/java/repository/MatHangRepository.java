@@ -9,11 +9,17 @@ import model.LoaiMatHang;
 import model.MatHang;
 
 @Repository
-public interface MatHangRepository extends PagingAndSortingRepository<MatHang, Long>{
+public interface MatHangRepository extends PagingAndSortingRepository<MatHang, Long> {
 	Page<MatHang> findByDeletedFalse(Pageable pageable);
+
 	MatHang findByMaMatHangAndDeletedFalse(Long maMatHang);
+
 	Page<MatHang> findByDeletedFalseAndLoaiMatHang(Pageable pageable, LoaiMatHang loaiMatHang);
-	Page<MatHang> findByDeletedFalseAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(Pageable pageable, String tenMatHang, long giaBatDau, long giaKetThuc);
-	Page<MatHang> findByDeletedFalseAndLoaiMatHangAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang, long giaBatDau, long giaKetThuc);
+
+	Page<MatHang> findByDeletedFalseAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(Pageable pageable,
+			String tenMatHang, long giaBatDau, long giaKetThuc);
+
+	Page<MatHang> findByDeletedFalseAndLoaiMatHangAndTenMatHangContainingAndGiaGreaterThanEqualAndGiaLessThanEqual(
+			Pageable pageable, LoaiMatHang loaiMatHang, String tenMatHang, long giaBatDau, long giaKetThuc);
 
 }

@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +32,7 @@ import service.LoaiMatHangService;
 public class LoaiMatHangController {
 	@Autowired
 	private LoaiMatHangService loaiMatHangService;
-	
+
 	// lấy thông tin loại mặt hàng theo mã loại mặt hàng
 	@GetMapping("/loai-mat-hang/{maLoaiMatHang}")
 	public ResponseEntity<JSONObject> timLoaiMatHang(@PathVariable Long maLoaiMatHang) {
@@ -53,7 +52,7 @@ public class LoaiMatHangController {
 
 		return new ResponseEntity<JSONObject>(returnedLMH, HttpStatus.OK);
 	}
-	
+
 //	// lấy thông tin tất cả loại mặt hàng
 //	@GetMapping("/loai-mat-hang")
 //	public ResponseEntity<JSONObject> getAllLoaiMatHang() {
@@ -70,10 +69,10 @@ public class LoaiMatHangController {
 	// lấy thông tin tất cả loại mặt hàng
 	@GetMapping("/loai-mat-hang")
 	public ResponseEntity<JSONObject> getAllLoaiMatHang(
-			@RequestParam(name="tenLoaiMatHang", required=false, defaultValue="") String tenLoaiMatHang,
+			@RequestParam(name = "tenLoaiMatHang", required = false, defaultValue = "") String tenLoaiMatHang,
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(name = "size", required = false, defaultValue = "20") int size,
-			@RequestParam(name="sortType", required=false, defaultValue="maLoaiMatHang") String sortType,
+			@RequestParam(name = "sortType", required = false, defaultValue = "maLoaiMatHang") String sortType,
 			@RequestParam(name = "sort", required = false, defaultValue = "ASC") String sort) throws JSONException {
 		Sort sortable = null;
 		if (sort.equals("ASC")) {

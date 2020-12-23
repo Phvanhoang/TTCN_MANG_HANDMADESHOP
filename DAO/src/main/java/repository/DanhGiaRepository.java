@@ -10,10 +10,14 @@ import model.MatHang;
 import model.TaiKhoan;
 
 @Repository
-public interface DanhGiaRepository extends PagingAndSortingRepository<DanhGia, Long>{
+public interface DanhGiaRepository extends PagingAndSortingRepository<DanhGia, Long> {
 	Page<DanhGia> findByDeletedFalse(Pageable pageable);
+
 	Page<DanhGia> findByDeletedFalseAndMatHang(Pageable pageable, MatHang matHang);
+
 	Page<DanhGia> findByDeletedFalseAndCreatedBy(Pageable pageable, TaiKhoan taiKhoan);
+
 	Page<DanhGia> findByDeletedFalseAndMatHangAndCreatedBy(Pageable pageable, MatHang matHang, TaiKhoan taiKhoan);
+
 	boolean existsByDeletedFalseAndMaDanhGiaEquals(long maDanhGia);
 }
