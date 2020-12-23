@@ -38,6 +38,7 @@ public class MatHangServiceImpl implements MatHangService {
 			throw new MatHangNotFoundException("Mat Hang Not Found");
 		}
 		matHang.setDeleted(true);
+		matHangRepository.save(matHang);
 		return true;
 	}
 
