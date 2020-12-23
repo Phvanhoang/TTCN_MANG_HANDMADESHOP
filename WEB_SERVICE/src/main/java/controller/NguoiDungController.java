@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import model.DacQuyen;
 import model.GioiTinh;
 import model.NguoiDung;
 import model.TaiKhoan;
@@ -38,26 +39,47 @@ public class NguoiDungController {
 	@Autowired
 	private NguoiDungService nguoiDungService;
 	@Autowired
-	private GetTaiKhoanFromTokenService getTaiKhoanFromToken;
+	private GetTaiKhoanFromTokenService getTaiKhoanFromTokenService;
 
 	/*
 	 * API lay thong tin nguoi dung
 	 */
 	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
 	@GetMapping("/authorized/nguoi-dung/{maNguoiDung}")
-	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung) {
+	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung,
+			@RequestHeader("Authorization") String token) {
 		JSONObject returnedObject = new JSONObject();
-		NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
-		if (nguoiDung == null)
-			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.NOT_FOUND);
-		returnedObject.put("hoTen", nguoiDung.getHoTen());
-		returnedObject.put("ngaySinh", nguoiDung.getNgaySinh());
-		returnedObject.put("sdt", nguoiDung.getSDT());
-		returnedObject.put("thanhPho", nguoiDung.getThanhPho());
-		returnedObject.put("anhDaiDien", nguoiDung.getAnhDaiDien());
-		returnedObject.put("gioiTinh",
-				(nguoiDung.getGioiTinh() == null) ? nguoiDung.getGioiTinh().getTenGioiTinh() : null);
-		return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
+		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(token);
+		DacQuyen dacQuyen = new DacQuyen();
+		dacQuyen = taiKhoan.getDacQuyen();
+		String role = dacQuyen.getTenDacQuyen();
+		boolean checkPermission = false;
+		if(role.equals("ROLE_ADMIN")) {
+			checkPermission = true;
+		}
+		else if(role.equals("ROLE_USER")) {
+			if(maNguoiDung == taiKhoan.getNguoiDung().getMaNguoiDung()) {
+				checkPermission = true;
+			}
+			
+		}
+		if(checkPermission) {
+			NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
+			if (nguoiDung == null)
+				return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.NOT_FOUND);
+			returnedObject.put("hoTen", nguoiDung.getHoTen());
+			returnedObject.put("ngaySinh", nguoiDung.getNgaySinh());
+			returnedObject.put("sdt", nguoiDung.getSDT());
+			returnedObject.put("thanhPho", nguoiDung.getThanhPho());
+			returnedObject.put("anhDaiDien", nguoiDung.getAnhDaiDien());
+			returnedObject.put("gioiTinh",
+					!(nguoiDung.getGioiTinh() == null) ? nguoiDung.getGioiTinh().getTenGioiTinh() : null);
+			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 
 	/*
@@ -69,7 +91,7 @@ public class NguoiDungController {
 			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
 			@RequestParam("thanhPho") String thanhPho, @RequestParam("sdt") String sdt,
 			@RequestParam("anhDaiDien") MultipartFile multipartFile, @RequestHeader("Authorization") String tokenJWT) {
-		TaiKhoan taiKhoan = getTaiKhoanFromToken.getTaiKhoan(tokenJWT);
+		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(tokenJWT);
 		NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
 		if (taiKhoan.getNguoiDung().equals(nguoiDung)) {
 			nguoiDung.setHoTen(hoTen);
