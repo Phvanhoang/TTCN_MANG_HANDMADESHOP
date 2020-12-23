@@ -140,7 +140,7 @@ public class MatHangController {
 			matHang.put("maLoaiMatHang", mh.getLoaiMatHang().getMaLoaiMatHang());
 			matHang.put("gia", mh.getGia());
 			matHang.put("soLuong", mh.getSoLuong());
-			matHang.put("soLuongDaBang", mh.getSoLuongDaBan());
+			matHang.put("soLuongDaBan", mh.getSoLuongDaBan());
 			matHang.put("moTa", mh.getMoTa());
 			matHang.put("createdAt", mh.getCreatedAt());
 			matHang.put("createdBy", mh.getCreatedBy().getMaTaiKhoan());
