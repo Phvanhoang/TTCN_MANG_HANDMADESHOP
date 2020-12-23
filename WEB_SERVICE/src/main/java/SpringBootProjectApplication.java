@@ -58,7 +58,7 @@ public class SpringBootProjectApplication {
 		if (createdTaiKhoan == null) {
 			creatTaiKhoanForCreatedBy(quyenService, taiKhoanService);
 		};
-		createAdminAccount(taiKhoanService, quyenService, "Hoangpv6681", "Hoangpv6681");
+		createAdminAccount(taiKhoanService, quyenService, "Admin", "Admin");
 	}
 	
     @Bean

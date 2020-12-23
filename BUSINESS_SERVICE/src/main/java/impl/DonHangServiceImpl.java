@@ -10,15 +10,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import exception.DonHangNotFoundException;
 import model.DonHang;
 import model.DonHang_MatHang;
 import model.DonHang_MatHang_Key;
 import model.MatHang;
 import model.NguoiDung;
+import model.TaiKhoan;
 import model.TrangThaiDonHang;
 import repository.DonHangRepository;
 import repository.DonHang_MatHangRepository;
 import repository.MatHangRepository;
+import repository.TaiKhoanRepository;
+import repository.TrangThaiDonHangRepository;
 import service.DonHangService;
 
 @Service
@@ -33,11 +37,12 @@ public class DonHangServiceImpl implements DonHangService{
 	@Autowired
 	private DonHang_MatHangRepository donHang_MatHangRepository;
 	
-	public Page<DonHang> findAllByNguoiDungAndDeletedFalse(Pageable pageable, NguoiDung nguoiDung) {
-		return null;
-//		return donHangRepository.findByNguoiDungAndDeletedFalse(pageable, nguoiDung);
-	}
-
+	@Autowired
+	private TaiKhoanRepository taiKhoanRepository;
+	
+	@Autowired
+	private TrangThaiDonHangRepository trangThaiDonHangRepository;
+	
 	@Transactional
 	public void createDonHang(DonHang donHang) {
 		int sum = 0;
@@ -56,11 +61,50 @@ public class DonHangServiceImpl implements DonHangService{
 			matHangRepository.save(matHang);
 		}
 		donHang.setGiaTongCong(sum);
-//		donHang.setThoiGian(new Date());
 		TrangThaiDonHang trangThaiDonHang = new TrangThaiDonHang();
-		trangThaiDonHang.setMatrangThai(1);
+		trangThaiDonHang.setMaTrangThai(1);
 		donHang.setTrangThaiDonHang(trangThaiDonHang);
 		donHangRepository.save(donHang);
+	}
+
+	public Page<DonHang> findByCreatedBy(Pageable pageable, long maTaiKhoan) {
+		TaiKhoan taiKhoan = taiKhoanRepository.findByMaTaiKhoan(maTaiKhoan);
+		return donHangRepository.findByDeletedFalseAndCreatedBy(pageable, taiKhoan);
+	}
+
+	public Page<DonHang> findByMatHang(Pageable pageable, long maMatHang) {
+		MatHang matHang = matHangRepository.findByMaMatHangAndDeletedFalse(maMatHang);
+		return donHangRepository.findByDeletedFalseAndMatHang(pageable, matHang);
+	}
+
+	public Page<DonHang> findByTrangThaiDonHang(Pageable pageable, long maTTDH) {
+		TrangThaiDonHang trangThaiDonHang = trangThaiDonHangRepository.findById(maTTDH).get();
+		return donHangRepository.findByDeletedFalseAndTrangThaiDonHangOrderByCreatedAtDesc(pageable, trangThaiDonHang);
+	}
+
+	public Page<DonHang> findOrderByCreateAtDesc(Pageable pageable) {
+		return donHangRepository.findByDeletedFalseOrderByCreatedAtDesc(pageable);
+	}
+
+	public boolean changeTrangThaiDonHang(long maDonHang, long maTTDH) throws DonHangNotFoundException {
+		TrangThaiDonHang trangThaiDonHang = trangThaiDonHangRepository.findById(maTTDH).get();
+		if (!donHangRepository.existsById(maDonHang)) {
+			throw new DonHangNotFoundException("Ma Don Hang khong ton tai");
+		}
+		DonHang donHang = donHangRepository.findById(maDonHang).get();
+		donHang.setTrangThaiDonHang(trangThaiDonHang);
+		donHangRepository.save(donHang);
+		return true;
+	}
+
+	public boolean delete(long maDonHang) throws DonHangNotFoundException {
+		if (!donHangRepository.existsByDeletedFalseAndMaDonHangEquals(maDonHang) ) {
+			throw new DonHangNotFoundException("Ma Don Hang khong ton tai");
+		}
+		DonHang donHang = donHangRepository.findById(maDonHang).get();
+		donHang.setDeleted(true);
+		donHangRepository.save(donHang);
+		return false;
 	}
 
 }

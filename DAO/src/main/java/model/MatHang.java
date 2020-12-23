@@ -45,7 +45,7 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	private int soLuong;
 	
 	@Column(name = "Rate", nullable = false)
-	private int rate;
+	private float rate;
 	
 	@Column(name = "SoLuotDanhGia", nullable = false)
 	private int soLuotDanhGia;
@@ -72,11 +72,11 @@ public class MatHang extends AuditModel<TaiKhoan>{
 	@OneToMany( mappedBy = "matHang")
 	private List<DonHang_MatHang> danhSachDonHang;
 	
-	public int getRate() {
+	public float getRate() {
 		return rate;
 	}
 	
-	public void setRate(int rate) {
+	public void setRate(float rate) {
 		this.rate = rate;
 	}
 	

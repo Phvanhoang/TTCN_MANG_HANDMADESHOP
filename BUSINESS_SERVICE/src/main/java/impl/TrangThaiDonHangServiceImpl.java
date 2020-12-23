@@ -1,5 +1,7 @@
 package impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,4 +23,7 @@ public class TrangThaiDonHangServiceImpl implements TrangThaiDonHangService{
 		trangThaiDonHangRepository.save(trangThaiDonHang);
 	}
 
+	public List<TrangThaiDonHang> getAll() {
+		return (List<TrangThaiDonHang>) trangThaiDonHangRepository.findAll();
+	}
 }
