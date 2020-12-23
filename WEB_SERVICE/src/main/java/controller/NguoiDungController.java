@@ -144,6 +144,9 @@ public class NguoiDungController {
 
 		Page<NguoiDung> returnedPage = nguoiDungService.findByDeletedFalse(pageable);
 		List<NguoiDung> listNguoiDung = returnedPage.getContent();
+		for (int i = 0; i < listNguoiDung.size(); i++) {
+			listNguoiDung.get(i).getTaiKhoan().getDacQuyen().setDanhSachTaiKhoan(null);
+		}
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", listNguoiDung);
 		returnedObject.put("currentPage", returnedPage.getNumber());
