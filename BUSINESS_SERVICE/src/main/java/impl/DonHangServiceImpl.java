@@ -1,5 +1,6 @@
 package impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -13,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import exception.DonHangNotFoundException;
 import model.DonHang;
 import model.DonHang_MatHang;
-import model.DonHang_MatHang_Key;
 import model.MatHang;
-import model.NguoiDung;
 import model.TaiKhoan;
 import model.TrangThaiDonHang;
 import repository.DonHangRepository;
@@ -107,4 +106,14 @@ public class DonHangServiceImpl implements DonHangService{
 		return false;
 	}
 
+	public ArrayList<DonHang> findByThoiGian(TrangThaiDonHang trangThai, Date startDate, Date endDate) {
+		return donHangRepository.findByDeletedFalseAndTrangThaiDonHangAndCreatedAtGreaterThanAndCreatedAtLessThan(trangThai, startDate, endDate);
+	}
+
+	public DonHang findByMaDonHang(long maDonHang) {
+		if(!donHangRepository.existsByDeletedFalseAndMaDonHangEquals(maDonHang)) {
+			return null;
+		}
+		return donHangRepository.findByMaDonHangAndDeletedFalse(maDonHang);
+	}
 }

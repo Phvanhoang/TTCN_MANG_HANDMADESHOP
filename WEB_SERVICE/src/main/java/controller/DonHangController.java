@@ -1,7 +1,15 @@
 package controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.google.gson.Gson;
+
 import exception.DonHangNotFoundException;
 import model.DonHang;
 import model.TrangThaiDonHang;
@@ -118,7 +127,7 @@ public class DonHangController {
 	/*
 	 * API lay danh sach don hang theo ma tai khoan nguoi tao
 	 */
-	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ALL_ROLES)")
 	@GetMapping("/authorized/don-hang/tai-khoan/{maTaiKhoan}")
 	public ResponseEntity<JSONObject> getAllDonHangByCreatedBy(@PathVariable long maTaiKhoan,
 			@RequestParam(name = "maDonHang", required = false, defaultValue = "") String maDonHang,
@@ -161,6 +170,22 @@ public class DonHangController {
 
 		Page<DonHang> returnedPage = donHangService.findOrderByCreateAtDesc(pageable);
 		return new ResponseEntity<JSONObject>(getResultData(returnedPage), HttpStatus.OK);
+	}
+	/*
+	 * API lay don hang theo ma don hang
+	 */
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@GetMapping("/authorized/don-hang/{maDonHang}")
+	public ResponseEntity<DonHang> getDonHang(@PathVariable Long maDonHang){
+		
+			DonHang donHang = donHangService.findByMaDonHang(maDonHang);
+			if(donHang != null) {
+				return new ResponseEntity<DonHang>(donHang, HttpStatus.OK);
+			}
+			
+			donHang.getTrangThaiDonHang().setDanhSachDonHang(null);
+			return new ResponseEntity<DonHang>(donHang, HttpStatus.NOT_FOUND);
+		
 	}
 
 	/*
@@ -223,5 +248,57 @@ public class DonHangController {
 		returnedObject.put("totalItems", returnedPage.getTotalElements());
 		returnedObject.put("totalPages", returnedPage.getTotalPages());
 		return returnedObject;
+	}
+
+	/*
+	 * API thong ke doanh thu theo ngay trong 30 ngay gan nhat
+	 */
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@GetMapping("/authorized/don-hang/doanh-thu")
+	public ResponseEntity<HashMap<String, Long>> getDoanhThu() throws ParseException {
+		HashMap<String, Long> doanhThu = new HashMap<String, Long>();
+
+		LocalDate localEndDate = LocalDate.now().plusDays(1);
+		System.out.println("end:" + localEndDate);
+
+		LocalDate localStartDate = localEndDate.plusDays(-32);
+		System.out.println("start:" + localStartDate);
+		List<TrangThaiDonHang> dsTrangThai = trangThaiDonHangService.getAll();
+		TrangThaiDonHang trangThai = new TrangThaiDonHang();
+		for (int i = 0; i < dsTrangThai.size(); i++) {
+			if (dsTrangThai.get(i).getTenTrangThai().equals("Accepted")) {
+				trangThai = dsTrangThai.get(i);
+				break;
+			}
+		}
+		java.util.Date endDate = (java.util.Date) java.sql.Date.valueOf(localEndDate);
+		System.out.println("a" + endDate);
+		java.util.Date startDate = (java.util.Date) java.sql.Date.valueOf(localStartDate);
+		System.out.println("b" + startDate);
+
+		ArrayList<DonHang> dsDonHang = donHangService.findByThoiGian(trangThai, startDate, endDate);
+		
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+
+		for (int i = 0; i < dsDonHang.size(); i++) {
+			DonHang donHang = dsDonHang.get(i);
+			System.out.println("donHang: "+ donHang);
+			//sdonHang.getTrangThaiDonHang().setDanhSachDonHang(null);
+			Date donHangCreatedAt = donHang.getCreatedAt();
+			//String date = simpleDateFormat.(donHangCreatedAt).toString();
+			String date = donHangCreatedAt.toString();
+			long hoaDon = donHang.getGiaTongCong();
+			System.out.println("hoadon: " + hoaDon);
+			
+			if(!doanhThu.containsKey(date)) {
+				doanhThu.put(date, hoaDon);
+			}
+			else{
+				long doanhThuDate = doanhThu.get(date) + hoaDon;
+				doanhThu.put(date, doanhThuDate);
+			}
+		}
+		return new ResponseEntity<HashMap<String, Long>>(doanhThu, HttpStatus.OK);
 	}
 }

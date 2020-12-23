@@ -1,5 +1,8 @@
 package repository;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +28,8 @@ public interface DonHangRepository extends PagingAndSortingRepository<DonHang, L
 	Page<DonHang> findByDeletedFalseOrderByCreatedAtDesc(Pageable pageable);
 
 	boolean existsByDeletedFalseAndMaDonHangEquals(long maDonHang);
+
+	ArrayList<DonHang> findByDeletedFalseAndTrangThaiDonHangAndCreatedAtGreaterThanAndCreatedAtLessThan(
+			TrangThaiDonHang trangThai, Date startDate, Date endDate);
+	DonHang findByMaDonHangAndDeletedFalse(long maDonHang);
 }

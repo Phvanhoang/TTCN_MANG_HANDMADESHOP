@@ -1,17 +1,14 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import exception.DonHangNotFoundException;
 import model.DonHang;
-import model.DonHang_MatHang;
-import model.LoaiMatHang;
-import model.MatHang;
-import model.NguoiDung;
-import model.TaiKhoan;
+import model.TrangThaiDonHang;
 
 public interface DonHangService {
 	void createDonHang(DonHang donHang);
@@ -21,4 +18,6 @@ public interface DonHangService {
 	Page<DonHang> findOrderByCreateAtDesc(Pageable pageable);
 	boolean changeTrangThaiDonHang(long maDonHang, long maTTDH) throws DonHangNotFoundException;
 	boolean delete(long maDonHang) throws DonHangNotFoundException;
+	ArrayList<DonHang> findByThoiGian(TrangThaiDonHang trangThai, Date startDate, Date endDate);
+	DonHang findByMaDonHang(long maDonHang);
 }
