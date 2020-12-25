@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.google.gson.Gson;
 
+import exception.Anh_MatHangNotFoundException;
 import exception.MatHangNotFoundException;
 import model.Anh_MatHang;
 import model.LoaiMatHang;
@@ -62,6 +64,54 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
+	
+	/*
+	 * API xóa ảnh - mặt hàng
+	 */
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@DeleteMapping("/authorized/mat-hang/anh-mat-hang/{maAnh}")
+	public ResponseEntity<Void> xoaAnh(@PathVariable("maAnh") long maAnh) {
+		try {
+			anh_MatHangService.delete(maAnh);
+		} catch (Anh_MatHangNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ANh khong ton tai trong CSDL", e);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	/*
+	 * API thay thế ảnh - mặt hàng
+	 */
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PutMapping("/authorized/mat-hang/anh-mat-hang/{maAnh}")
+	public ResponseEntity<Void> thayTheAnh(@PathVariable("maAnh") long maAnh,
+			@RequestParam("image") MultipartFile multipartFile) {
+		try {
+			anh_MatHangService.replace(maAnh, multipartFile.getBytes());
+		} catch (Anh_MatHangNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Anh khong ton tai trong CSDL", e);
+		} catch (IOException e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Loi SERVER", e);
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	/*
+	 * API thay thế ảnh - mặt hàng
+	 */
+//	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@GetMapping("/mat-hang/anh-mat-hang/{maAnh}")
+	public ResponseEntity<Anh_MatHang> getAnh(@PathVariable("maAnh") long maAnh) {
+		JSONObject jsonObject = new JSONObject();
+		Anh_MatHang anh_MatHang = null;
+		try {
+			anh_MatHang = anh_MatHangService.findOne(maAnh);
+//			jsonObject.put("", value)
+		} catch (Anh_MatHangNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Anh khong ton tai trong CSDL", e);
+		}
+		return new ResponseEntity<Anh_MatHang>(anh_MatHang, HttpStatus.OK);
+	}
 
 	/*
 	 * API thêm mặt hàng
@@ -77,6 +127,8 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
+	
+	
 
 	/*
 	 * API lấy thông tin mặt hàng theo mã mặt hàng

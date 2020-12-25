@@ -33,6 +33,9 @@ public class TaiKhoanController {
 	@Autowired
 	private GetTaiKhoanFromTokenService getTaiKhoanFromTokenService;
 	
+	/*
+	 * API khoa tai khoan		
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PutMapping("/authorized/tai-khoan/lock/{maTaiKhoan}")
 	public ResponseEntity<Void> khoaTaiKhoan(@PathVariable long maTaiKhoan) {
@@ -43,7 +46,9 @@ public class TaiKhoanController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+	/*
+	 * API mo khoa tai khoan
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PutMapping("/authorized/tai-khoan/unlock/{maTaiKhoan}")
 	public ResponseEntity<Void> moKhoaTaiKhoan(@PathVariable long maTaiKhoan) {
@@ -55,6 +60,9 @@ public class TaiKhoanController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	/*
+	 * API thay doi mat khau
+	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
 	@PutMapping("/authorized/tai-khoan/change/{maTaiKhoan}")
 	public ResponseEntity<Void> doiMatKhau(@PathVariable long maTaiKhoan, 
@@ -73,7 +81,10 @@ public class TaiKhoanController {
 				BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 				String matKhauCu = jsonObject.getAsString("matKhauCu");
 				String matKhauMoi = jsonObject.getAsString("matKhauMoi");
-				boolean result = taiKhoanService.changPassword(maTaiKhoan, passwordEncoder.encode(matKhauMoi));
+				if (!passwordEncoder.matches(matKhauCu, taiKhoan.getMatKhau())) {
+					new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+				};
+				taiKhoanService.changPassword(maTaiKhoan, passwordEncoder.encode(matKhauMoi));
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			} catch (TaiKhoanNotFoundException e) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Khong tim thay tai khoan trong CSDL", e);
