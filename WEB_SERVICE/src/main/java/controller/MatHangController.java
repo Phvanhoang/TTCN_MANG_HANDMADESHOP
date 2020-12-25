@@ -114,7 +114,7 @@ public class MatHangController {
 		Pageable pageable = PageRequest.of(page, size, sortable);
 		Page<MatHang> returnedPage = matHangService.findByLoaiMatHang(pageable, loaiMatHang);
 		result = getResultData(returnedPage);
-		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
+		return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
 	}
 
 	/*
@@ -131,6 +131,7 @@ public class MatHangController {
 			matHang.put("maLoaiMatHang", mh.getLoaiMatHang().getMaLoaiMatHang());
 			matHang.put("gia", mh.getGia());
 			matHang.put("soLuong", mh.getSoLuong());
+			matHang.put("danhSachHinhAnh", mh.getDanhSachHinhAnh());
 			matHang.put("soLuongDaBan", mh.getSoLuongDaBan());
 			matHang.put("moTa", mh.getMoTa());
 			matHang.put("createdAt", mh.getCreatedAt());
@@ -218,7 +219,7 @@ public class MatHangController {
 				result = getResultData(returnedPage);
 			}
 
-			return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
+			return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tìm kiếm mặt hàng thất bại");
 		}

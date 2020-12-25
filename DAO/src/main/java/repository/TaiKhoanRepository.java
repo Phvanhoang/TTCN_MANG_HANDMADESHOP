@@ -16,4 +16,8 @@ public interface TaiKhoanRepository extends CrudRepository<TaiKhoan, Long> {
 	TaiKhoan findByTenDangNhapAndMatKhauAndDeletedFalse(String tenDangNhap, String matKhau);
 
 	boolean existsByTenDangNhap(String tenDangNhap);
+	
+	boolean existsByMaTaiKhoanAndDeletedFalse(long maTaiKhoan);
+	
+	boolean existsByMaTaiKhoanAndMatKhauAndDeletedFalse(long id, String matKhau);
 }

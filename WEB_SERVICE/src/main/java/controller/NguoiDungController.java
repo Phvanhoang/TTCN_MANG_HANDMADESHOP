@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import model.DacQuyen;
+import model.DacQuyenNames;
 import model.GioiTinh;
 import model.NguoiDung;
 import model.TaiKhoan;
@@ -45,27 +46,23 @@ public class NguoiDungController {
 	 * API lay thong tin nguoi dung
 	 */
 	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
-	@GetMapping("/authorized/nguoi-dung/{maNguoiDung}")
-	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maNguoiDung,
+	@GetMapping("/authorized/nguoi-dung/{maTaiKhoan}")
+	public ResponseEntity<JSONObject> getNguoiDung(@PathVariable Long maTaiKhoan,
 			@RequestHeader("Authorization") String token) {
 		JSONObject returnedObject = new JSONObject();
 		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(token);
-		DacQuyen dacQuyen = new DacQuyen();
-		dacQuyen = taiKhoan.getDacQuyen();
+		DacQuyen dacQuyen = taiKhoan.getDacQuyen();
 		String role = dacQuyen.getTenDacQuyen();
 		boolean checkPermission = false;
-		if (role.equals("ROLE_ADMIN")) {
+		if (DacQuyenNames.ROLE_ADMIN.equals(role)) {
 			checkPermission = true;
-		} else if (role.equals("ROLE_USER")) {
-			if (maNguoiDung == taiKhoan.getNguoiDung().getMaNguoiDung()) {
+		} else if (DacQuyenNames.ROLE_USER.equals(role)) {
+			if (maTaiKhoan == taiKhoan.getMaTaiKhoan()) {
 				checkPermission = true;
 			}
-
 		}
 		if (checkPermission) {
-			NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
-			if (nguoiDung == null)
-				return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.NOT_FOUND);
+			NguoiDung nguoiDung = taiKhoan.getNguoiDung();
 			returnedObject.put("hoTen", nguoiDung.getHoTen());
 			returnedObject.put("ngaySinh", nguoiDung.getNgaySinh());
 			returnedObject.put("sdt", nguoiDung.getSDT());
@@ -75,7 +72,7 @@ public class NguoiDungController {
 					!(nguoiDung.getGioiTinh() == null) ? nguoiDung.getGioiTinh().getTenGioiTinh() : null);
 			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.FORBIDDEN);
 		}
 
 	}
@@ -83,21 +80,29 @@ public class NguoiDungController {
 	/*
 	 * API chinh sua thong tin nguoi dung
 	 */
-	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
-	@PutMapping("/authorized/nguoi-dung/{maNguoiDung}")
-	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maNguoiDung, @RequestParam("hoTen") String hoTen,
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
+	@PutMapping("/authorized/nguoi-dung/{maTaiKhoan}")
+	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maTaiKhoan, @RequestParam("hoTen") String hoTen,
 			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
 			@RequestParam("thanhPho") String thanhPho, @RequestParam("sdt") String sdt,
 			@RequestParam("anhDaiDien") MultipartFile multipartFile, @RequestHeader("Authorization") String tokenJWT) {
 		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(tokenJWT);
-		NguoiDung nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
-		if (taiKhoan.getNguoiDung().equals(nguoiDung)) {
+		DacQuyen dacQuyen = taiKhoan.getDacQuyen();
+		String role = dacQuyen.getTenDacQuyen();
+		boolean checkPermission = false;
+		if (DacQuyenNames.ROLE_USER.equals(role)) {
+			if (maTaiKhoan == taiKhoan.getMaTaiKhoan()) {
+				checkPermission = true;
+			}
+		}
+		if (checkPermission) {
+			NguoiDung nguoiDung = taiKhoan.getNguoiDung();
 			nguoiDung.setHoTen(hoTen);
 
 			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			java.sql.Date ngaySinh_convert = null;
+			Date ngaySinh_convert = null;
 			try {
-				ngaySinh_convert = (java.sql.Date) new Date(simpleDateFormat.parse(ngaySinh).getTime());
+				ngaySinh_convert = new Date(simpleDateFormat.parse(ngaySinh).getTime());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -106,12 +111,11 @@ public class NguoiDungController {
 			nguoiDung.setThanhPho(thanhPho);
 
 			GioiTinh gioiTinh = new GioiTinh();
-			System.out.println("gioiTinh :" + gioiTinh);
 			gioiTinh.setMaGioiTinh(maGioiTinh);
 			nguoiDung.setGioiTinh(gioiTinh);
 
 			try {
-				nguoiDung.setAnhDaiDien(multipartFile.getBytes());
+			 	nguoiDung.setAnhDaiDien(multipartFile.getBytes());
 			} catch (IOException e) {
 				return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -119,9 +123,8 @@ public class NguoiDungController {
 			nguoiDungService.save(nguoiDung);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
 		}
-
 	}
 
 	/*
