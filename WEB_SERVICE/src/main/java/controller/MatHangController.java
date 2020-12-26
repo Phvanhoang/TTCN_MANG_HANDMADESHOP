@@ -66,6 +66,24 @@ public class MatHangController {
 	}
 	
 	/*
+	 * API nhiều thêm ảnh - mặt hàng
+	 */
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PostMapping("/authorized/mat-hang/{maMatHang}/anh-mat-hang-list")
+	public ResponseEntity<Void> uploadMulti(@RequestParam("images") MultipartFile[] multipartFiles,
+			@PathVariable("maMatHang") long maMatHang) {
+		MatHang matHang = matHangService.findByMaMatHang(maMatHang);
+		try {
+			for (int i = 0; i < multipartFiles.length; i++) {
+				anh_MatHangService.save(new Anh_MatHang(multipartFiles[i].getBytes(), matHang));
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
+	}
+	
+	/*
 	 * API xóa ảnh - mặt hàng
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
@@ -97,9 +115,8 @@ public class MatHangController {
 	}
 	
 	/*
-	 * API thay thế ảnh - mặt hàng
+	 * API lấy ảnh - mặt hàng
 	 */
-//	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@GetMapping("/mat-hang/anh-mat-hang/{maAnh}")
 	public ResponseEntity<Anh_MatHang> getAnh(@PathVariable("maAnh") long maAnh) {
 		JSONObject jsonObject = new JSONObject();
