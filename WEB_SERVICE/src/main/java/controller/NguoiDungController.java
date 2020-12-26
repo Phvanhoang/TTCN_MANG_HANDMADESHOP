@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.google.gson.Gson;
 
 import model.DacQuyen;
 import model.DacQuyenNames;
@@ -78,13 +81,11 @@ public class NguoiDungController {
 	}
 
 	/*
-	 * API chinh sua thong tin nguoi dung
+	 * API thay doi avatar nguoi dung
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
-	@PutMapping("/authorized/nguoi-dung/{maTaiKhoan}")
-	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maTaiKhoan, @RequestParam("hoTen") String hoTen,
-			@RequestParam("ngaySinh") String ngaySinh, @RequestParam("maGioiTinh") Integer maGioiTinh,
-			@RequestParam("thanhPho") String thanhPho, @RequestParam("sdt") String sdt,
+	@PutMapping("/authorized/nguoi-dung/avatar/{maTaiKhoan}")
+	public ResponseEntity<Void> chinhSuaAnhNguoiDung(@PathVariable Long maTaiKhoan,
 			@RequestParam("anhDaiDien") MultipartFile multipartFile, @RequestHeader("Authorization") String tokenJWT) {
 		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(tokenJWT);
 		DacQuyen dacQuyen = taiKhoan.getDacQuyen();
@@ -97,30 +98,45 @@ public class NguoiDungController {
 		}
 		if (checkPermission) {
 			NguoiDung nguoiDung = taiKhoan.getNguoiDung();
-			nguoiDung.setHoTen(hoTen);
-
-			DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			Date ngaySinh_convert = null;
-			try {
-				ngaySinh_convert = new Date(simpleDateFormat.parse(ngaySinh).getTime());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			nguoiDung.setNgaySinh(ngaySinh_convert);
-			nguoiDung.setSDT(sdt);
-			nguoiDung.setThanhPho(thanhPho);
-
-			GioiTinh gioiTinh = new GioiTinh();
-			gioiTinh.setMaGioiTinh(maGioiTinh);
-			nguoiDung.setGioiTinh(gioiTinh);
-
 			try {
 			 	nguoiDung.setAnhDaiDien(multipartFile.getBytes());
 			} catch (IOException e) {
 				return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-
 			nguoiDungService.save(nguoiDung);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	/*
+	 * API thay doi thong tin nguoi dung
+	 */
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
+	@PutMapping("/authorized/nguoi-dung/{maTaiKhoan}")
+	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maTaiKhoan,
+			@RequestBody JSONObject jsonObject,
+			@RequestHeader("Authorization") String tokenJWT) {
+		System.out.println(jsonObject);
+		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(tokenJWT);
+		DacQuyen dacQuyen = taiKhoan.getDacQuyen();
+		String role = dacQuyen.getTenDacQuyen();
+		boolean checkPermission = false;
+		if (DacQuyenNames.ROLE_USER.equals(role)) {
+			if (maTaiKhoan == taiKhoan.getMaTaiKhoan()) {
+				checkPermission = true;
+			}
+		}
+		if (checkPermission) {
+			Gson gson = new Gson();
+			NguoiDung nguoiDungUpdate = gson.fromJson(jsonObject.toString(), NguoiDung.class);
+			System.out.println(nguoiDungUpdate.getHoTen());
+			NguoiDung nguoiDung = taiKhoan.getNguoiDung();
+			nguoiDungUpdate.setMaNguoiDung(nguoiDung.getMaNguoiDung());
+			nguoiDungUpdate.setAnhDaiDien(nguoiDung.getAnhDaiDien());
+			nguoiDungUpdate.setTaiKhoan(taiKhoan);
+			nguoiDungService.save(nguoiDungUpdate);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
