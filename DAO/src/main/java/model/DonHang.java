@@ -37,7 +37,7 @@ public class DonHang extends AuditModel<TaiKhoan> {
 	@Column(name = "ChuThich", nullable = false, columnDefinition = "TEXT")
 	private String chuThich;
 
-	@JsonBackReference
+	//@JsonBackReference
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "donHang", cascade = CascadeType.PERSIST)
 	private Set<DonHang_MatHang> danhSachMatHang;
 

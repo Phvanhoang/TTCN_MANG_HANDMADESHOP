@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,9 +34,11 @@ import com.google.gson.Gson;
 
 import exception.DonHangNotFoundException;
 import model.DonHang;
+import model.NguoiDung;
 import model.TrangThaiDonHang;
 import net.minidev.json.JSONObject;
 import service.DonHangService;
+import service.NguoiDungService;
 import service.TrangThaiDonHangService;
 
 @CrossOrigin(origins = { "http://localhost:3000" })
@@ -49,7 +50,9 @@ public class DonHangController {
 
 	@Autowired
 	private TrangThaiDonHangService trangThaiDonHangService;
-
+	
+	@Autowired 
+	private NguoiDungService nguoiDungService;
 	/*
 	 * API tao don hang
 	 */
@@ -179,7 +182,7 @@ public class DonHangController {
 	public ResponseEntity<DonHang> getDonHang(@PathVariable Long maDonHang){
 		
 			DonHang donHang = donHangService.findByMaDonHang(maDonHang);
-			if(donHang != null) {
+			if(donHang == null) {
 				return new ResponseEntity<DonHang>(donHang, HttpStatus.OK);
 			}
 			
@@ -300,5 +303,27 @@ public class DonHangController {
 			}
 		}
 		return new ResponseEntity<HashMap<String, Long>>(doanhThu, HttpStatus.OK);
+	}
+	
+	/*
+	 * API lay thong tin TK va Nguoi dung khi biet ma don hang
+	 */
+	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@GetMapping("/authorized/don-hang/{maDonHang}/nguoi-dung")
+	public ResponseEntity<NguoiDung> getTaiKhoanByMaDonHang(@PathVariable long maDonHang){
+		DonHang donHang = donHangService.findByMaDonHang(maDonHang);
+		NguoiDung nguoiDung = new NguoiDung();
+		if(donHang==null) {
+			return new ResponseEntity<NguoiDung>(nguoiDung, HttpStatus.NOT_FOUND);
+		}
+		long maNguoiDung = donHang.getCreatedBy().getNguoiDung().getMaNguoiDung();
+		nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
+		if(nguoiDung == null) {
+			return new ResponseEntity<NguoiDung>(nguoiDung, HttpStatus.NOT_FOUND);
+		}
+		nguoiDung.getTaiKhoan().getDacQuyen().setDanhSachTaiKhoan(null);
+		nguoiDung.getTaiKhoan().setMatKhau(null);
+		return new ResponseEntity<NguoiDung>(nguoiDung, HttpStatus.OK);
+				
 	}
 }
