@@ -183,11 +183,11 @@ public class DonHangController {
 		
 			DonHang donHang = donHangService.findByMaDonHang(maDonHang);
 			if(donHang == null) {
-				return new ResponseEntity<DonHang>(donHang, HttpStatus.OK);
+				return new ResponseEntity<DonHang>(donHang, HttpStatus.NOT_FOUND);
 			}
 			
 			donHang.getTrangThaiDonHang().setDanhSachDonHang(null);
-			return new ResponseEntity<DonHang>(donHang, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<DonHang>(donHang, HttpStatus.OK);
 		
 	}
 
