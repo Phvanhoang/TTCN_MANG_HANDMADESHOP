@@ -32,17 +32,17 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	private GioiTinh gioiTinh;
 
 	@Column(name = "HoTen", nullable = true)
-	private String HoTen;
+	private String hoTen;
 
 	@Column(name = "ThanhPho", nullable = true)
 	private String ThanhPho;
 
 	@Column(name = "SDT", nullable = true)
-	private String SDT;
+	private String sdt;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "NgaySinh", nullable = true)
-	private Date NgaySinh;
+	private Date ngaySinh;
 
 	@JsonManagedReference
 	@OneToOne(cascade = CascadeType.ALL)
@@ -62,11 +62,11 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	}
 
 	public Date getNgaySinh() {
-		return NgaySinh;
+		return ngaySinh;
 	}
 
 	public String getSDT() {
-		return SDT;
+		return sdt;
 	}
 
 	public TaiKhoan getTaiKhoan() {
@@ -90,11 +90,11 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	}
 
 	public void setNgaySinh(Date ngaySinh) {
-		NgaySinh = ngaySinh;
+		ngaySinh = ngaySinh;
 	}
 
 	public void setSDT(String sDT) {
-		SDT = sDT;
+		sdt = sDT;
 	}
 
 	public void setTaiKhoan(TaiKhoan taiKhoan) {
@@ -106,10 +106,10 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	}
 
 	public void setHoTen(String hoTen) {
-		HoTen = hoTen;
+		hoTen = hoTen;
 	}
 
 	public String getHoTen() {
-		return HoTen;
+		return hoTen;
 	}
 }

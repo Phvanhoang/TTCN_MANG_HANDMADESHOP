@@ -52,12 +52,12 @@ public class MatHang extends AuditModel<TaiKhoan> {
 	private String moTa;
 
 	@JsonBackReference
-	@LazyCollection(LazyCollectionOption.FALSE)
+//	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "matHang")
-	@Fetch(value = FetchMode.SUBSELECT)
+//	@Fetch(value = FetchMode.SUBSELECT)
 	private List<DanhGia> danhSachDanhGia;
 
-	@JsonBackReference
+//	@JsonBackReference
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "matHang")
 	private List<Anh_MatHang> danhSachHinhAnh;
