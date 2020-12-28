@@ -71,8 +71,8 @@ public class NguoiDungController {
 			returnedObject.put("sdt", nguoiDung.getSDT());
 			returnedObject.put("thanhPho", nguoiDung.getThanhPho());
 			returnedObject.put("anhDaiDien", nguoiDung.getAnhDaiDien());
-			returnedObject.put("gioiTinh",
-					!(nguoiDung.getGioiTinh() == null) ? nguoiDung.getGioiTinh().getTenGioiTinh() : null);
+			returnedObject.put("maGioiTinh",
+					!(nguoiDung.getGioiTinh() == null) ? nguoiDung.getGioiTinh().getMaGioiTinh() : null);
 			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<JSONObject>(returnedObject, HttpStatus.FORBIDDEN);
