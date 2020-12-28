@@ -149,6 +149,7 @@ public class NguoiDungController {
 		List<NguoiDung> listNguoiDung = returnedPage.getContent();
 		for (int i = 0; i < listNguoiDung.size(); i++) {
 			listNguoiDung.get(i).getTaiKhoan().getDacQuyen().setDanhSachTaiKhoan(null);
+			listNguoiDung.get(i).setGioiTinh(null);
 		}
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", listNguoiDung);
