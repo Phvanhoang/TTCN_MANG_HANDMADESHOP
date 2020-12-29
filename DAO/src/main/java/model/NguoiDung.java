@@ -35,7 +35,7 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	private String hoTen;
 
 	@Column(name = "ThanhPho", nullable = true)
-	private String ThanhPho;
+	private String thanhPho;
 
 	@Column(name = "SDT", nullable = true)
 	private String sdt;
@@ -74,7 +74,7 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	}
 
 	public String getThanhPho() {
-		return ThanhPho;
+		return thanhPho;
 	}
 
 	public void setAnhDaiDien(byte[] anhDaiDien) {
@@ -94,7 +94,7 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	}
 
 	public void setSDT(String sDT) {
-		sdt = sDT;
+		this.sdt = sDT;
 	}
 
 	public void setTaiKhoan(TaiKhoan taiKhoan) {
@@ -102,7 +102,7 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	}
 
 	public void setThanhPho(String thanhPho) {
-		ThanhPho = thanhPho;
+		this.thanhPho = thanhPho;
 	}
 
 	public void setHoTen(String hoTen) {

@@ -1,9 +1,10 @@
 package controller;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import com.google.gson.Gson;
 import exception.DonHangNotFoundException;
 import model.DonHang;
 import model.NguoiDung;
+import model.TinhTrangDonHangNames;
 import model.TrangThaiDonHang;
 import net.minidev.json.JSONObject;
 import service.DonHangService;
@@ -50,9 +52,10 @@ public class DonHangController {
 
 	@Autowired
 	private TrangThaiDonHangService trangThaiDonHangService;
-	
-	@Autowired 
+
+	@Autowired
 	private NguoiDungService nguoiDungService;
+
 	/*
 	 * API tao don hang
 	 */
@@ -97,10 +100,13 @@ public class DonHangController {
 	/*
 	 * API lay danh sach trang thai don hang
 	 */
-	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
 	@GetMapping(value = "/authorized/don-hang/trang-thai-don-hang")
 	public ResponseEntity<List<TrangThaiDonHang>> getTTDH() {
 		List<TrangThaiDonHang> list = trangThaiDonHangService.getAll();
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setDanhSachDonHang(null);
+		}
 		return new ResponseEntity<List<TrangThaiDonHang>>(list, HttpStatus.OK);
 	}
 
@@ -130,7 +136,7 @@ public class DonHangController {
 	/*
 	 * API lay danh sach don hang theo ma tai khoan nguoi tao
 	 */
-	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ALL_ROLES)")
+	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
 	@GetMapping("/authorized/don-hang/tai-khoan/{maTaiKhoan}")
 	public ResponseEntity<JSONObject> getAllDonHangByCreatedBy(@PathVariable long maTaiKhoan,
 			@RequestParam(name = "maDonHang", required = false, defaultValue = "") String maDonHang,
@@ -174,21 +180,21 @@ public class DonHangController {
 		Page<DonHang> returnedPage = donHangService.findOrderByCreateAtDesc(pageable);
 		return new ResponseEntity<JSONObject>(getResultData(returnedPage), HttpStatus.OK);
 	}
+
 	/*
 	 * API lay don hang theo ma don hang
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@GetMapping("/authorized/don-hang/{maDonHang}")
-	public ResponseEntity<DonHang> getDonHang(@PathVariable Long maDonHang){
-		
-			DonHang donHang = donHangService.findByMaDonHang(maDonHang);
-			if(donHang == null) {
-				return new ResponseEntity<DonHang>(donHang, HttpStatus.NOT_FOUND);
-			}
-			
-			donHang.getTrangThaiDonHang().setDanhSachDonHang(null);
-			return new ResponseEntity<DonHang>(donHang, HttpStatus.OK);
-		
+	public ResponseEntity<DonHang> getDonHang(@PathVariable Long maDonHang) {
+
+		DonHang donHang = donHangService.findByMaDonHang(maDonHang);
+		if (donHang == null) {
+			return new ResponseEntity<DonHang>(donHang, HttpStatus.NOT_FOUND);
+		}
+
+		donHang.getTrangThaiDonHang().setDanhSachDonHang(null);
+		return new ResponseEntity<DonHang>(donHang, HttpStatus.OK);
 	}
 
 	/*
@@ -269,7 +275,7 @@ public class DonHangController {
 		List<TrangThaiDonHang> dsTrangThai = trangThaiDonHangService.getAll();
 		TrangThaiDonHang trangThai = new TrangThaiDonHang();
 		for (int i = 0; i < dsTrangThai.size(); i++) {
-			if (dsTrangThai.get(i).getTenTrangThai().equals("Accepted")) {
+			if (TinhTrangDonHangNames.ACCEPTED.equals(dsTrangThai.get(i).getTenTrangThai())) {
 				trangThai = dsTrangThai.get(i);
 				break;
 			}
@@ -279,51 +285,66 @@ public class DonHangController {
 		java.util.Date startDate = (java.util.Date) java.sql.Date.valueOf(localStartDate);
 		System.out.println("b" + startDate);
 
-		ArrayList<DonHang> dsDonHang = donHangService.findByThoiGian(trangThai, startDate, endDate);
-		
-		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
+		ArrayList<String> arrayDate = new ArrayList<String>();
 
+		for (int i = 2; i <= 31; i++) {
+			String localDate = localStartDate.plusDays(i).toString();
+			arrayDate.add(localDate);
+			System.out.println("date: " + arrayDate.get(i - 2));
+		}
+		
+		long tongDoanhThu = 0;
+		ArrayList<DonHang> dsDonHang = donHangService.findByThoiGian(trangThai, startDate, endDate);
 		for (int i = 0; i < dsDonHang.size(); i++) {
 			DonHang donHang = dsDonHang.get(i);
-			System.out.println("donHang: "+ donHang);
-			//sdonHang.getTrangThaiDonHang().setDanhSachDonHang(null);
+			// System.out.println("donHang: " + donHang);
 			Date donHangCreatedAt = donHang.getCreatedAt();
-			//String date = simpleDateFormat.(donHangCreatedAt).toString();
-			String date = donHangCreatedAt.toString();
+			String date = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+					.format(donHangCreatedAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			System.out.println("date: " + donHangCreatedAt);
+
 			long hoaDon = donHang.getGiaTongCong();
 			System.out.println("hoadon: " + hoaDon);
-			
-			if(!doanhThu.containsKey(date)) {
+
+			if (!doanhThu.containsKey(date)) {
 				doanhThu.put(date, hoaDon);
-			}
-			else{
+			} else {
 				long doanhThuDate = doanhThu.get(date) + hoaDon;
 				doanhThu.put(date, doanhThuDate);
 			}
+			tongDoanhThu += hoaDon;
+
 		}
+
+		for (int i = 0; i < arrayDate.size(); i++) {
+			if (!doanhThu.containsKey(arrayDate.get(i))) {
+				doanhThu.put(arrayDate.get(i), (long) 0);
+			}
+		}
+		doanhThu.put("tongDoanhThu", tongDoanhThu);
+		System.out.println("tongDoanhThu: " + tongDoanhThu);
+
 		return new ResponseEntity<HashMap<String, Long>>(doanhThu, HttpStatus.OK);
 	}
-	
+
 	/*
 	 * API lay thong tin TK va Nguoi dung khi biet ma don hang
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@GetMapping("/authorized/don-hang/{maDonHang}/nguoi-dung")
-	public ResponseEntity<NguoiDung> getTaiKhoanByMaDonHang(@PathVariable long maDonHang){
+	public ResponseEntity<NguoiDung> getTaiKhoanByMaDonHang(@PathVariable long maDonHang) {
 		DonHang donHang = donHangService.findByMaDonHang(maDonHang);
 		NguoiDung nguoiDung = new NguoiDung();
-		if(donHang==null) {
+		if (donHang == null) {
 			return new ResponseEntity<NguoiDung>(nguoiDung, HttpStatus.NOT_FOUND);
 		}
 		long maNguoiDung = donHang.getCreatedBy().getNguoiDung().getMaNguoiDung();
 		nguoiDung = nguoiDungService.findByDeletedFalse(maNguoiDung);
-		if(nguoiDung == null) {
+		if (nguoiDung == null) {
 			return new ResponseEntity<NguoiDung>(nguoiDung, HttpStatus.NOT_FOUND);
 		}
 		nguoiDung.getTaiKhoan().getDacQuyen().setDanhSachTaiKhoan(null);
 		nguoiDung.getTaiKhoan().setMatKhau(null);
 		return new ResponseEntity<NguoiDung>(nguoiDung, HttpStatus.OK);
-				
 	}
 }
