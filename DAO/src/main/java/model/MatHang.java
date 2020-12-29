@@ -48,7 +48,7 @@ public class MatHang extends AuditModel<TaiKhoan> {
 	@Column(name = "SoLuongDaBan", nullable = false)
 	private int soLuongDaBan;
 
-	@Column(name = "MoTa", nullable = false, columnDefinition = "NVARCHAR(255)")
+	@Column(name = "MoTa", nullable = false, columnDefinition = "TEXT")
 	private String moTa;
 
 	@JsonBackReference

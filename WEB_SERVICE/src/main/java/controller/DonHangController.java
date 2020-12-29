@@ -97,7 +97,7 @@ public class DonHangController {
 	/*
 	 * API lay danh sach trang thai don hang
 	 */
-	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
+	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
 	@GetMapping(value = "/authorized/don-hang/trang-thai-don-hang")
 	public ResponseEntity<List<TrangThaiDonHang>> getTTDH() {
 		List<TrangThaiDonHang> list = trangThaiDonHangService.getAll();
@@ -130,7 +130,7 @@ public class DonHangController {
 	/*
 	 * API lay danh sach don hang theo ma tai khoan nguoi tao
 	 */
-	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ALL_ROLES)")
+	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
 	@GetMapping("/authorized/don-hang/tai-khoan/{maTaiKhoan}")
 	public ResponseEntity<JSONObject> getAllDonHangByCreatedBy(@PathVariable long maTaiKhoan,
 			@RequestParam(name = "maDonHang", required = false, defaultValue = "") String maDonHang,
@@ -248,7 +248,7 @@ public class DonHangController {
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", data);
 		returnedObject.put("currentPage", returnedPage.getNumber());
-		returnedObject.put("totalItems", returnedPage.getTotalElements());
+		returnedObject.put("totalItems", returnedPage.getNumberOfElements());
 		returnedObject.put("totalPages", returnedPage.getTotalPages());
 		return returnedObject;
 	}
