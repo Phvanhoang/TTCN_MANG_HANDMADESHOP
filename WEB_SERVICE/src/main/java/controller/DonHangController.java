@@ -248,7 +248,7 @@ public class DonHangController {
 		JSONObject returnedObject = new JSONObject();
 		returnedObject.put("data", data);
 		returnedObject.put("currentPage", returnedPage.getNumber());
-		returnedObject.put("totalItems", returnedPage.getTotalElements());
+		returnedObject.put("totalItems", returnedPage.getNumberOfElements());
 		returnedObject.put("totalPages", returnedPage.getTotalPages());
 		return returnedObject;
 	}
