@@ -169,6 +169,8 @@ public class DonHangController {
 			@RequestParam(name = "sortType", required = false, defaultValue = "createdAt") String sortType,
 			@RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort) throws JSONException {
 		Sort sortable = null;
+		JSONObject result = new JSONObject();
+		
 		if (sort.equals("ASC")) {
 			sortable = Sort.by(sortType).ascending();
 		}
@@ -178,7 +180,27 @@ public class DonHangController {
 		Pageable pageable = PageRequest.of(page, size, sortable);
 
 		Page<DonHang> returnedPage = donHangService.findOrderByCreateAtDesc(pageable);
-		return new ResponseEntity<JSONObject>(getResultData(returnedPage), HttpStatus.OK);
+		if(returnedPage == null) {
+			return new ResponseEntity<JSONObject>(result, HttpStatus.NOT_FOUND);
+		}
+		List<DonHang> dsDonHang = returnedPage.getContent();
+		ArrayList<JSONObject> data = new ArrayList<JSONObject>();
+		
+		for(int i=0;i<dsDonHang.size();i++) {
+			DonHang donHang = dsDonHang.get(i);
+			long maNguoiDung = donHang.getCreatedBy().getNguoiDung().getMaNguoiDung();
+			JSONObject dh = new JSONObject();
+			dh.put("maNguoiDung", maNguoiDung);
+			dh.put("donHang", donHang);
+			
+			data.add(dh);
+		}
+		result.put("data", data);
+		result.put("currentPage", returnedPage.getNumber());
+		result.put("totalItems", returnedPage.getTotalElements());
+		result.put("totalPages", returnedPage.getTotalPages());
+
+		return new ResponseEntity<JSONObject>(result, HttpStatus.OK);
 	}
 
 	/*
