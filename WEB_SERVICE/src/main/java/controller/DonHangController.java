@@ -101,6 +101,9 @@ public class DonHangController {
 	@GetMapping(value = "/authorized/don-hang/trang-thai-don-hang")
 	public ResponseEntity<List<TrangThaiDonHang>> getTTDH() {
 		List<TrangThaiDonHang> list = trangThaiDonHangService.getAll();
+		for(int i = 0; i < list.size();i++) {
+			list.get(i).setDanhSachDonHang(null);
+		}
 		return new ResponseEntity<List<TrangThaiDonHang>>(list, HttpStatus.OK);
 	}
 
