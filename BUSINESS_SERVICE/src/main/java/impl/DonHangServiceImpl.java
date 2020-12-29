@@ -16,6 +16,7 @@ import model.DonHang;
 import model.DonHang_MatHang;
 import model.MatHang;
 import model.TaiKhoan;
+import model.TinhTrangDonHangNames;
 import model.TrangThaiDonHang;
 import repository.DonHangRepository;
 import repository.DonHang_MatHangRepository;
@@ -59,9 +60,15 @@ public class DonHangServiceImpl implements DonHangService{
 			sum += donHang_MatHang.getSoLuong() * matHang.getGia();
 			matHangRepository.save(matHang);
 		}
+		ArrayList<TrangThaiDonHang> dsTrangThaiDH = (ArrayList<TrangThaiDonHang>) trangThaiDonHangRepository.findAll();
+		
 		donHang.setGiaTongCong(sum);
 		TrangThaiDonHang trangThaiDonHang = new TrangThaiDonHang();
-		trangThaiDonHang.setMaTrangThai(1);
+		for(int i =0; i < dsTrangThaiDH.size(); i++) {
+			if(TinhTrangDonHangNames.PENDING.equals(dsTrangThaiDH.get(i).getTenTrangThai())) {
+				trangThaiDonHang.setMaTrangThai(dsTrangThaiDH.get(i).getMaTrangThai());
+			}
+		}
 		donHang.setTrangThaiDonHang(trangThaiDonHang);
 		donHangRepository.save(donHang);
 	}

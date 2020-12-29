@@ -64,7 +64,7 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
-	
+
 	/*
 	 * API nhiều thêm ảnh - mặt hàng
 	 */
@@ -82,7 +82,7 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
-	
+
 	/*
 	 * API xóa ảnh - mặt hàng
 	 */
@@ -96,7 +96,7 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+
 	/*
 	 * API thay thế ảnh - mặt hàng
 	 */
@@ -113,13 +113,12 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+
 	/*
 	 * API lấy ảnh - mặt hàng
 	 */
 	@GetMapping("/mat-hang/anh-mat-hang/{maAnh}")
 	public ResponseEntity<Anh_MatHang> getAnh(@PathVariable("maAnh") long maAnh) {
-		JSONObject jsonObject = new JSONObject();
 		Anh_MatHang anh_MatHang = null;
 		try {
 			anh_MatHang = anh_MatHangService.findOne(maAnh);
@@ -144,8 +143,6 @@ public class MatHangController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
-	
-	
 
 	/*
 	 * API lấy thông tin mặt hàng theo mã mặt hàng

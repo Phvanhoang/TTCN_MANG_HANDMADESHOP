@@ -1,9 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,6 @@ import com.google.gson.Gson;
 
 import model.DacQuyen;
 import model.DacQuyenNames;
-import model.GioiTinh;
 import model.NguoiDung;
 import model.TaiKhoan;
 import net.minidev.json.JSONObject;
@@ -99,7 +95,7 @@ public class NguoiDungController {
 		if (checkPermission) {
 			NguoiDung nguoiDung = taiKhoan.getNguoiDung();
 			try {
-			 	nguoiDung.setAnhDaiDien(multipartFile.getBytes());
+				nguoiDung.setAnhDaiDien(multipartFile.getBytes());
 			} catch (IOException e) {
 				return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -109,14 +105,13 @@ public class NguoiDungController {
 			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
 		}
 	}
-	
+
 	/*
 	 * API thay doi thong tin nguoi dung
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
 	@PutMapping("/authorized/nguoi-dung/{maTaiKhoan}")
-	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maTaiKhoan,
-			@RequestBody JSONObject jsonObject,
+	public ResponseEntity<Void> chinhSuaNguoiDung(@PathVariable Long maTaiKhoan, @RequestBody JSONObject jsonObject,
 			@RequestHeader("Authorization") String tokenJWT) {
 		System.out.println(jsonObject);
 		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(tokenJWT);

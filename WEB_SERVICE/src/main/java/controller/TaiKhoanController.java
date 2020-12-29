@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,12 +28,12 @@ import utils.GetTaiKhoanFromTokenService;
 public class TaiKhoanController {
 	@Autowired
 	private TaiKhoanService taiKhoanService;
-	
+
 	@Autowired
 	private GetTaiKhoanFromTokenService getTaiKhoanFromTokenService;
-	
+
 	/*
-	 * API khoa tai khoan		
+	 * API khoa tai khoan
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_ADMIN)")
 	@PutMapping("/authorized/tai-khoan/lock/{maTaiKhoan}")
@@ -46,6 +45,7 @@ public class TaiKhoanController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+
 	/*
 	 * API mo khoa tai khoan
 	 */
@@ -59,14 +59,14 @@ public class TaiKhoanController {
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+
 	/*
 	 * API thay doi mat khau
 	 */
 	@PreAuthorize("hasAuthority(T(model.DacQuyenNames).ROLE_USER)")
 	@PutMapping("/authorized/tai-khoan/change/{maTaiKhoan}")
-	public ResponseEntity<Void> doiMatKhau(@PathVariable long maTaiKhoan, 
-			@RequestBody JSONObject jsonObject, @RequestHeader("Authorization") String token) {
+	public ResponseEntity<Void> doiMatKhau(@PathVariable long maTaiKhoan, @RequestBody JSONObject jsonObject,
+			@RequestHeader("Authorization") String token) {
 		TaiKhoan taiKhoan = getTaiKhoanFromTokenService.getTaiKhoan(token);
 		DacQuyen dacQuyen = taiKhoan.getDacQuyen();
 		String role = dacQuyen.getTenDacQuyen();
@@ -83,7 +83,8 @@ public class TaiKhoanController {
 				String matKhauMoi = jsonObject.getAsString("matKhauMoi");
 				if (!passwordEncoder.matches(matKhauCu, taiKhoan.getMatKhau())) {
 					new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
-				};
+				}
+				;
 				taiKhoanService.changPassword(maTaiKhoan, passwordEncoder.encode(matKhauMoi));
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			} catch (TaiKhoanNotFoundException e) {
@@ -92,6 +93,6 @@ public class TaiKhoanController {
 		} else {
 			return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
 		}
-		
+
 	}
 }
