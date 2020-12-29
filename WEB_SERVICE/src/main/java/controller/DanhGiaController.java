@@ -81,7 +81,8 @@ public class DanhGiaController {
 	/*
 	 * API lay danh sach danh gia theo ma mat hang
 	 */
-	@GetMapping("/danh-gia/mat-hang/{maMatHang}")
+	@PreAuthorize("hasAnyAuthority(T(model.DacQuyenNames).ALL_ROLES)")
+	@GetMapping("authorized/danh-gia/mat-hang/{maMatHang}")
 	public ResponseEntity<JSONObject> GetAllDanhGiaByMaMatHang(@PathVariable int maMatHang,
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(name = "size", required = false, defaultValue = "15") int size,
@@ -98,11 +99,33 @@ public class DanhGiaController {
 		if (matHang == null) {
 			return new ResponseEntity<JSONObject>(result, HttpStatus.NOT_FOUND);
 		}
-		System.out.println("matHang:" + matHang.getMaMatHang());
-
+		// System.out.println("matHang:" + matHang.getMaMatHang());
+		
 		Pageable pageable = PageRequest.of(page, size, sortable);
 		Page<DanhGia> returnedPage = danhGiaService.findByMatHang(pageable, matHang);
-		result = getResultData(returnedPage);
+		List<DanhGia> listDanhGia = returnedPage.getContent();
+		ArrayList<JSONObject> data = new ArrayList<JSONObject>();
+		for(int i=0;i<listDanhGia.size();i++) {
+			DanhGia danhGia = listDanhGia.get(i);
+			byte[] anhDaiDien = danhGia.getCreatedBy().getNguoiDung().getAnhDaiDien();
+			String tenNguoiDung = danhGia.getCreatedBy().getNguoiDung().getHoTen();
+			String noiDung = danhGia.getNoiDung();
+			String thoiGian = danhGia.getCreatedAt().toString();
+			long maTaiKhoan = danhGia.getCreatedBy().getMaTaiKhoan();
+			int soSao = danhGia.getSoSao();
+			JSONObject dg = new JSONObject();
+			dg.put("maTaiKhoan", maTaiKhoan);
+			dg.put("anhDaiDien", anhDaiDien);
+			dg.put("tenNguoiDung", tenNguoiDung);
+			dg.put("noiDung", noiDung);
+			dg.put("thoiGian", thoiGian);
+			dg.put("soSao", soSao);
+			data.add(dg);
+		}
+		result.put("data", data);
+		result.put("currentPage", returnedPage.getNumber());
+		result.put("totalItems", returnedPage.getTotalElements());
+		result.put("totalPages", returnedPage.getTotalPages());
 		return new ResponseEntity<JSONObject>(result, HttpStatus.CREATED);
 	}
 
