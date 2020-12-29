@@ -123,6 +123,7 @@ public class DanhGiaController {
 			data.add(dg);
 		}
 		result.put("data", data);
+		result.put("soSaoTrungBinh", matHang.getRate());
 		result.put("currentPage", returnedPage.getNumber());
 		result.put("totalItems", returnedPage.getTotalElements());
 		result.put("totalPages", returnedPage.getTotalPages());
