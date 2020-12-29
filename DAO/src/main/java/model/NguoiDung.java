@@ -90,7 +90,7 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	}
 
 	public void setNgaySinh(Date ngaySinh) {
-		ngaySinh = ngaySinh;
+		this.ngaySinh = ngaySinh;
 	}
 
 	public void setSDT(String sDT) {
@@ -106,7 +106,7 @@ public class NguoiDung extends AuditModel<TaiKhoan> {
 	}
 
 	public void setHoTen(String hoTen) {
-		hoTen = hoTen;
+		this.hoTen = hoTen;
 	}
 
 	public String getHoTen() {

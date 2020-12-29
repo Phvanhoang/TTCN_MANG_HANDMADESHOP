@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
