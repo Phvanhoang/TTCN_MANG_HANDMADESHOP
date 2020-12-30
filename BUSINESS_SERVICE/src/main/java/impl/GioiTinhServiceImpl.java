@@ -1,5 +1,6 @@
 package impl;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,10 @@ public class GioiTinhServiceImpl implements GioiTinhService{
 		GioiTinh gioiTinh = gioiTinhRepository.findByTenGioiTinh(tenGioiTinh);
 		if (gioiTinh != null) return true;
 		return false;
+	}
+
+	public ArrayList<GioiTinh> getDanhSachGioiTinh() {
+		return gioiTinhRepository.findAll();
 	}
 
 }

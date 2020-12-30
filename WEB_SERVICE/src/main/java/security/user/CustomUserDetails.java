@@ -2,7 +2,6 @@ package security.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -18,42 +17,42 @@ public class CustomUserDetails implements UserDetails {
 	public TaiKhoan getTaiKhoan() {
 		return taiKhoan;
 	}
-	
+
 	public void setTaiKhoan(TaiKhoan taiKhoan) {
 		this.taiKhoan = taiKhoan;
 	}
-	
+
 	public CustomUserDetails(TaiKhoan taiKhoan) {
 		this.taiKhoan = taiKhoan;
 	}
-	
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-    	List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-        list.add(new SimpleGrantedAuthority(taiKhoan.getDacQuyen().getTenDacQuyen()));
-        return list;
-    }
 
-    public String getPassword() {
-        return taiKhoan.getMatKhau();
-    }
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+		list.add(new SimpleGrantedAuthority(taiKhoan.getDacQuyen().getTenDacQuyen()));
+		return list;
+	}
 
-    public String getUsername() {
-        return taiKhoan.getTenDangNhap();
-    }
+	public String getPassword() {
+		return taiKhoan.getMatKhau();
+	}
 
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	public String getUsername() {
+		return taiKhoan.getTenDangNhap();
+	}
 
-    public boolean isAccountNonLocked() {
-        return taiKhoan.isTrangThai();
-    }
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	public boolean isAccountNonLocked() {
+		return !taiKhoan.isLocked();
+	}
 
-    public boolean isEnabled() {
-        return true;
-    }
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	public boolean isEnabled() {
+		return true;
+	}
 }

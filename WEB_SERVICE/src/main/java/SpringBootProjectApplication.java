@@ -1,11 +1,6 @@
-import java.time.LocalDate;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -20,12 +15,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import impl.TaiKhoanServiceImpl;
 import model.DacQuyen;
+import model.DacQuyenNames;
 import model.GioiTinh;
+import model.GioiTinhNames;
 import model.TaiKhoan;
+import model.TinhTrangDonHangNames;
 import model.TrangThaiDonHang;
-import repository.TaiKhoanRepository;
 import security.auditor_aware.SpringSecurityAuditorAware;
 import security.config.MethodSecurityConfig;
 import security.config.WebSecurityConfig;
@@ -40,8 +36,8 @@ import service.TrangThaiDonHangService;
 @EnableTransactionManagement
 @EntityScan(basePackages = "model")
 @EnableJpaRepositories(basePackages = "repository")
-@ComponentScan(basePackages = {"model", "impl", "controller", "service", "security.*", "utils"}, 
-				basePackageClasses = {WebSecurityConfig.class, MethodSecurityConfig.class})
+@ComponentScan(basePackages = { "model", "impl", "controller", "service", "security.*",
+		"utils" }, basePackageClasses = { WebSecurityConfig.class, MethodSecurityConfig.class })
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class SpringBootProjectApplication {
 	private static String username = "UserForCreatedByTaiKhoan";
@@ -59,89 +55,78 @@ public class SpringBootProjectApplication {
 		TaiKhoan createdTaiKhoan = taiKhoanService.findByTenDangNhapAndMatKhau(username, password);
 		if (createdTaiKhoan == null) {
 			creatTaiKhoanForCreatedBy(quyenService, taiKhoanService);
-		};
-		createAdminAccount(taiKhoanService, quyenService, "Hoangpv6681", "Hoangpv6681");
+		}
+		;
+		createAdminAccount(taiKhoanService, quyenService, "Admin", "Admin");
 	}
-	
-    @Bean
-    public AuditorAware<TaiKhoan> auditorProvider(TaiKhoanService taiKhoanService) {
+
+	@Bean
+	public AuditorAware<TaiKhoan> auditorProvider(TaiKhoanService taiKhoanService) {
 		TaiKhoan createdTaiKhoan = taiKhoanService.findByTenDangNhapAndMatKhau(username, password);
-    	return new SpringSecurityAuditorAware(createdTaiKhoan);
-    }
-    
-    public static void createAdminAccount(TaiKhoanService taiKhoanService, QuyenService quyenService ,
-    							String tenDangNhap, String matKhau) {
-    	if (taiKhoanService.existsByTenDangNhap(tenDangNhap)) return;
-    	BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    	String encodedPassword = passwordEncoder.encode(matKhau);
+		return new SpringSecurityAuditorAware(createdTaiKhoan);
+	}
+
+	public static void createAdminAccount(TaiKhoanService taiKhoanService, QuyenService quyenService,
+			String tenDangNhap, String matKhau) {
+		if (taiKhoanService.existsByTenDangNhap(tenDangNhap))
+			return;
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String encodedPassword = passwordEncoder.encode(matKhau);
 		TaiKhoan taiKhoan = new TaiKhoan();
 		taiKhoan.setTenDangNhap(tenDangNhap);
 		taiKhoan.setMatKhau(encodedPassword);
-		taiKhoan.setThoiGianDangKy(new Date());
-	  	ArrayList<DacQuyen> danhSachDacQuyen = quyenService.getDanhSachDacQuyen();
-  		for(int i=0; i<danhSachDacQuyen.size(); i++) {
-  			if(danhSachDacQuyen.get(i).getTenDacQuyen().equals("ROLE_ADMIN")) {
-  				taiKhoan.setDacQuyen(danhSachDacQuyen.get(i));
-  				break;
-  			}
-  		}
-    	taiKhoanService.save(taiKhoan);
-    }
-    
-	public static void creatTaiKhoanForCreatedBy(QuyenService quyenService, 
-										TaiKhoanService taiKhoanService) {
+		ArrayList<DacQuyen> danhSachDacQuyen = quyenService.getDanhSachDacQuyen();
+		for (int i = 0; i < danhSachDacQuyen.size(); i++) {
+			if (danhSachDacQuyen.get(i).getTenDacQuyen().equals("ROLE_ADMIN")) {
+				taiKhoan.setDacQuyen(danhSachDacQuyen.get(i));
+				break;
+			}
+		}
+		taiKhoanService.save(taiKhoan);
+	}
+
+	public static void creatTaiKhoanForCreatedBy(QuyenService quyenService, TaiKhoanService taiKhoanService) {
 		TaiKhoan taiKhoan = new TaiKhoan();
 		ArrayList<DacQuyen> danhSachDacQuyen = quyenService.getDanhSachDacQuyen();
-		for(int i=0; i<danhSachDacQuyen.size(); i++) {
-			if(danhSachDacQuyen.get(i).getTenDacQuyen().equals("ROLE_USER")) {
+		for (int i = 0; i < danhSachDacQuyen.size(); i++) {
+			if (DacQuyenNames.ROLE_ADMIN.equals(danhSachDacQuyen.get(i).getTenDacQuyen())) {
 				taiKhoan.setDacQuyen(danhSachDacQuyen.get(i));
 				break;
 			}
 		}
 		taiKhoan.setTenDangNhap(username);
 		taiKhoan.setMatKhau(password);
-		taiKhoan.setThoiGianDangKy(new Date());
 		taiKhoanService.save(taiKhoan);
 	}
-	
-	public static void createGioiTinhList(GioiTinhService gioiTinhService){
-		List<String> gioiTinhList = new ArrayList<String>();
-		gioiTinhList.add("Nam");
-		gioiTinhList.add("Nữ");
-		gioiTinhList.add("Khác");
-		for (int i = 0; i < gioiTinhList.size(); i++) {
-			if (!gioiTinhService.checkTenGioiTinh(gioiTinhList.get(i))) {
+
+	public static void createGioiTinhList(GioiTinhService gioiTinhService) {
+		String[] gioiTinhList = GioiTinhNames.ALL_GT;
+		for (int i = 0; i < gioiTinhList.length; i++) {
+			if (!gioiTinhService.checkTenGioiTinh(gioiTinhList[i])) {
 				GioiTinh gioiTinh = new GioiTinh();
-				gioiTinh.setTenGioiTinh(gioiTinhList.get(i));
+				gioiTinh.setTenGioiTinh(gioiTinhList[i]);
 				gioiTinhService.save(gioiTinh);
 			}
 		}
 	}
 
-	public static void createTrangThaiDonHangList(TrangThaiDonHangService trangThaiDHService){
-		List<String> trangThaiDHList = new ArrayList<String>();
-		trangThaiDHList.add("PENDING");
-		trangThaiDHList.add("ACCEPTED");
-		trangThaiDHList.add("SENDING");
-		trangThaiDHList.add("COMPLETED");
-		trangThaiDHList.add("CANCELED");
-		for (int i = 0; i < trangThaiDHList.size(); i++) {
-			if (!trangThaiDHService.checkTenTrangThai((trangThaiDHList.get(i)))) {
+	public static void createTrangThaiDonHangList(TrangThaiDonHangService trangThaiDHService) {
+		String[] trangThaiDHList = TinhTrangDonHangNames.ALL_TTDH;
+		for (int i = 0; i < trangThaiDHList.length; i++) {
+			if (!trangThaiDHService.checkTenTrangThai((trangThaiDHList[i]))) {
 				TrangThaiDonHang trangThaiDH = new TrangThaiDonHang();
-				trangThaiDH.setTenTrangThai(trangThaiDHList.get(i));
+				trangThaiDH.setTenTrangThai(trangThaiDHList[i]);
 				trangThaiDHService.save(trangThaiDH);
 			}
 		}
 	}
 
-	public static void createDacQuyenList(QuyenService quyenService){
-		List<String> dacQuyenList = new ArrayList<String>();
-		dacQuyenList.add("ROLE_ADMIN");
-		dacQuyenList.add("ROLE_USER");
-		for (int i = 0; i < dacQuyenList.size(); i++) {
-			if (!quyenService.checkTenDacQuyen(dacQuyenList.get(i))) {
+	public static void createDacQuyenList(QuyenService quyenService) {
+		String[] dacQuyenList = DacQuyenNames.ALL_ROLES;
+		for (int i = 0; i < dacQuyenList.length; i++) {
+			if (!quyenService.checkTenDacQuyen(dacQuyenList[i])) {
 				DacQuyen dacQuyen = new DacQuyen();
-				dacQuyen.setTenDacQuyen(dacQuyenList.get(i));
+				dacQuyen.setTenDacQuyen(dacQuyenList[i]);
 				quyenService.save(dacQuyen);
 			}
 		}
