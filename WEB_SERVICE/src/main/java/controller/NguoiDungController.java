@@ -32,7 +32,7 @@ import net.minidev.json.JSONObject;
 import service.NguoiDungService;
 import utils.GetTaiKhoanFromTokenService;
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
 @RestController
 @RequestMapping("nguoi-dung-management")
 public class NguoiDungController {

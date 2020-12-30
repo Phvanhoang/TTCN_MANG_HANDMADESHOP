@@ -26,7 +26,7 @@ import service.NguoiDungService;
 import service.QuyenService;
 import service.TaiKhoanService;
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
 @RestController
 public class DangKyController {
 	@Autowired

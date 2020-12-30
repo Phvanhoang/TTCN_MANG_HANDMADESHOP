@@ -38,7 +38,7 @@ import service.Anh_MatHangService;
 import service.LoaiMatHangService;
 import service.MatHangService;
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
 @RestController
 @RequestMapping(path = "mat-hang-management")
 public class MatHangController {

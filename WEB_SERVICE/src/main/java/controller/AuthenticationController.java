@@ -19,7 +19,7 @@ import security.payload.LoginResponse;
 import security.user.CustomUserDetails;
 import service.TaiKhoanService;
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
 @RestController
 public class AuthenticationController {
 	@Autowired

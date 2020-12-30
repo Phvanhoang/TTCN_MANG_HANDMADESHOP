@@ -26,7 +26,7 @@ import model.LoaiMatHang;
 import net.minidev.json.JSONObject;
 import service.LoaiMatHangService;
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
 @RestController
 @RequestMapping(path = "/loai-mat-hang-management")
 public class LoaiMatHangController {

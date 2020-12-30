@@ -43,7 +43,7 @@ import service.DonHangService;
 import service.NguoiDungService;
 import service.TrangThaiDonHangService;
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
 @RestController
 @RequestMapping("/don-hang-management")
 public class DonHangController {

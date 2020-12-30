@@ -34,7 +34,7 @@ import service.DanhGiaService;
 import service.MatHangService;
 import service.TaiKhoanService;
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
 @RestController
 @RequestMapping(path = "/danh-gia-management")
 public class DanhGiaController {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import model.GioiTinh;
 import service.GioiTinhService;
 
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 @RestController
 @RequestMapping(path="/gioi-tinh-management")
 public class GioiTinhController {
