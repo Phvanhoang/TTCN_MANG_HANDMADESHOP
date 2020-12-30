@@ -175,7 +175,7 @@ public class DonHangController {
 			sortable = Sort.by(sortType).ascending();
 		}
 		if (sort.equals("DESC")) {
-			sortable = Sort.by(sortType).descending();
+			sortable = Sort.by(sortType).descending(); 
 		}
 		Pageable pageable = PageRequest.of(page, size, sortable);
 
@@ -191,6 +191,7 @@ public class DonHangController {
 			long maNguoiDung = donHang.getCreatedBy().getNguoiDung().getMaNguoiDung();
 			JSONObject dh = new JSONObject();
 			dh.put("maNguoiDung", maNguoiDung);
+			donHang.getTrangThaiDonHang().setDanhSachDonHang(null);
 			dh.put("donHang", donHang);
 			
 			data.add(dh);
