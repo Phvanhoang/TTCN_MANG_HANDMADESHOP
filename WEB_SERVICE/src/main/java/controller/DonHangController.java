@@ -191,10 +191,10 @@ public class DonHangController {
 			long maNguoiDung = donHang.getCreatedBy().getNguoiDung().getMaNguoiDung();
 			JSONObject dh = new JSONObject();
 			dh.put("maNguoiDung", maNguoiDung);
-			String trangThaiDonHang = donHang.getTrangThaiDonHang().getTenTrangThai();
+			long maTrangThai = donHang.getTrangThaiDonHang().getMaTrangThai();
 			donHang.setTrangThaiDonHang(null);
 			dh.put("donHang", donHang);
-			dh.put("trangThaiDonHang", trangThaiDonHang);
+			dh.put("maTrangThai", maTrangThai);
 			
 			data.add(dh);
 		}
